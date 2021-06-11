@@ -1,0 +1,34 @@
+#ifndef SIMCONNECTTHREAD_IH
+#define SIMCONNECTTHREAD_IH
+
+#include "simconnectthread.h"
+#include <cmath>
+#include <windows.h>
+#include <windef.h>
+#include "C:/MSFS SDK/SimConnect SDK/include/SimConnect.h"
+#include "../dataIdentifiers.h"
+
+enum DATA_DEFINITION_IDS
+{
+    PFD_DATA_DEFINITION_ID,
+    ENGINE_DATA_DEFINITION_ID,
+    SLOW_DATA_DEFINITION_ID,
+    STRINGS_DATA_DEFINITION_ID
+};
+
+enum DATA_REQUEST_IDS
+{
+    PFD_DATA_REQUEST_ID,
+    ENGINE_DATA_REQUEST_ID,
+    SLOW_DATA_REQUEST_ID,
+    STRINGS_DATA_REQUEST_ID
+};
+
+enum EVENT_IDS
+{
+    EVENT_6HZ_ID,
+    SIM_START_EVENT_ID,
+    SIM_STOP_EVENT_ID
+};
+
+#endif // SIMCONNECTTHREAD_IH
