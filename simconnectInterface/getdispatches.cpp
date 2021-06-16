@@ -1,5 +1,4 @@
 #include "simconnectthread.ih"
-#include <QDebug>
 
 void SimconnectThread::getDispatches()
 {
@@ -9,7 +8,6 @@ void SimconnectThread::getDispatches()
 
     while (SUCCEEDED(SimConnect_GetNextDispatch(d_simConnectHandle, &pData, &cbData)) && !quit)
     {
-        //qDebug() << "got data" << pData->dwID;
         dataIdx++;
         switch(pData->dwID)
         {
@@ -20,8 +18,6 @@ void SimconnectThread::getDispatches()
             case SIMCONNECT_RECV_ID_EVENT:
             {
                 SIMCONNECT_RECV_EVENT *evt = static_cast<SIMCONNECT_RECV_EVENT *>(pData);
-
-                //qDebug() << "received notification:" << evt->uEventID;
 
                 if (evt->uEventID == EVENT_6HZ_ID)
                 {
@@ -43,14 +39,12 @@ void SimconnectThread::getDispatches()
                         SimConnect_RequestDataOnSimObject(d_simConnectHandle, ENGINE_DATA_REQUEST_ID, ENGINE_DATA_DEFINITION_ID, SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_PERIOD_SIM_FRAME, SIMCONNECT_DATA_REQUEST_FLAG_CHANGED);
                     }
 
-                    //qDebug() << "received notification 6hz:" << dataIdx;
 
                     if (sharedDataUpdated->load(std::memory_order_seq_cst))
-                    {//emit receivedError("received data update");
+                    {
                         sharedDataUpdated->store(false, std::memory_order_seq_cst);
                         readSharedData();
 
-                        //emit receivedError(quit ? "have to quit" : "no quit");
 
                         if (quit)
                             break;

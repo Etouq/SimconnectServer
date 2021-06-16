@@ -1,7 +1,6 @@
-#include "mainwindow.h"
-#include "dataIdentifiers.h"
-#include "binaryutil.h"
-#include <QDebug>
+#include "../mainwindow.h"
+#include "common/dataIdentifiers.h"
+#include "common/binaryutil.h"
 
 void MainWindow::receivedDataFromClient()
 {
@@ -39,16 +38,14 @@ void MainWindow::receivedDataFromClient()
             }
             case ClientIds::START:
             {
-                //qDebug() << "Received start";
                 if (tcpSocket->bytesAvailable() < 112)
                 {
                     tcpSocket->rollbackTransaction();
                     reading = false;
                     break;
                 }
-                //qDebug() << "size is big enough";
                 ActiveAirplaneSettings settings = BinaryUtil::readAirplaneSettings(*tcpSocket);
-                //qDebug() << "read settings";
+
                 tcpSocket->commitTransaction();
                 if (simThread == nullptr || !simThread->isRunning())
                 {

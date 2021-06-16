@@ -9,21 +9,26 @@ CONFIG += c++latest
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    aircraftData/engineDataDefs.cpp \
-    aircraftData/miscDataDefs.cpp \
-    aircraftData/pfdDataDefs.cpp \
-    clientfunctions/clientdisconnected.cpp \
-    clientfunctions/quitfromclient.cpp \
-    clientfunctions/receiveddatafromclient.cpp \
-    flightplanreader.cpp \
+    FlightplanReader/flightplanreader.cpp \
     main.cpp \
-    mainwindow.cpp \
-    miscfunctions/clearflightplan.cpp \
-    miscfunctions/initserver.cpp \
-    miscfunctions/newincomingconnection.cpp \
-    miscfunctions/readaircraftsettings.cpp \
-    miscfunctions/readflightplan.cpp \
-    miscfunctions/readnewflightplan.cpp \
+    mainwindow/clientfunctions/clientdisconnected.cpp \
+    mainwindow/clientfunctions/quitfromclient.cpp \
+    mainwindow/clientfunctions/receiveddatafromclient.cpp \
+    mainwindow/mainwindow.cpp \
+    mainwindow/miscfunctions/clearflightplan.cpp \
+    mainwindow/miscfunctions/initserver.cpp \
+    mainwindow/miscfunctions/newincomingconnection.cpp \
+    mainwindow/miscfunctions/readflightplan.cpp \
+    mainwindow/miscfunctions/readnewflightplan.cpp \
+    mainwindow/simfunctions/closesim.cpp \
+    mainwindow/simfunctions/quitfromsim.cpp \
+    mainwindow/simfunctions/showsimmsg.cpp \
+    mainwindow/simfunctions/simconnected.cpp \
+    mainwindow/simfunctions/simconnectfailed.cpp \
+    mainwindow/simfunctions/startsim.cpp \
+    simconnectInterface/aircraftData/engineDataDefs.cpp \
+    simconnectInterface/aircraftData/miscDataDefs.cpp \
+    simconnectInterface/aircraftData/pfdDataDefs.cpp \
     simconnectInterface/dataHandlers/handlejetdata.cpp \
     simconnectInterface/dataHandlers/handlepfddata.cpp \
     simconnectInterface/dataHandlers/handlepropdata.cpp \
@@ -38,28 +43,22 @@ SOURCES += \
     simconnectInterface/setupaircraftdata.cpp \
     simconnectInterface/setupdata.cpp \
     simconnectInterface/simconnectthread.cpp \
-    simconnectInterface/tryconnecting.cpp \
-    simfunctions/closesim.cpp \
-    simfunctions/quitfromsim.cpp \
-    simfunctions/showsimmsg.cpp \
-    simfunctions/simconnected.cpp \
-    simfunctions/simconnectfailed.cpp \
-    simfunctions/startsim.cpp
+    simconnectInterface/tryconnecting.cpp
 
 HEADERS += \
-    aircraftData/engineDataDefs.h \
-    aircraftData/miscDataDefs.h \
-    aircraftData/pfdDataDefs.h \
-    aircraftData/sharedStructs.h \
-    binaryutil.h \
-    dataIdentifiers.h \
-    flightplanreader.h \
-    mainwindow.h \
+    FlightplanReader/flightplanreader.h \
+    common/binaryutil.h \
+    common/dataIdentifiers.h \
+    mainwindow/mainwindow.h \
+    simconnectInterface/aircraftData/engineDataDefs.h \
+    simconnectInterface/aircraftData/miscDataDefs.h \
+    simconnectInterface/aircraftData/pfdDataDefs.h \
+    simconnectInterface/aircraftData/sharedStructs.h \
     simconnectInterface/simconnectthread.h \
     simconnectInterface/simconnectthread.ih
 
 FORMS += \
-    mainwindow.ui
+    mainwindow/mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

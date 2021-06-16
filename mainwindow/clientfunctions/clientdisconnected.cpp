@@ -1,6 +1,6 @@
-#include "mainwindow.h"
-#include "dataIdentifiers.h"
-#include "ui_mainwindow.h"
+#include "../mainwindow.h"
+#include "../ui_mainwindow.h"
+#include "common/dataIdentifiers.h"
 
 void MainWindow::clientDisconnected()
 {

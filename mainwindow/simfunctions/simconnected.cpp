@@ -1,5 +1,4 @@
-#include "mainwindow.h"
-#include "dataIdentifiers.h"
+#include "../mainwindow.h"
 
 void MainWindow::simConnected()
 {

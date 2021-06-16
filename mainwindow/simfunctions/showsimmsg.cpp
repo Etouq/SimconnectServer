@@ -1,6 +1,6 @@
-#include "mainwindow.h"
-#include "binaryutil.h"
-#include "dataIdentifiers.h"
+#include "../mainwindow.h"
+#include "common/binaryutil.h"
+#include "common/dataIdentifiers.h"
 
 void MainWindow::showSimMsg(const QString &msg)
 {

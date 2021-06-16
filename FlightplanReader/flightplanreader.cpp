@@ -1,5 +1,5 @@
 #include "flightplanreader.h"
-#include "dataIdentifiers.h"
+#include "common/dataIdentifiers.h"
 
 FlightplanReader::FlightplanReader()
 {

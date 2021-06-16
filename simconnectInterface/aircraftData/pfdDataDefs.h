@@ -291,7 +291,7 @@ struct PfdCleanDataStruct
         //wind
         wind_velocity = rhs->ambient_wind_velocity;
         wind_true_direction = rhs->ambient_wind_direction;
-        wind_direction = rhs->ambient_wind_direction >= 180.0 ? (rhs->ambient_wind_direction - 180.0 - rotation) : (rhs->ambient_wind_direction + 180.0 - rotation);
+        wind_direction = std::fmod(360.0 + std::fmod(rhs->ambient_wind_direction + 180.0 - rotation, 360.0), 360.0);
 
         gps_wp_ete = rhs->gps_wp_ete;
         gps_ete = rhs->gps_ete;

@@ -6,7 +6,7 @@
 #include <windows.h>
 #include <windef.h>
 #include "C:/MSFS SDK/SimConnect SDK/include/SimConnect.h"
-#include "../dataIdentifiers.h"
+#include "common/dataIdentifiers.h"
 
 enum DATA_DEFINITION_IDS
 {

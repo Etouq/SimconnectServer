@@ -6,7 +6,6 @@
 #include <QTcpSocket>
 #include <QString>
 #include "simconnectInterface/simconnectthread.h"
-#include <QDebug>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -70,8 +69,6 @@ private:
     void quitFromClient();
 
     void quitFromServer();
-
-    ActiveAirplaneSettings readAircraftSettings();
 
     Ui::MainWindow *ui;
     QTcpServer tcpServer;

@@ -4,7 +4,7 @@
 #include <QByteArray>
 #include <QIODevice>
 #include <cstdint>
-#include "flightplanreader.h"
+#include "FlightplanReader/flightplanreader.h"
 #include "simconnectInterface/simconnectthread.h"
 
 class BinaryUtil
