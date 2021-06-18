@@ -29,12 +29,21 @@ SOURCES += \
     simconnectInterface/aircraftData/engineDataDefs.cpp \
     simconnectInterface/aircraftData/miscDataDefs.cpp \
     simconnectInterface/aircraftData/pfdDataDefs.cpp \
+    simconnectInterface/dataHandlers/handleairspeeddata.cpp \
+    simconnectInterface/dataHandlers/handlealtimeterdata.cpp \
+    simconnectInterface/dataHandlers/handleapinfodata.cpp \
+    simconnectInterface/dataHandlers/handleattitudedata.cpp \
+    simconnectInterface/dataHandlers/handlebottombardata.cpp \
+    simconnectInterface/dataHandlers/handlehsibrgdata.cpp \
+    simconnectInterface/dataHandlers/handlehsidata.cpp \
     simconnectInterface/dataHandlers/handlejetdata.cpp \
-    simconnectInterface/dataHandlers/handlepfddata.cpp \
+    simconnectInterface/dataHandlers/handlenavinfodata.cpp \
     simconnectInterface/dataHandlers/handlepropdata.cpp \
+    simconnectInterface/dataHandlers/handleradiodata.cpp \
     simconnectInterface/dataHandlers/handleslowdata.cpp \
     simconnectInterface/dataHandlers/handlestringsdata.cpp \
     simconnectInterface/dataHandlers/handleturbopropdata.cpp \
+    simconnectInterface/dataHandlers/handlewinddata.cpp \
     simconnectInterface/getdispatches.cpp \
     simconnectInterface/readshareddata.cpp \
     simconnectInterface/rundataloop.cpp \

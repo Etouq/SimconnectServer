@@ -23,20 +23,14 @@ void SimconnectThread::getDispatches()
                 {
                     if (updateAircraft)
                     {
-                        d_lastPfdData = PfdCleanDataStruct();
-                        d_lastSlowData = SlowDatadefStruct();
-                        d_lastStringsData = StringsDataStruct();
                         d_lastJetData = JetData();
                         d_lastPropData = PropData();
                         d_lastTurbopropData = TurbopropData();
-                        sendBlankPfdData();
                         sendBlankEngineData();
-                        sendBlankSlowData();
-                        sendBlankStringsData();
-                        SimConnect_ClearDataDefinition(d_simConnectHandle, ENGINE_DATA_DEFINITION_ID);
+                        SimConnect_ClearDataDefinition(d_simConnectHandle, ENGINE_DEFINITION);
                         setupAircraftData();
                         updateAircraft = false;
-                        SimConnect_RequestDataOnSimObject(d_simConnectHandle, ENGINE_DATA_REQUEST_ID, ENGINE_DATA_DEFINITION_ID, SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_PERIOD_SIM_FRAME, SIMCONNECT_DATA_REQUEST_FLAG_CHANGED);
+                        SimConnect_RequestDataOnSimObject(d_simConnectHandle, ENGINE_REQUEST, ENGINE_DEFINITION, SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_PERIOD_SIM_FRAME, SIMCONNECT_DATA_REQUEST_FLAG_CHANGED);
                     }
 
 
@@ -74,22 +68,84 @@ void SimconnectThread::getDispatches()
 
                 switch(pObjData->dwRequestID)
                 {
-                    case PFD_DATA_REQUEST_ID:
+                    case AIRSPEED_REQUEST:
                     {
-                        handlePfdData(pObjData);
+                        PfdAirspeedStruct newData(*reinterpret_cast<PfdAirspeedStruct *>(&pObjData->dwData));
+                        handleAirspeedData(newData);
                         break;
                     }
-                    case ENGINE_DATA_REQUEST_ID:
+                    case ALTIMETER_REQUEST:
+                    {
+                        PfdAltimeterStruct newData(reinterpret_cast<PfdAltimeterRawStruct *>(&pObjData->dwData));
+                        handleAltimeterData(newData);
+                        d_updateAltimeter = false;
+                        break;
+                    }
+                    case ATTITUDE_REQUEST:
+                    {
+                        PfdAttitudeStruct newData(reinterpret_cast<PfdAttitudeRawStruct *>(&pObjData->dwData));
+                        handleAttitudeData(newData);
+                        break;
+                    }
+                    case BOTTOMBAR_REQUEST:
+                    {
+                        PfdBottombarStruct newData(*reinterpret_cast<PfdBottombarStruct *>(&pObjData->dwData));
+                        handleBottombarData(newData);
+                        break;
+                    }
+                    case HSI_REQUEST:
+                    {
+                        PfdHsiStruct newData(reinterpret_cast<PfdHsiRawStruct *>(&pObjData->dwData));
+                        handleHsiData(newData);
+                        d_updateHsi = false;
+                        break;
+                    }
+                    case HSI_BRG_REQUEST:
+                    {
+                        PfdHsiBrgRawStruct *temp = reinterpret_cast<PfdHsiBrgRawStruct *>(&pObjData->dwData);
+                        d_previousAdfRadial = temp->adf_radial;
+                        PfdHsiBrgStruct newData(temp, d_lastHsiData.rotation);
+                        handleHsiBrgData(newData);
+                        d_updateHsiBrg = false;
+                        break;
+                    }
+                    case RADIO_REQUEST:
+                    {
+                        PfdRadioStruct newData(*reinterpret_cast<PfdRadioStruct *>(&pObjData->dwData));
+                        handleRadioData(newData);
+                        break;
+                    }
+                    case NAV_INFO_REQUEST:
+                    {
+                        PfdNavInfoStruct newData(reinterpret_cast<PfdNavInfoRawStruct *>(&pObjData->dwData));
+                        handleNavInfoData(newData);
+                        break;
+                    }
+                    case WIND_REQUEST:
+                    {
+                        PfdWindStruct newData(reinterpret_cast<PfdWindRawStruct *>(&pObjData->dwData), d_lastHsiData.rotation);
+                        handleWindData(newData);
+                        d_updateWind = false;
+                        break;
+                    }
+                    case AP_INFO_REQUEST:
+                    {
+                        PfdApInfoStruct newData(reinterpret_cast<PfdApInfoRawStruct *>(&pObjData->dwData));
+                        handleApInfoData(newData);
+                        d_updateApInfo = false;
+                        break;
+                    }
+                    case ENGINE_REQUEST:
                     {
                         (this->*d_aircraftHandler)(pObjData);
                         break;
                     }
-                    case SLOW_DATA_REQUEST_ID:
+                    case SLOW_REQUEST:
                     {
                         handleSlowData(pObjData);
                         break;
                     }
-                    case STRINGS_DATA_REQUEST_ID:
+                    case STRINGS_REQUEST:
                     {
                         handleStringsData(pObjData);
                         break;
@@ -191,5 +247,36 @@ void SimconnectThread::getDispatches()
             }
         }
     }
+
+    if (d_updateAltimeter)
+    {
+        handleAltimeterData(d_lastAltimeterData);
+        d_updateAltimeter = false;
+    }
+    if (d_updateHsi)
+    {
+        handleHsiData(d_lastHsiData);
+        d_updateHsi = false;
+    }
+    if (d_updateHsiBrg)
+    {
+        PfdHsiBrgStruct newData = d_lastHsiBrgData;
+        newData.adf_radial = d_previousAdfRadial + d_lastHsiData.rotation;
+        handleHsiBrgData(newData);
+        d_updateHsiBrg = false;
+    }
+    if (d_updateWind)
+    {
+        PfdWindStruct newData = d_lastWindData;
+        newData.wind_direction = fmod(360.0 + fmod(newData.wind_true_direction + 180.0 - d_lastHsiData.rotation, 360.0), 360.0);
+        handleWindData(newData);
+        d_updateWind = false;
+    }
+    if (d_updateApInfo)
+    {
+        handleApInfoData(d_lastApInfoData);
+        d_updateApInfo = false;
+    }
+
 }
 

@@ -13,7 +13,7 @@ void SimconnectThread::readSharedData()
         return;
     }
 
-    SimConnect_RequestDataOnSimObject(d_simConnectHandle, ENGINE_DATA_REQUEST_ID, ENGINE_DATA_DEFINITION_ID, SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_PERIOD_NEVER);
+    SimConnect_RequestDataOnSimObject(d_simConnectHandle, ENGINE_REQUEST, ENGINE_DEFINITION, SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_PERIOD_NEVER);
     d_currentAirplaneSettings = temp.airplaneSettings;
     updateAircraft = true;
 }

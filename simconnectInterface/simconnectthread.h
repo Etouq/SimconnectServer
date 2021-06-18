@@ -60,7 +60,24 @@ class SimconnectThread : public QThread
     SharedDataStruct *sharedData;
 
     //pfd data
-    PfdCleanDataStruct d_lastPfdData;
+    PfdAirspeedStruct d_lastAirspeedData;
+    PfdAltimeterStruct d_lastAltimeterData;
+    PfdAttitudeStruct d_lastAttitudeData;
+    PfdBottombarStruct d_lastBottombarData;
+    PfdHsiStruct d_lastHsiData;
+    PfdHsiBrgStruct d_lastHsiBrgData;
+    PfdRadioStruct d_lastRadioData;
+    PfdNavInfoStruct d_lastNavInfoData;
+    PfdWindStruct d_lastWindData;
+    PfdApInfoStruct d_lastApInfoData;
+
+    bool d_updateAltimeter = false;
+    bool d_updateHsi = false;
+    bool d_updateHsiBrg = false;
+    bool d_updateWind = false;
+    bool d_updateApInfo = false;
+
+    double d_previousAdfRadial = 0;
 
     int32_t d_lastVertMode = -1; // 0: none, 1: vdi, 2: gs, 3: gp, 4: gspreview
 
@@ -127,12 +144,35 @@ private:
     void getDispatches();
 
     void sendBlankPfdData();
+
+    void sendBlankAirspeedData();
+    void sendBlankAltimeterData();
+    void sendBlankAttitudeData();
+    void sendBlankBottombarData();
+    void sendBlankHsiData();
+    void sendBlankHsiBrgData();
+    void sendBlankRadioData();
+    void sendBlankNavInfoData();
+    void sendBlankWindData();
+    void sendBlankApInfoData();
+
     void sendBlankEngineData();
     void sendBlankSlowData();
     void sendBlankStringsData();
 
     void setupAircraftData();
-    void handlePfdData(SIMCONNECT_RECV_SIMOBJECT_DATA *pObjData);
+
+    void handleAirspeedData(const PfdAirspeedStruct &newData);
+    void handleAltimeterData(const PfdAltimeterStruct &newData);
+    void handleAttitudeData(const PfdAttitudeStruct &newData);
+    void handleBottombarData(const PfdBottombarStruct &newData);
+    void handleHsiData(const PfdHsiStruct &newData);
+    void handleHsiBrgData(const PfdHsiBrgStruct &newData);
+    void handleRadioData(const PfdRadioStruct &newData);
+    void handleNavInfoData(const PfdNavInfoStruct &newData);
+    void handleWindData(const PfdWindStruct &newData);
+    void handleApInfoData(const PfdApInfoStruct &newData);
+
     void handleSlowData(SIMCONNECT_RECV_SIMOBJECT_DATA *pObjData);
     void handleStringsData(SIMCONNECT_RECV_SIMOBJECT_DATA *pObjData);
 
