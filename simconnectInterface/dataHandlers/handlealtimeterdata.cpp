@@ -28,7 +28,6 @@ void SimconnectThread::handleAltimeterData(const PfdAltimeterStruct &newData)
         id = DataIdentifiers::REF_ALTITUDE;
         dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
         dataToSend.append(reinterpret_cast<const char *>(&newData.ref_altitude), sizeof(newData.ref_altitude));
-        d_updateApInfo = true;
     }
 
     if (fabs(d_lastAltimeterData.pressure - newData.pressure) >= 0.009)
@@ -54,11 +53,10 @@ void SimconnectThread::handleAltimeterData(const PfdAltimeterStruct &newData)
         id = DataIdentifiers::REF_VSPEED;
         dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
         dataToSend.append(reinterpret_cast<const char *>(&newData.ref_vspeed), sizeof(newData.ref_vspeed));
-        d_updateApInfo = true;
     }
 
 
-    int32_t cdiSource = d_lastHsiData.gpsDrivesNav1 ? 3 : d_lastHsiData.autopilot_nav_selected;
+    int32_t cdiSource = d_lastAltimeterData.gpsDrivesNav1 ? 3 : d_lastAltimeterData.autopilot_nav_selected;
     switch (cdiSource)
     {
         case 1:   // nav1
@@ -133,7 +131,7 @@ void SimconnectThread::handleAltimeterData(const PfdAltimeterStruct &newData)
         }
         case 3:   // gps
         {
-            if (newData.gps_approach_active && d_lastHsiData.gps_approach_approach_type == 10)   // 10 = rnav
+            if (newData.gps_approach_active && d_lastAltimeterData.gps_approach_approach_type == 10)   // 10 = rnav
             {
                 if (d_lastVertMode != 3)
                 {

@@ -13,8 +13,6 @@ void SimconnectThread::handleHsiData(const PfdHsiStruct &newData)
         id = DataIdentifiers::ROTATION;
         dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
         dataToSend.append(reinterpret_cast<const char *>(&newData.rotation), sizeof(newData.rotation));
-        d_updateHsiBrg = true;
-        d_updateWind = true;
     }
     if (fabs(d_lastHsiData.heading - newData.heading) >= 0.0009)
     {
@@ -61,7 +59,7 @@ void SimconnectThread::handleHsiData(const PfdHsiStruct &newData)
 
 
     int32_t cdiSource = 3;
-    if (!newData.gpsDrivesNav1 || (d_lastApInfoData.autopilot_approach_hold && newData.gps_approach_approach_type == 10))   // 10 = rnav
+    if (!newData.gpsDrivesNav1 || (d_lastHsiData.autopilot_approach_hold && newData.gps_approach_approach_type == 10))   // 10 = rnav
     {
         cdiSource = newData.autopilot_nav_selected;
     }
@@ -69,12 +67,12 @@ void SimconnectThread::handleHsiData(const PfdHsiStruct &newData)
     {
         case 1:   // nav1
         {
-            if (d_lastDisplayDeviation != d_lastHsiBrgData.nav1_has_nav)
+            if (d_lastDisplayDeviation != d_lastHsiData.nav1_has_nav)
             {
-                d_lastDisplayDeviation = d_lastHsiBrgData.nav1_has_nav;
+                d_lastDisplayDeviation = d_lastHsiData.nav1_has_nav;
                 id = DataIdentifiers::DISPLAY_DEVIATION;
                 dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-                dataToSend.append(reinterpret_cast<const char *>(&d_lastHsiBrgData.nav1_has_nav), sizeof(d_lastHsiBrgData.nav1_has_nav));
+                dataToSend.append(reinterpret_cast<const char *>(&d_lastHsiData.nav1_has_nav), sizeof(d_lastHsiData.nav1_has_nav));
             }
             if (newData.nav1_has_loc)
             {
@@ -139,12 +137,12 @@ void SimconnectThread::handleHsiData(const PfdHsiStruct &newData)
         }
         case 2:   // nav2
         {
-            if (d_lastDisplayDeviation != d_lastHsiBrgData.nav2_has_nav)
+            if (d_lastDisplayDeviation != d_lastHsiData.nav2_has_nav)
             {
-                d_lastDisplayDeviation = d_lastHsiBrgData.nav2_has_nav;
+                d_lastDisplayDeviation = d_lastHsiData.nav2_has_nav;
                 id = DataIdentifiers::DISPLAY_DEVIATION;
                 dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-                dataToSend.append(reinterpret_cast<const char *>(&d_lastHsiBrgData.nav2_has_nav), sizeof(d_lastHsiBrgData.nav2_has_nav));
+                dataToSend.append(reinterpret_cast<const char *>(&d_lastHsiData.nav2_has_nav), sizeof(d_lastHsiData.nav2_has_nav));
             }
 
             if (newData.nav2_has_loc)
@@ -260,33 +258,4 @@ void SimconnectThread::handleHsiData(const PfdHsiStruct &newData)
     }
 
     emit sendData(dataToSend);
-
-
-    if (d_lastHsiData.gpsDrivesNav1 != newData.gpsDrivesNav1)
-    {
-        d_lastHsiData.gpsDrivesNav1 = newData.gpsDrivesNav1;
-        d_updateAltimeter = true;
-        d_updateApInfo = true;
-    }
-    if (d_lastHsiData.autopilot_nav_selected != newData.autopilot_nav_selected)
-    {
-        d_lastHsiData.autopilot_nav_selected = newData.autopilot_nav_selected;
-        d_updateAltimeter = true;
-        d_updateApInfo = true;
-    }
-    if (d_lastHsiData.gps_approach_approach_type != newData.gps_approach_approach_type)
-    {
-        d_lastHsiData.gps_approach_approach_type = newData.gps_approach_approach_type;
-        d_updateAltimeter = true;
-    }
-    if(d_lastHsiData.nav1_has_loc != newData.nav1_has_loc)
-    {
-        d_lastHsiData.nav1_has_loc = newData.nav1_has_loc;
-        d_updateApInfo = true;
-    }
-    if(d_lastHsiData.nav2_has_loc != newData.nav2_has_loc)
-    {
-        d_lastHsiData.nav2_has_loc = newData.nav2_has_loc;
-        d_updateApInfo = true;
-    }
 }

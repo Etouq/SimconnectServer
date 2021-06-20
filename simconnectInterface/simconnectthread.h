@@ -71,14 +71,6 @@ class SimconnectThread : public QThread
     PfdWindStruct d_lastWindData;
     PfdApInfoStruct d_lastApInfoData;
 
-    bool d_updateAltimeter = false;
-    bool d_updateHsi = false;
-    bool d_updateHsiBrg = false;
-    bool d_updateWind = false;
-    bool d_updateApInfo = false;
-
-    double d_previousAdfRadial = 0;
-
     int32_t d_lastVertMode = -1; // 0: none, 1: vdi, 2: gs, 3: gp, 4: gspreview
 
     bool d_lastDisplayDeviation = true;

@@ -21,6 +21,7 @@ void SimconnectThread::handleBottombarData(const PfdBottombarStruct &newData)
         dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
         dataToSend.append(reinterpret_cast<const char *>(&newData.local_seconds), sizeof(newData.local_seconds));
     }
+
     if (d_lastBottombarData.ground_speed != newData.ground_speed)
     {
         d_lastBottombarData.ground_speed = newData.ground_speed;

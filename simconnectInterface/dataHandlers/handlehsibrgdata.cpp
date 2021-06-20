@@ -28,7 +28,6 @@ void SimconnectThread::handleHsiBrgData(const PfdHsiBrgStruct &newData)
         id = DataIdentifiers::NAV1_HAS_NAV;
         dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
         dataToSend.append(reinterpret_cast<const char *>(&newData.nav1_has_nav), sizeof(newData.nav1_has_nav));
-        d_updateHsi = true;
     }
     if (d_lastHsiBrgData.nav1_has_signal != newData.nav1_has_signal)
     {
@@ -66,7 +65,6 @@ void SimconnectThread::handleHsiBrgData(const PfdHsiBrgStruct &newData)
         id = DataIdentifiers::NAV2_HAS_NAV;
         dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
         dataToSend.append(reinterpret_cast<const char *>(&newData.nav2_has_nav), sizeof(newData.nav2_has_nav));
-        d_updateHsi = true;
     }
     if (d_lastHsiBrgData.nav2_has_signal != newData.nav2_has_signal)
     {

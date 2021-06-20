@@ -78,7 +78,6 @@ void SimconnectThread::getDispatches()
                     {
                         PfdAltimeterStruct newData(reinterpret_cast<PfdAltimeterRawStruct *>(&pObjData->dwData));
                         handleAltimeterData(newData);
-                        d_updateAltimeter = false;
                         break;
                     }
                     case ATTITUDE_REQUEST:
@@ -97,16 +96,12 @@ void SimconnectThread::getDispatches()
                     {
                         PfdHsiStruct newData(reinterpret_cast<PfdHsiRawStruct *>(&pObjData->dwData));
                         handleHsiData(newData);
-                        d_updateHsi = false;
                         break;
                     }
                     case HSI_BRG_REQUEST:
                     {
-                        PfdHsiBrgRawStruct *temp = reinterpret_cast<PfdHsiBrgRawStruct *>(&pObjData->dwData);
-                        d_previousAdfRadial = temp->adf_radial;
-                        PfdHsiBrgStruct newData(temp, d_lastHsiData.rotation);
+                        PfdHsiBrgStruct newData(reinterpret_cast<PfdHsiBrgRawStruct *>(&pObjData->dwData));
                         handleHsiBrgData(newData);
-                        d_updateHsiBrg = false;
                         break;
                     }
                     case RADIO_REQUEST:
@@ -123,16 +118,14 @@ void SimconnectThread::getDispatches()
                     }
                     case WIND_REQUEST:
                     {
-                        PfdWindStruct newData(reinterpret_cast<PfdWindRawStruct *>(&pObjData->dwData), d_lastHsiData.rotation);
+                        PfdWindStruct newData(reinterpret_cast<PfdWindRawStruct *>(&pObjData->dwData));
                         handleWindData(newData);
-                        d_updateWind = false;
                         break;
                     }
                     case AP_INFO_REQUEST:
                     {
                         PfdApInfoStruct newData(reinterpret_cast<PfdApInfoRawStruct *>(&pObjData->dwData));
                         handleApInfoData(newData);
-                        d_updateApInfo = false;
                         break;
                     }
                     case ENGINE_REQUEST:
@@ -246,36 +239,6 @@ void SimconnectThread::getDispatches()
                 break;
             }
         }
-    }
-
-    if (d_updateAltimeter)
-    {
-        handleAltimeterData(d_lastAltimeterData);
-        d_updateAltimeter = false;
-    }
-    if (d_updateHsi)
-    {
-        handleHsiData(d_lastHsiData);
-        d_updateHsi = false;
-    }
-    if (d_updateHsiBrg)
-    {
-        PfdHsiBrgStruct newData = d_lastHsiBrgData;
-        newData.adf_radial = d_previousAdfRadial + d_lastHsiData.rotation;
-        handleHsiBrgData(newData);
-        d_updateHsiBrg = false;
-    }
-    if (d_updateWind)
-    {
-        PfdWindStruct newData = d_lastWindData;
-        newData.wind_direction = fmod(360.0 + fmod(newData.wind_true_direction + 180.0 - d_lastHsiData.rotation, 360.0), 360.0);
-        handleWindData(newData);
-        d_updateWind = false;
-    }
-    if (d_updateApInfo)
-    {
-        handleApInfoData(d_lastApInfoData);
-        d_updateApInfo = false;
     }
 
 }
