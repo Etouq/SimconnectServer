@@ -14,8 +14,8 @@ struct SlowDatadefRawStruct
     float eng4FuelFlow = 0;
     float groundSpeed = 0;
     int32_t hasAp = 1;
-    int32_t hasCom1 = 1;
-    int32_t hasCom2 = 1;
+    int32_t hasCom1 = 0;
+    int32_t hasCom2 = 0;
     int32_t hasNav1 = 1;
     int32_t hasNav2 = 1;
 };
@@ -32,7 +32,7 @@ struct SlowDatadefStruct
     bool hasNav1 = true;
     bool hasNav2 = true;
 
-    SlowDatadefStruct() {}
+    SlowDatadefStruct() = default;
 
     SlowDatadefStruct(SlowDatadefRawStruct *rhs)
     {
@@ -66,7 +66,7 @@ struct StringsDataStruct
     QByteArray nav2_ident = "";
     QByteArray gps_wp_prev_id = "";
 
-    StringsDataStruct() {}
+    StringsDataStruct() = default;
 
     StringsDataStruct(StringsRawDataStruct *rhs)
     {
@@ -77,6 +77,6 @@ struct StringsDataStruct
     }
 };
 
-extern const std::vector<dataDef> stringsDatadefVector;// "GPS WP NEXT ID" "NAV IDENT:1" "NAV IDENT:2" "GPS WP PREV ID" // maybe add: ATC AIRLINE String (50), ATC ID String (10), ATC FLIGHT NUMBER String (6)
+extern const std::vector<dataDef> stringsDatadefVector; // maybe add: ATC AIRLINE String (50), ATC ID String (10), ATC FLIGHT NUMBER String (6)
 
 #endif // MISCDATADEFS_H
