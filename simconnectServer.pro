@@ -10,6 +10,7 @@ CONFIG += c++latest
 
 SOURCES += \
     FlightplanReader/flightplanreader.cpp \
+    common/binaryutil.cpp \
     main.cpp \
     mainwindow/clientfunctions/clientdisconnected.cpp \
     mainwindow/clientfunctions/quitfromclient.cpp \
