@@ -12,12 +12,6 @@ void SimconnectThread::setupData()
     sendBlankSlowData();
     sendBlankStringsData();
 
-    d_updateAltimeter = true;
-    d_updateHsi = true;
-    d_updateHsiBrg = true;
-    d_updateWind = true;
-    d_updateApInfo = true;
-
     for(const dataDef& def : pfdAirspeedDefs)
         SimConnect_AddToDataDefinition(d_simConnectHandle, AIRSPEED_DEFINITION, def.DatumName, def.UnitsName, def.DatumType, def.fEpsilon);
 

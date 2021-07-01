@@ -30,7 +30,6 @@ void SimconnectThread::handleAirspeedData(const PfdAirspeedStruct &newData)
         id = DataIdentifiers::REF_SPEED;
         dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
         dataToSend.append(reinterpret_cast<const char *>(&newData.ref_speed), sizeof(newData.ref_speed));
-        d_updateApInfo = true;
     }
 
     emit sendData(dataToSend);

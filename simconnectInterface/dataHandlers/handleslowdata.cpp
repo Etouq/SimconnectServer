@@ -20,8 +20,6 @@ void SimconnectThread::handleSlowData(SIMCONNECT_RECV_SIMOBJECT_DATA *pObjData)
         id = DataIdentifiers::AP_AVAILABLE;
         dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
         dataToSend.append(reinterpret_cast<char *>(&newData.hasAp), sizeof(newData.hasAp));
-        if (newData.hasAp)
-            d_updateApInfo = true;
     }
 
     if (d_lastSlowData.hasCom1 != newData.hasCom1)
