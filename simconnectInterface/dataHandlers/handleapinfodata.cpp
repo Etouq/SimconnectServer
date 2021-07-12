@@ -41,20 +41,20 @@ void SimconnectThread::handleApInfoData(const PfdApInfoStruct &newData)
     else if (newData.ap_flc)
     {
         AP_VerticalActive = "FLC";
-        AP_ModeReference = QByteArray::number(d_lastApInfoData.ref_speed) + "KT";
+        AP_ModeReference = QByteArray::number(newData.ref_speed) + "KT";
     }
     else if (newData.ap_altitude_lock)
     {
         AP_VerticalActive = newData.ap_altitude_arm ? "ALTS" : "ALT";
-        AP_ModeReference = QByteArray::number(d_lastApInfoData.ref_altitude) + "FT";
+        AP_ModeReference = QByteArray::number(newData.ref_altitude) + "FT";
     }
     else if (newData.ap_vertical_hold)
     {
         AP_VerticalActive = "VS";
-        AP_ModeReference = QByteArray::number(d_lastApInfoData.ref_vspeed) + "FPM";
+        AP_ModeReference = QByteArray::number(newData.ref_vspeed) + "FPM";
     }
     else if (newData.ap_glideslope_active)
-        AP_VerticalActive = d_lastApInfoData.gpsDrivesNav1 ? "GP" : "GS";
+        AP_VerticalActive = newData.gpsDrivesNav1 ? "GP" : "GS";
 
     if (d_lastAP_VerticalActive != AP_VerticalActive)
     {
@@ -121,12 +121,12 @@ void SimconnectThread::handleApInfoData(const PfdApInfoStruct &newData)
         AP_LateralActive = "HDG";
     else if (newData.ap_nav1_lock)
     {
-        if (d_lastApInfoData.gpsDrivesNav1)
+        if (newData.gpsDrivesNav1)
             AP_LateralActive = "GPS";
         else
         {
-            if ((d_lastApInfoData.autopilot_nav_selected == 1 && d_lastApInfoData.nav1_has_loc)
-                || (d_lastApInfoData.autopilot_nav_selected == 2 && d_lastApInfoData.nav2_has_loc))
+            if ((newData.autopilot_nav_selected == 1 && newData.nav1_has_loc)
+                || (newData.autopilot_nav_selected == 2 && newData.nav2_has_loc))
                 AP_LateralActive = "LOC";
             else
                 AP_LateralActive = "VOR";
@@ -136,12 +136,12 @@ void SimconnectThread::handleApInfoData(const PfdApInfoStruct &newData)
         AP_LateralActive = "BC";
     else if (newData.autopilot_approach_hold)
     {
-        if (d_lastApInfoData.gpsDrivesNav1)
+        if (newData.gpsDrivesNav1)
             AP_LateralActive = "GPS";
         else
         {
-            if ((d_lastApInfoData.autopilot_nav_selected == 1 && d_lastApInfoData.nav1_has_loc)
-                || (d_lastApInfoData.autopilot_nav_selected == 2 && d_lastApInfoData.nav2_has_loc))
+            if ((newData.autopilot_nav_selected == 1 && newData.nav1_has_loc)
+                || (newData.autopilot_nav_selected == 2 && newData.nav2_has_loc))
                 AP_LateralActive = "LOC";
             else
                 AP_LateralActive = "VOR";
@@ -164,12 +164,12 @@ void SimconnectThread::handleApInfoData(const PfdApInfoStruct &newData)
     {
         if (newData.ap_nav1_lock)
         {
-            if (d_lastApInfoData.gpsDrivesNav1)
+            if (newData.gpsDrivesNav1)
                 AP_LateralArmed = "GPS";
             else
             {
-                if ((d_lastApInfoData.autopilot_nav_selected == 1 && d_lastApInfoData.nav1_has_loc)
-                    || (d_lastApInfoData.autopilot_nav_selected == 2 && d_lastApInfoData.nav2_has_loc))
+                if ((newData.autopilot_nav_selected == 1 && newData.nav1_has_loc)
+                    || (newData.autopilot_nav_selected == 2 && newData.nav2_has_loc))
                     AP_LateralArmed = "LOC";
                 else
                     AP_LateralArmed = "VOR";
@@ -179,12 +179,12 @@ void SimconnectThread::handleApInfoData(const PfdApInfoStruct &newData)
             AP_LateralArmed = "BC";
         else if (newData.autopilot_approach_hold)
         {
-            if (d_lastApInfoData.gpsDrivesNav1)
+            if (newData.gpsDrivesNav1)
                 AP_LateralArmed = "GPS";
             else
             {
-                if ((d_lastApInfoData.autopilot_nav_selected == 1 && d_lastApInfoData.nav1_has_loc)
-                    || (d_lastApInfoData.autopilot_nav_selected == 2 && d_lastApInfoData.nav2_has_loc))
+                if ((newData.autopilot_nav_selected == 1 && newData.nav1_has_loc)
+                    || (newData.autopilot_nav_selected == 2 && newData.nav2_has_loc))
                     AP_LateralArmed = "LOC";
                 else
                     AP_LateralArmed = "VOR";

@@ -120,7 +120,7 @@ QByteArray BinaryUtil::toBinary(const QList<FlightPlanWaypoint> &wpList)
 
 
 //from binary converters
-
+//fundamental types
 int8_t BinaryUtil::readInt8_t(QIODevice &data)
 {
     int8_t val = 0;

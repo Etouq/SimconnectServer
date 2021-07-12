@@ -59,7 +59,7 @@ void SimconnectThread::handleHsiData(const PfdHsiStruct &newData)
 
 
     int32_t cdiSource = 3;
-    if (!newData.gpsDrivesNav1 || (d_lastHsiData.autopilot_approach_hold && newData.gps_approach_approach_type == 10))   // 10 = rnav
+    if (!newData.gpsDrivesNav1 || (newData.autopilot_approach_hold && newData.gps_approach_approach_type == 10))   // 10 = rnav
     {
         cdiSource = newData.autopilot_nav_selected;
     }

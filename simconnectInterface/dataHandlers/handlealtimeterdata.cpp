@@ -56,7 +56,7 @@ void SimconnectThread::handleAltimeterData(const PfdAltimeterStruct &newData)
     }
 
 
-    int32_t cdiSource = d_lastAltimeterData.gpsDrivesNav1 ? 3 : d_lastAltimeterData.autopilot_nav_selected;
+    int32_t cdiSource = newData.gpsDrivesNav1 ? 3 : newData.autopilot_nav_selected;
     switch (cdiSource)
     {
         case 1:   // nav1
@@ -131,7 +131,7 @@ void SimconnectThread::handleAltimeterData(const PfdAltimeterStruct &newData)
         }
         case 3:   // gps
         {
-            if (newData.gps_approach_active && d_lastAltimeterData.gps_approach_approach_type == 10)   // 10 = rnav
+            if (newData.gps_approach_active && newData.gps_approach_approach_type == 10)   // 10 = rnav
             {
                 if (d_lastVertMode != 3)
                 {
