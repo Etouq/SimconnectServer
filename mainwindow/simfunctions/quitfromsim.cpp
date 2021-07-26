@@ -8,6 +8,6 @@ void MainWindow::quitFromSim()
 
     setClientConnectionState(DISCONNECTING);
 
-    DataIdentifiers id = DataIdentifiers::QUIT;
-    tcpSocket->write(reinterpret_cast<char *>(&id), sizeof(id));
+    SimconnectIds id = SimconnectIds::QUIT;
+    tcpSocket->write(reinterpret_cast<const char *>(&id), sizeof(id));
 }

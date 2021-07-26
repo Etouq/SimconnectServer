@@ -5,7 +5,7 @@ void SimconnectThread::runDataLoop()
 {
     setupData();
 
-    DataIdentifiers id = DataIdentifiers::SIM_START_EVENT;
+    SimconnectIds id = SimconnectIds::SIM_START_EVENT;
     emit sendData(QByteArray(reinterpret_cast<char *>(&id), sizeof(id)));
 
     while (!quit)

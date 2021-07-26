@@ -3,6 +3,6 @@
 
 void MainWindow::clearFlightplan()
 {
-    DataIdentifiers id = DataIdentifiers::CLEAR_FLIGHTPLAN;
+    SimconnectIds id = SimconnectIds::CLEAR_FLIGHTPLAN;
     tcpSocket->write(reinterpret_cast<char *>(&id), sizeof(id));
 }

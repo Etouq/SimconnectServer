@@ -16,6 +16,8 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
+    const uint8_t latestSimconnectNetworkVersion = 1;
+
     enum ConnectionState
     {
         CONNECTED,

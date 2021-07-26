@@ -3,13 +3,13 @@
 
 void SimconnectThread::handleAltimeterData(const PfdAltimeterStruct &newData)
 {
-    DataIdentifiers id = DataIdentifiers::ALTITUDE;
+    SimconnectIds id = SimconnectIds::ALTITUDE;
     QByteArray dataToSend;
 
     if (fabs(d_lastAltimeterData.altitude - newData.altitude) >= 0.09)
     {
         d_lastAltimeterData.altitude = newData.altitude;
-        id = DataIdentifiers::ALTITUDE;
+        id = SimconnectIds::ALTITUDE;
         dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
         dataToSend.append(reinterpret_cast<const char *>(&newData.altitude), sizeof(newData.altitude));
     }
@@ -17,7 +17,7 @@ void SimconnectThread::handleAltimeterData(const PfdAltimeterStruct &newData)
     if (fabs(d_lastAltimeterData.radar_altitude - newData.radar_altitude) >= 0.09)
     {
         d_lastAltimeterData.radar_altitude = newData.radar_altitude;
-        id = DataIdentifiers::RADAR_ALTITUDE;
+        id = SimconnectIds::RADAR_ALTITUDE;
         dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
         dataToSend.append(reinterpret_cast<const char *>(&newData.radar_altitude), sizeof(newData.radar_altitude));
     }
@@ -25,7 +25,7 @@ void SimconnectThread::handleAltimeterData(const PfdAltimeterStruct &newData)
     if (d_lastAltimeterData.ref_altitude != newData.ref_altitude)
     {
         d_lastAltimeterData.ref_altitude = newData.ref_altitude;
-        id = DataIdentifiers::REF_ALTITUDE;
+        id = SimconnectIds::REF_ALTITUDE;
         dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
         dataToSend.append(reinterpret_cast<const char *>(&newData.ref_altitude), sizeof(newData.ref_altitude));
     }
@@ -33,7 +33,7 @@ void SimconnectThread::handleAltimeterData(const PfdAltimeterStruct &newData)
     if (fabs(d_lastAltimeterData.pressure - newData.pressure) >= 0.009)
     {
         d_lastAltimeterData.pressure = newData.pressure;
-        id = DataIdentifiers::PRESSURE;
+        id = SimconnectIds::PRESSURE;
         dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
         dataToSend.append(reinterpret_cast<const char *>(&newData.pressure), sizeof(newData.pressure));
     }
@@ -42,7 +42,7 @@ void SimconnectThread::handleAltimeterData(const PfdAltimeterStruct &newData)
     if (fabs(d_lastAltimeterData.vspeed - newData.vspeed) >= 0.009)
     {
         d_lastAltimeterData.vspeed = newData.vspeed;
-        id = DataIdentifiers::VSPEED;
+        id = SimconnectIds::VSPEED;
         dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
         dataToSend.append(reinterpret_cast<const char *>(&newData.vspeed), sizeof(newData.vspeed));
     }
@@ -50,7 +50,7 @@ void SimconnectThread::handleAltimeterData(const PfdAltimeterStruct &newData)
     if (d_lastAltimeterData.ref_vspeed != newData.ref_vspeed)
     {
         d_lastAltimeterData.ref_vspeed = newData.ref_vspeed;
-        id = DataIdentifiers::REF_VSPEED;
+        id = SimconnectIds::REF_VSPEED;
         dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
         dataToSend.append(reinterpret_cast<const char *>(&newData.ref_vspeed), sizeof(newData.ref_vspeed));
     }
@@ -66,7 +66,7 @@ void SimconnectThread::handleAltimeterData(const PfdAltimeterStruct &newData)
                 if (d_lastVertMode != 2)
                 {
                     d_lastVertMode = 2;
-                    id = DataIdentifiers::VERT_DEV_MODE;
+                    id = SimconnectIds::VERT_DEV_MODE;
                     dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
                     dataToSend.append(reinterpret_cast<const char *>(&d_lastVertMode), sizeof(d_lastVertMode));
 
@@ -77,7 +77,7 @@ void SimconnectThread::handleAltimeterData(const PfdAltimeterStruct &newData)
                 {
                     d_lastAltimeterData.nav1_gsi = newData.nav1_gsi;
                     double deviation = newData.nav1_gsi / 127.0;
-                    id = DataIdentifiers::VERT_DEV_VALUE;
+                    id = SimconnectIds::VERT_DEV_VALUE;
                     dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
                     dataToSend.append(reinterpret_cast<const char *>(&deviation), sizeof(deviation));
                 }
@@ -87,7 +87,7 @@ void SimconnectThread::handleAltimeterData(const PfdAltimeterStruct &newData)
                 if (d_lastVertMode != 0)
                 {
                     d_lastVertMode = 0;
-                    id = DataIdentifiers::VERT_DEV_MODE;
+                    id = SimconnectIds::VERT_DEV_MODE;
                     dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
                     dataToSend.append(reinterpret_cast<const char *>(&d_lastVertMode), sizeof(d_lastVertMode));
                 }
@@ -101,7 +101,7 @@ void SimconnectThread::handleAltimeterData(const PfdAltimeterStruct &newData)
                 if (d_lastVertMode != 2)
                 {
                     d_lastVertMode = 2;
-                    id = DataIdentifiers::VERT_DEV_MODE;
+                    id = SimconnectIds::VERT_DEV_MODE;
                     dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
                     dataToSend.append(reinterpret_cast<const char *>(&d_lastVertMode), sizeof(d_lastVertMode));
 
@@ -112,7 +112,7 @@ void SimconnectThread::handleAltimeterData(const PfdAltimeterStruct &newData)
                 {
                     d_lastAltimeterData.nav2_gsi = newData.nav2_gsi;
                     double deviation = newData.nav2_gsi / 127.0;
-                    id = DataIdentifiers::VERT_DEV_VALUE;
+                    id = SimconnectIds::VERT_DEV_VALUE;
                     dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
                     dataToSend.append(reinterpret_cast<const char *>(&deviation), sizeof(deviation));
                 }
@@ -122,7 +122,7 @@ void SimconnectThread::handleAltimeterData(const PfdAltimeterStruct &newData)
                 if (d_lastVertMode != 0)
                 {
                     d_lastVertMode = 0;
-                    id = DataIdentifiers::VERT_DEV_MODE;
+                    id = SimconnectIds::VERT_DEV_MODE;
                     dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
                     dataToSend.append(reinterpret_cast<const char *>(&d_lastVertMode), sizeof(d_lastVertMode));
                 }
@@ -136,7 +136,7 @@ void SimconnectThread::handleAltimeterData(const PfdAltimeterStruct &newData)
                 if (d_lastVertMode != 3)
                 {
                     d_lastVertMode = 3;
-                    id = DataIdentifiers::VERT_DEV_MODE;
+                    id = SimconnectIds::VERT_DEV_MODE;
                     dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
                     dataToSend.append(reinterpret_cast<const char *>(&d_lastVertMode), sizeof(d_lastVertMode));
 
@@ -147,7 +147,7 @@ void SimconnectThread::handleAltimeterData(const PfdAltimeterStruct &newData)
                 {
                     d_lastAltimeterData.gps_vert_error = newData.gps_vert_error;
                     double deviation = newData.gps_vert_error / 150.0;
-                    id = DataIdentifiers::VERT_DEV_VALUE;
+                    id = SimconnectIds::VERT_DEV_VALUE;
                     dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
                     dataToSend.append(reinterpret_cast<const char *>(&deviation), sizeof(deviation));
                 }
@@ -157,7 +157,7 @@ void SimconnectThread::handleAltimeterData(const PfdAltimeterStruct &newData)
                 if (d_lastVertMode != 4)
                 {
                     d_lastVertMode = 4;
-                    id = DataIdentifiers::VERT_DEV_MODE;
+                    id = SimconnectIds::VERT_DEV_MODE;
                     dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
                     dataToSend.append(reinterpret_cast<const char *>(&d_lastVertMode), sizeof(d_lastVertMode));
 
@@ -168,7 +168,7 @@ void SimconnectThread::handleAltimeterData(const PfdAltimeterStruct &newData)
                 {
                     d_lastAltimeterData.nav1_gsi = newData.nav1_gsi;
                     double deviation = newData.nav1_gsi / 127.0;
-                    id = DataIdentifiers::VERT_DEV_VALUE;
+                    id = SimconnectIds::VERT_DEV_VALUE;
                     dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
                     dataToSend.append(reinterpret_cast<const char *>(&deviation), sizeof(deviation));
                 }
@@ -178,7 +178,7 @@ void SimconnectThread::handleAltimeterData(const PfdAltimeterStruct &newData)
                 if (d_lastVertMode != 4)
                 {
                     d_lastVertMode = 4;
-                    id = DataIdentifiers::VERT_DEV_MODE;
+                    id = SimconnectIds::VERT_DEV_MODE;
                     dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
                     dataToSend.append(reinterpret_cast<const char *>(&d_lastVertMode), sizeof(d_lastVertMode));
 
@@ -189,7 +189,7 @@ void SimconnectThread::handleAltimeterData(const PfdAltimeterStruct &newData)
                 {
                     d_lastAltimeterData.nav2_gsi = newData.nav2_gsi;
                     double deviation = newData.nav2_gsi / 127.0;
-                    id = DataIdentifiers::VERT_DEV_VALUE;
+                    id = SimconnectIds::VERT_DEV_VALUE;
                     dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
                     dataToSend.append(reinterpret_cast<const char *>(&deviation), sizeof(deviation));
                 }
@@ -199,7 +199,7 @@ void SimconnectThread::handleAltimeterData(const PfdAltimeterStruct &newData)
                 if (d_lastVertMode != 0)
                 {
                     d_lastVertMode = 0;
-                    id = DataIdentifiers::VERT_DEV_MODE;
+                    id = SimconnectIds::VERT_DEV_MODE;
                     dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
                     dataToSend.append(reinterpret_cast<const char *>(&d_lastVertMode), sizeof(d_lastVertMode));
                 }

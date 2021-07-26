@@ -21,6 +21,7 @@ void MainWindow::newIncomingConnection()
 
     setClientConnectionState(ConnectionState::CONNECTED);
 
-    DataIdentifiers id = DataIdentifiers::SIMCONNECT_SERVER;
-    tcpSocket->write(reinterpret_cast<char *>(&id), sizeof(id));
+    SharedServerIds id = SharedServerIds::SIMCONNECT_SERVER;
+    tcpSocket->write(reinterpret_cast<const char *>(&id), sizeof(id));
+    tcpSocket->write(reinterpret_cast<const char *>(&latestSimconnectNetworkVersion), sizeof(latestSimconnectNetworkVersion));
 }

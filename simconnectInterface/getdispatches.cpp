@@ -47,12 +47,12 @@ void SimconnectThread::getDispatches()
                 }
                 else if (evt->uEventID == SIM_START_EVENT_ID)
                 {
-                    DataIdentifiers id = DataIdentifiers::SIM_START_EVENT;
+                    SimconnectIds id = SimconnectIds::SIM_START_EVENT;
                     emit sendData(QByteArray(reinterpret_cast<char *>(&id), sizeof(id)));
                 }
                 else if (evt->uEventID == SIM_STOP_EVENT_ID)
                 {
-                    DataIdentifiers id = DataIdentifiers::SIM_STOP_EVENT;
+                    SimconnectIds id = SimconnectIds::SIM_STOP_EVENT;
                     emit sendData(QByteArray(reinterpret_cast<char *>(&id), sizeof(id)));
                 }
                 else

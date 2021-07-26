@@ -1,6 +1,7 @@
 #include "../mainwindow.h"
 #include "common/dataIdentifiers.h"
 #include "common/binaryutil.h"
+#include <QMessageBox>
 
 void MainWindow::receivedDataFromClient()
 {
@@ -14,6 +15,31 @@ void MainWindow::receivedDataFromClient()
 
         switch(identifier)
         {
+            case ClientIds::CLIENT_NETWORK_VERSION:
+            {
+                if (tcpSocket->bytesAvailable() < sizeof(latestSimconnectNetworkVersion))
+                {
+                    tcpSocket->rollbackTransaction();
+                    reading = false;
+                    break;
+                }
+                uint8_t clientVersion = 0;
+                tcpSocket->read(reinterpret_cast<char *>(&clientVersion), sizeof(clientVersion));
+                tcpSocket->commitTransaction();
+                if (latestSimconnectNetworkVersion < clientVersion)
+                {
+                    tcpSocket->disconnectFromHost();
+                    QMessageBox::critical(this, "Error", "The network data transfer version of the Flight Display Companion is newer than the one used by this application. Either update this application or revert the Flight Display Companion to the last working version.");
+                    return;
+                }
+                if (latestSimconnectNetworkVersion > clientVersion)
+                {
+                    tcpSocket->disconnectFromHost();
+                    QMessageBox::critical(this, "Error", "The network data transfer version of the Flight Display Companion is older than the one used by this application. Either update the Flight Display Companion or revert this application to the last working version.");
+                    return;
+                }
+                break;
+            }
             case ClientIds::QUIT:
             {
                 tcpSocket->commitTransaction();

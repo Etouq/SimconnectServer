@@ -3,32 +3,36 @@
 
 #include <cstdint>
 
-enum class DataIdentifiers : uint8_t
+enum class SharedServerIds : uint8_t
 {
-    //server identifier
+    // server identifier
     SIMCONNECT_SERVER,
     GAUGE_DESIGNER_SERVER,
-    //pfd
-    //airspeed
+};
+
+enum class SimconnectIds : uint8_t
+{
+    // pfd
+    // airspeed
     AIRSPEED,
     MAX_SPEED,
     TRUE_AIRSPEED,
     REF_SPEED,
     AP_FLC,
-    //altimeter
+    // altimeter
     ALTITUDE,
     RADAR_ALTITUDE,
     REF_ALTITUDE,
     PRESSURE,
-    //vspeed
+    // vspeed
     VSPEED,
     REF_VSPEED,
-    //vert dev
+    // vert dev
     VERT_DEV_MODE,
     VERT_DEV_VALUE,
-    //aoa
+    // aoa
     ANGLE_OF_ATTACK,
-    //ap info
+    // ap info
     AP_AVAILABLE,
     AP_LATERAL_ACTIVE,
     AP_LATERAL_ARMED,
@@ -39,18 +43,18 @@ enum class DataIdentifiers : uint8_t
     AP_MODE_REFERENCE,
     AP_ARMED,
     AP_ARMED_REFERENCE,
-    //attitude
+    // attitude
     BANK,
     PITCH,
     SLIPSKID,
     FD_BANK,
     FD_PITCH,
-    //bottombar
+    // bottombar
     ZULU_SECONDS,
     LOCAL_SECONDS,
     GROUND_SPEED,
     TOTAL_AIR_TEMP,
-    //hsi
+    // hsi
     ROTATION,
     HEADING,
     COURSE,
@@ -60,7 +64,7 @@ enum class DataIdentifiers : uint8_t
     NAV_SOURCE,
     CURRENT_TRACK,
     TO_FROM,
-    //hsi brg
+    // hsi brg
     NAV1_IDENT,
     NAV1_DME,
     NAV1_BEARING,
@@ -78,14 +82,14 @@ enum class DataIdentifiers : uint8_t
     ADF_HAS_SIGNAL,
     ADF_FREQ,
     ADF_RADIAL,
-    //nav info
+    // nav info
     GPS_IS_ACTIVE_FLIGHTPLAN,
     CURRENT_LEG_TO,
     CURRENT_LEG_FROM,
     LEG_IS_DIRECT_TO,
     CURRENT_LEG_DISTANCE,
     CURRENT_LEG_BEARING,
-    //radio info
+    // radio info
     HAS_COM1,
     HAS_COM2,
     HAS_NAV1,
@@ -94,30 +98,26 @@ enum class DataIdentifiers : uint8_t
     COM2_FREQ,
     NAV1_FREQ,
     NAV2_FREQ,
-    //wind
+    // wind
     WIND_DIRECTION,
     WIND_STRENGTH,
     WIND_TRUE_DIRECTION,
-    //mfd
+    // mfd
     COORDINATES,
     TRUE_HEADING,
     GPS_WP_DTK,
     GPS_WP_ETE,
     GPS_ETE,
-    //flightplan
+    // flightplan
     CLEAR_FLIGHTPLAN,
     FLIGHTPLAN_LIST,
-    //simconnect server
+    // simconnect server
     QUIT,
     SIM_START_EVENT,
     SIM_STOP_EVENT,
     SIM_CONNECTION_FAILED,
     ERROR_STRING,
-    //gauge designer
-    REMOVE_AIRCRAFT_LIST,
-    LOAD_AIRCRAFT_LIST,
-    SAVE_AIRCRAFT,
-    //engine
+    // engine
     ENGINE1_N1,
     ENGINE2_N1,
     ENGINE3_N1,
@@ -146,7 +146,7 @@ enum class DataIdentifiers : uint8_t
     ENGINE2_OIL_TEMP,
     ENGINE1_EGT,
     ENGINE2_EGT,
-    //misc ed
+    // misc ed
     APU_RPM_PCT,
     FUEL_TEXT_DATA,
     SPOILERS_PCT,
@@ -156,17 +156,18 @@ enum class DataIdentifiers : uint8_t
     AIL_TRIM_PCT
 };
 
-//used for communication from client to server
+// used for communication from client to server
 enum class ClientIds : uint8_t
 {
-    //simconnect server
+    CLIENT_NETWORK_VERSION,
+    // simconnect server
     QUIT,
     CHANGE_AIRCRAFT,
     START,
-    //gauge designer
+    // gauge designer
     LOAD_AIRCRAFT,
     AIRCRAFT_FILE_LIST
 };
 
 
-#endif // DATAIDENTIFIERS_H
+#endif   // DATAIDENTIFIERS_H

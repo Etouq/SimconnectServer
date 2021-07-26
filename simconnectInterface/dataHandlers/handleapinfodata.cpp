@@ -6,21 +6,21 @@ void SimconnectThread::handleApInfoData(const PfdApInfoStruct &newData)
     if (!d_lastSlowData.hasAp)
         return;
 
-    DataIdentifiers id = DataIdentifiers::ALTITUDE;
+    SimconnectIds id = SimconnectIds::ALTITUDE;
     QByteArray dataToSend;
 
 
     if (d_lastApInfoData.ap_master != newData.ap_master)
     {
         d_lastApInfoData.ap_master = newData.ap_master;
-        id = DataIdentifiers::AP_STATUS;
+        id = SimconnectIds::AP_STATUS;
         dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
         dataToSend.append(reinterpret_cast<const char *>(&newData.ap_master), sizeof(newData.ap_master));
     }
     if (d_lastApInfoData.ap_yaw_damper != newData.ap_yaw_damper)
     {
         d_lastApInfoData.ap_yaw_damper = newData.ap_yaw_damper;
-        id = DataIdentifiers::AP_YD_STATUS;
+        id = SimconnectIds::AP_YD_STATUS;
         dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
         dataToSend.append(reinterpret_cast<const char *>(&newData.ap_yaw_damper), sizeof(newData.ap_yaw_damper));
     }
@@ -60,7 +60,7 @@ void SimconnectThread::handleApInfoData(const PfdApInfoStruct &newData)
     {
         d_lastAP_VerticalActive = AP_VerticalActive;
         size = AP_VerticalActive.size();
-        id = DataIdentifiers::AP_VERTICAL_ACTIVE;
+        id = SimconnectIds::AP_VERTICAL_ACTIVE;
         dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
         dataToSend.append(reinterpret_cast<const char *>(&size), sizeof(size));
         dataToSend.append(AP_VerticalActive.constData(), size);
@@ -69,7 +69,7 @@ void SimconnectThread::handleApInfoData(const PfdApInfoStruct &newData)
     {
         d_lastAP_ModeReference = AP_ModeReference;
         size = AP_ModeReference.size();
-        id = DataIdentifiers::AP_MODE_REFERENCE;
+        id = SimconnectIds::AP_MODE_REFERENCE;
         dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
         dataToSend.append(reinterpret_cast<const char *>(&size), sizeof(size));
         dataToSend.append(AP_ModeReference.constData(), size);
@@ -96,7 +96,7 @@ void SimconnectThread::handleApInfoData(const PfdApInfoStruct &newData)
     {
         d_lastAP_Armed = AP_Armed;
         size = AP_Armed.size();
-        id = DataIdentifiers::AP_ARMED;
+        id = SimconnectIds::AP_ARMED;
         dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
         dataToSend.append(reinterpret_cast<const char *>(&size), sizeof(size));
         dataToSend.append(AP_Armed.constData(), size);
@@ -105,7 +105,7 @@ void SimconnectThread::handleApInfoData(const PfdApInfoStruct &newData)
     {
         d_lastAP_ArmedReference = AP_ArmedReference;
         size = AP_ArmedReference.size();
-        id = DataIdentifiers::AP_ARMED_REFERENCE;
+        id = SimconnectIds::AP_ARMED_REFERENCE;
         dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
         dataToSend.append(reinterpret_cast<const char *>(&size), sizeof(size));
         dataToSend.append(AP_ArmedReference.constData(), size);
@@ -152,7 +152,7 @@ void SimconnectThread::handleApInfoData(const PfdApInfoStruct &newData)
     {
         d_lastAP_LateralActive = AP_LateralActive;
         size = AP_LateralActive.size();
-        id = DataIdentifiers::AP_LATERAL_ACTIVE;
+        id = SimconnectIds::AP_LATERAL_ACTIVE;
         dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
         dataToSend.append(reinterpret_cast<const char *>(&size), sizeof(size));
         dataToSend.append(AP_LateralActive.constData(), size);
@@ -196,7 +196,7 @@ void SimconnectThread::handleApInfoData(const PfdApInfoStruct &newData)
     {
         d_lastAP_LateralArmed = AP_LateralArmed;
         size = AP_LateralArmed.size();
-        id = DataIdentifiers::AP_LATERAL_ARMED;
+        id = SimconnectIds::AP_LATERAL_ARMED;
         dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
         dataToSend.append(reinterpret_cast<const char *>(&size), sizeof(size));
         dataToSend.append(AP_LateralArmed.constData(), size);

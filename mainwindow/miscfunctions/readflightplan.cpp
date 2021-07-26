@@ -15,7 +15,7 @@ void MainWindow::readFlightplan(const QString &fileName)
         int64_t byteSize = dataToSend.size();
         dataToSend.prepend(reinterpret_cast<char *>(&byteSize), sizeof(byteSize));
 
-        DataIdentifiers id = DataIdentifiers::FLIGHTPLAN_LIST;
+        SimconnectIds id = SimconnectIds::FLIGHTPLAN_LIST;
         dataToSend.prepend(reinterpret_cast<char *>(&id), sizeof(id));
 
         tcpSocket->write(dataToSend);

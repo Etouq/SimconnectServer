@@ -2,7 +2,7 @@
 
 void SimconnectThread::handleAirspeedData(const PfdAirspeedStruct &newData)
 {
-    DataIdentifiers id = DataIdentifiers::AIRSPEED;
+    SimconnectIds id = SimconnectIds::AIRSPEED;
     QByteArray dataToSend(reinterpret_cast<char *>(&id), sizeof(id));
 
     d_lastAirspeedData.airspeed = newData.airspeed;
@@ -11,7 +11,7 @@ void SimconnectThread::handleAirspeedData(const PfdAirspeedStruct &newData)
     if (fabs(d_lastAirspeedData.max_speed - newData.max_speed) >= 0.09)
     {
         d_lastAirspeedData.max_speed = newData.max_speed;
-        id = DataIdentifiers::MAX_SPEED;
+        id = SimconnectIds::MAX_SPEED;
         dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
         dataToSend.append(reinterpret_cast<const char *>(&newData.max_speed), sizeof(newData.max_speed));
     }
@@ -19,7 +19,7 @@ void SimconnectThread::handleAirspeedData(const PfdAirspeedStruct &newData)
     if (d_lastAirspeedData.true_airspeed != newData.true_airspeed)
     {
         d_lastAirspeedData.true_airspeed = newData.true_airspeed;
-        id = DataIdentifiers::TRUE_AIRSPEED;
+        id = SimconnectIds::TRUE_AIRSPEED;
         dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
         dataToSend.append(reinterpret_cast<const char *>(&newData.true_airspeed), sizeof(newData.true_airspeed));
     }
@@ -27,7 +27,7 @@ void SimconnectThread::handleAirspeedData(const PfdAirspeedStruct &newData)
     if (d_lastAirspeedData.ref_speed != newData.ref_speed)
     {
         d_lastAirspeedData.ref_speed = newData.ref_speed;
-        id = DataIdentifiers::REF_SPEED;
+        id = SimconnectIds::REF_SPEED;
         dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
         dataToSend.append(reinterpret_cast<const char *>(&newData.ref_speed), sizeof(newData.ref_speed));
     }

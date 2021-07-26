@@ -4,7 +4,7 @@
 void MainWindow::closeSim()
 {
     setSimConnectionState(DISCONNECTING);
-    //disconnect all signals (except for deletelater)
+    //disconnect all signals
     disconnect(simThread, &SimconnectThread::sendData, tcpSocket, qOverload<const QByteArray &>(&QIODevice::write));
     disconnect(simThread, &SimconnectThread::receivedError, this, &MainWindow::showSimMsg);
     disconnect(simThread, &SimconnectThread::simConnectQuit, this, &MainWindow::quitFromSim);
