@@ -4,11 +4,12 @@
 #include <QObject>
 #include <QString>
 #include <QXmlStreamReader>
-#include <QFile>
 #include <QGeoCoordinate>
 #include <QList>
 #include <cstdint>
 #include <QRegularExpression>
+
+class QFile;
 
 struct FlightPlanWaypoint
 {

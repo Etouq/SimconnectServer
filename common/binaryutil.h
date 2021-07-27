@@ -1,16 +1,20 @@
 #ifndef BINARYUTIL_H
 #define BINARYUTIL_H
 
-#include <QByteArray>
-#include <QIODevice>
 #include <cstdint>
-#include "FlightplanReader/flightplanreader.h"
-#include "simconnectInterface/simconnectthread.h"
+#include <QList>
+
+class QByteArray;
+class QIODevice;
+class QString;
+struct FlightPlanWaypoint;
+struct ActiveAirplaneSettings;
+
 
 namespace BinaryUtil
 {
-//to binary converters
-//fundamental types
+// to binary converters
+// fundamental types
 QByteArray toBinary(int8_t val);
 QByteArray toBinary(uint8_t val);
 QByteArray toBinary(int16_t val);
@@ -26,23 +30,23 @@ QByteArray toBinary(float flt);
 QByteArray toBinary(double dbl);
 
 
-//basic types
+// basic types
 QByteArray toBinary(const QString &str);
 
 
-//struct types
+// struct types
 QByteArray toBinary(const FlightPlanWaypoint &wp);
 
 QByteArray toBinary(const ActiveAirplaneSettings &settings);
 
 
-//list types
+// list types
 QByteArray toBinary(const QList<FlightPlanWaypoint> &wpList);
 
 
 
-//from binary converters
-//fundamental types
+// from binary converters
+// fundamental types
 int8_t readInt8_t(QIODevice &data);
 uint8_t readUint8_t(QIODevice &data);
 int16_t readInt16_t(QIODevice &data);
@@ -58,19 +62,19 @@ float readFloat(QIODevice &data);
 double readDouble(QIODevice &data);
 
 
-//basic types
+// basic types
 QString readString(QIODevice &data);
 
 
-//struct types
+// struct types
 FlightPlanWaypoint readFpWp(QIODevice &data);
 
 ActiveAirplaneSettings readAirplaneSettings(QIODevice &data);
 
 
-//list types
+// list types
 QList<FlightPlanWaypoint> readFpList(QIODevice &data);
 
-}
+}   // namespace BinaryUtil
 
-#endif // BINARYUTIL_H
+#endif   // BINARYUTIL_H

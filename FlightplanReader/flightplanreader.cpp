@@ -1,5 +1,6 @@
 #include "flightplanreader.h"
 #include "common/dataIdentifiers.h"
+#include <QFile>
 
 FlightplanReader::FlightplanReader()
 {

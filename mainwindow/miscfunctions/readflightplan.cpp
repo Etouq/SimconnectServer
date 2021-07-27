@@ -2,6 +2,7 @@
 #include "FlightplanReader/flightplanreader.h"
 #include "common/dataIdentifiers.h"
 #include "common/binaryutil.h"
+#include <QFile>
 
 void MainWindow::readFlightplan(const QString &fileName)
 {

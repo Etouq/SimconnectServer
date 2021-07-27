@@ -1,4 +1,8 @@
 #include "binaryutil.h"
+#include <QByteArray>
+#include <QIODevice>
+#include "FlightplanReader/flightplanreader.h"
+#include "simconnectInterface/simconnectthread.h"
 
 //to binary converters
 //fundamental types
