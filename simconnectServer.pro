@@ -29,7 +29,6 @@ SOURCES += \
     mainwindow/simfunctions/simconnected.cpp \
     mainwindow/simfunctions/simconnectfailed.cpp \
     mainwindow/simfunctions/startsim.cpp \
-    simconnectInterface/aircraftData/engineDataDefs.cpp \
     simconnectInterface/aircraftData/miscDataDefs.cpp \
     simconnectInterface/aircraftData/pfdDataDefs.cpp \
     simconnectInterface/dataHandlers/handleairspeeddata.cpp \
@@ -48,12 +47,14 @@ SOURCES += \
     simconnectInterface/dataHandlers/handleturbopropdata.cpp \
     simconnectInterface/dataHandlers/handlewinddata.cpp \
     simconnectInterface/getdispatches.cpp \
+    simconnectInterface/readcommandstring.cpp \
     simconnectInterface/readshareddata.cpp \
     simconnectInterface/rundataloop.cpp \
     simconnectInterface/sendblankenginedata.cpp \
     simconnectInterface/sendblankpfddata.cpp \
     simconnectInterface/setupaircraftdata.cpp \
     simconnectInterface/setupdata.cpp \
+    simconnectInterface/setupevents.cpp \
     simconnectInterface/simconnectthread.cpp \
     simconnectInterface/tryconnecting.cpp
 

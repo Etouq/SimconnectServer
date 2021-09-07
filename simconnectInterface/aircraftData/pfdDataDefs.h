@@ -230,11 +230,20 @@ struct PfdHsiBrgStruct
 
 struct PfdRadioStruct
 {
-    double com1_freq = 0;
-    double com2_freq = 0;
+    float com1_freq = 0;
+    float com2_freq = 0;
 
-    double nav1_freq = 0;
-    double nav2_freq = 0;
+    float nav1_freq = 0;
+    float nav2_freq = 0;
+
+    float com1_stby = 0;
+    float com2_stby = 0;
+
+    float nav1_stby = 0;
+    float nav2_stby = 0;
+
+    int32_t xpdr_code = 0;
+    int32_t xpdr_state = 0;
 };
 
 struct PfdNavInfoRawStruct

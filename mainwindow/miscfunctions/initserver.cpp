@@ -6,7 +6,7 @@
 
 void MainWindow::initServer()
 {
-    if (!tcpServer.listen(QHostAddress::Any, 42069))
+    if (!tcpServer.listen(QHostAddress::Any, 42069))   // epic meme number lol
         if (!tcpServer.listen())
         {
             QMessageBox::critical(this, "Simconnect Server", "Unable to start the server: " + tcpServer.errorString() + ".");

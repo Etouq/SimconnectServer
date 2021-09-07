@@ -149,16 +149,16 @@ void SimconnectThread::setupAircraftData()
     SimConnect_AddToDataDefinition(d_simConnectHandle, ENGINE_DEFINITION, "GENERAL ENG OIL PRESSURE:3", "kpa", SIMCONNECT_DATATYPE_FLOAT64, d_currentAirplaneSettings.oilPressEpsilon);
     SimConnect_AddToDataDefinition(d_simConnectHandle, ENGINE_DEFINITION, "GENERAL ENG OIL PRESSURE:4", "kpa", SIMCONNECT_DATATYPE_FLOAT64, d_currentAirplaneSettings.oilPressEpsilon);
 
-    SimConnect_AddToDataDefinition(d_simConnectHandle, ENGINE_DEFINITION, "APU PCT RPM", "percent", SIMCONNECT_DATATYPE_FLOAT64, 0.5);
+    SimConnect_AddToDataDefinition(d_simConnectHandle, ENGINE_DEFINITION, "APU PCT RPM", "percent", SIMCONNECT_DATATYPE_FLOAT64, 0.5f);
 
-    SimConnect_AddToDataDefinition(d_simConnectHandle, ENGINE_DEFINITION, "TRAILING EDGE FLAPS LEFT ANGLE", "degrees", SIMCONNECT_DATATYPE_FLOAT64, 0.5);
-    SimConnect_AddToDataDefinition(d_simConnectHandle, ENGINE_DEFINITION, "TRAILING EDGE FLAPS RIGHT ANGLE", "degrees", SIMCONNECT_DATATYPE_FLOAT64, 0.5);
+    SimConnect_AddToDataDefinition(d_simConnectHandle, ENGINE_DEFINITION, "TRAILING EDGE FLAPS LEFT ANGLE", "degrees", SIMCONNECT_DATATYPE_FLOAT64, 0.5f);
+    SimConnect_AddToDataDefinition(d_simConnectHandle, ENGINE_DEFINITION, "TRAILING EDGE FLAPS RIGHT ANGLE", "degrees", SIMCONNECT_DATATYPE_FLOAT64, 0.5f);
 
-    SimConnect_AddToDataDefinition(d_simConnectHandle, ENGINE_DEFINITION, "SPOILERS LEFT POSITION", "percent", SIMCONNECT_DATATYPE_FLOAT64, 0.5);
-    SimConnect_AddToDataDefinition(d_simConnectHandle, ENGINE_DEFINITION, "SPOILERS RIGHT POSITION", "percent", SIMCONNECT_DATATYPE_FLOAT64, 0.5);
+    SimConnect_AddToDataDefinition(d_simConnectHandle, ENGINE_DEFINITION, "SPOILERS LEFT POSITION", "percent", SIMCONNECT_DATATYPE_FLOAT64, 0.5f);
+    SimConnect_AddToDataDefinition(d_simConnectHandle, ENGINE_DEFINITION, "SPOILERS RIGHT POSITION", "percent", SIMCONNECT_DATATYPE_FLOAT64, 0.5f);
 
-    SimConnect_AddToDataDefinition(d_simConnectHandle, ENGINE_DEFINITION, "ELEVATOR TRIM PCT", "percent Over 100", SIMCONNECT_DATATYPE_FLOAT64, 0.002);
-    SimConnect_AddToDataDefinition(d_simConnectHandle, ENGINE_DEFINITION, "RUDDER TRIM PCT", "percent Over 100", SIMCONNECT_DATATYPE_FLOAT64, 0.002);
-    SimConnect_AddToDataDefinition(d_simConnectHandle, ENGINE_DEFINITION, "AILERON TRIM PCT", "percent Over 100", SIMCONNECT_DATATYPE_FLOAT64, 0.002);
+    SimConnect_AddToDataDefinition(d_simConnectHandle, ENGINE_DEFINITION, "ELEVATOR TRIM PCT", "percent Over 100", SIMCONNECT_DATATYPE_FLOAT64, 0.002f);
+    SimConnect_AddToDataDefinition(d_simConnectHandle, ENGINE_DEFINITION, "RUDDER TRIM PCT", "percent Over 100", SIMCONNECT_DATATYPE_FLOAT64, 0.002f);
+    SimConnect_AddToDataDefinition(d_simConnectHandle, ENGINE_DEFINITION, "AILERON TRIM PCT", "percent Over 100", SIMCONNECT_DATATYPE_FLOAT64, 0.002f);
 
 }

@@ -12,6 +12,8 @@ void SimconnectThread::setupData()
     sendBlankSlowData();
     sendBlankStringsData();
 
+    SimConnect_AddToDataDefinition(d_simConnectHandle, SET_XPNDR_STATE_DEF, "TRANSPONDER STATE", "number", SIMCONNECT_DATATYPE_INT32);
+
     for(const dataDef& def : pfdAirspeedDefs)
         SimConnect_AddToDataDefinition(d_simConnectHandle, AIRSPEED_DEFINITION, def.DatumName, def.UnitsName, def.DatumType, def.fEpsilon);
 

@@ -91,13 +91,6 @@ struct TurbopropData
     AircraftCommonData commonData;
 };
 
-extern const std::vector<dataDef> AircraftCommonDefs;
-
-extern const std::vector<dataDef> JetDefs;
-
-extern const std::vector<dataDef> PropDefs;
-
-extern const std::vector<dataDef> TurbopropDefs;
 
 
 

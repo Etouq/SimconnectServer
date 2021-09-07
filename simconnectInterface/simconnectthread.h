@@ -44,9 +44,12 @@ struct ActiveAirplaneSettings
 
 struct SharedDataStruct
 {
+    QByteArray commandString;
     ActiveAirplaneSettings airplaneSettings;
+    bool airplaneSettingsChanged = false;
     bool quit = false;
 };
+
 
 
 class SimconnectThread : public QThread
@@ -130,8 +133,10 @@ private:
     void runDataLoop();
 
     void readSharedData();
+    void readCommandString(const QByteArray &data);
 
     void setupData();
+    void setupEvents();
 
     void getDispatches();
 

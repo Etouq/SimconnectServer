@@ -98,6 +98,12 @@ enum class SimconnectIds : uint8_t
     COM2_FREQ,
     NAV1_FREQ,
     NAV2_FREQ,
+    COM1_STBY,
+    COM2_STBY,
+    NAV1_STBY,
+    NAV2_STBY,
+    XPDR_CODE,
+    XPDR_STATE,
     // wind
     WIND_DIRECTION,
     WIND_STRENGTH,
@@ -156,17 +162,13 @@ enum class SimconnectIds : uint8_t
     AIL_TRIM_PCT
 };
 
-// used for communication from client to server
-enum class ClientIds : uint8_t
+enum class ClientToServerIds : uint8_t
 {
     CLIENT_NETWORK_VERSION,
-    // simconnect server
     QUIT,
     CHANGE_AIRCRAFT,
     START,
-    // gauge designer
-    LOAD_AIRCRAFT,
-    AIRCRAFT_FILE_LIST
+    SIM_COMMANDS
 };
 
 

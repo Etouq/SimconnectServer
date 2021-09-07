@@ -292,6 +292,30 @@ void SimconnectThread::sendBlankRadioData()
     dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
     dataToSend.append(reinterpret_cast<const char *>(&d_lastRadioData.nav2_freq), sizeof(d_lastRadioData.nav2_freq));
 
+    id = SimconnectIds::COM1_STBY;
+    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
+    dataToSend.append(reinterpret_cast<const char *>(&d_lastRadioData.com1_stby), sizeof(d_lastRadioData.com1_stby));
+
+    id = SimconnectIds::COM2_STBY;
+    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
+    dataToSend.append(reinterpret_cast<const char *>(&d_lastRadioData.com2_stby), sizeof(d_lastRadioData.com2_stby));
+
+    id = SimconnectIds::NAV1_STBY;
+    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
+    dataToSend.append(reinterpret_cast<const char *>(&d_lastRadioData.nav1_stby), sizeof(d_lastRadioData.nav1_stby));
+
+    id = SimconnectIds::NAV2_STBY;
+    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
+    dataToSend.append(reinterpret_cast<const char *>(&d_lastRadioData.nav2_stby), sizeof(d_lastRadioData.nav2_stby));
+
+    id = SimconnectIds::XPDR_CODE;
+    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
+    dataToSend.append(reinterpret_cast<const char *>(&d_lastRadioData.xpdr_code), sizeof(d_lastRadioData.xpdr_code));
+
+    id = SimconnectIds::XPDR_STATE;
+    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
+    dataToSend.append(reinterpret_cast<const char *>(&d_lastRadioData.xpdr_state), sizeof(d_lastRadioData.xpdr_state));
+
     emit sendData(dataToSend);
 }
 

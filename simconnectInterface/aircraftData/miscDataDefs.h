@@ -79,4 +79,10 @@ struct StringsDataStruct
 
 extern const std::vector<dataDef> stringsDatadefVector; // maybe add: ATC AIRLINE String (50), ATC ID String (10), ATC FLIGHT NUMBER String (6)
 
+
+struct SetXpndrStateStruct
+{
+    int32_t state = 0;
+};
+
 #endif // MISCDATADEFS_H

@@ -3,6 +3,7 @@
 
 void SimconnectThread::runDataLoop()
 {
+    setupEvents();
     setupData();
 
     SimconnectIds id = SimconnectIds::SIM_START_EVENT;
