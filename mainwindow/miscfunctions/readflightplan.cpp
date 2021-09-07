@@ -1,7 +1,8 @@
 #include "../mainwindow.h"
 #include "FlightplanReader/flightplanreader.h"
-#include "common/dataIdentifiers.h"
 #include "common/binaryutil.h"
+#include "common/dataIdentifiers.h"
+
 #include <QFile>
 
 void MainWindow::readFlightplan(const QString &fileName)

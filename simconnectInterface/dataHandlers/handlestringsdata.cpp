@@ -49,7 +49,6 @@ void SimconnectThread::handleStringsData(SIMCONNECT_RECV_SIMOBJECT_DATA *pObjDat
     }
 
     emit sendData(dataToSend);
-
 }
 
 void SimconnectThread::sendBlankStringsData()
@@ -84,17 +83,3 @@ void SimconnectThread::sendBlankStringsData()
 
     emit sendData(dataToSend);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,4 +1,5 @@
 #include "simconnectthread.ih"
+
 #include <QMutexLocker>
 
 void SimconnectThread::readSharedData()
@@ -20,11 +21,12 @@ void SimconnectThread::readSharedData()
 
     if (temp.airplaneSettingsChanged)
     {
-        SimConnect_RequestDataOnSimObject(d_simConnectHandle, ENGINE_REQUEST, ENGINE_DEFINITION, SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_PERIOD_NEVER);
+        SimConnect_RequestDataOnSimObject(d_simConnectHandle,
+                                          ENGINE_REQUEST,
+                                          ENGINE_DEFINITION,
+                                          SIMCONNECT_OBJECT_ID_USER,
+                                          SIMCONNECT_PERIOD_NEVER);
         d_currentAirplaneSettings = temp.airplaneSettings;
         updateAircraft = true;
     }
-
-
 }
-

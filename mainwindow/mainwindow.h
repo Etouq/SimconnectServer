@@ -1,14 +1,17 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
-#include <QTcpServer>
-#include <QTcpSocket>
-#include <QString>
 #include "simconnectInterface/simconnectthread.h"
 
+#include <QMainWindow>
+#include <QString>
+#include <QTcpServer>
+#include <QTcpSocket>
+
 QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
+namespace Ui {
+class MainWindow;
+}
 QT_END_NAMESPACE
 
 
@@ -75,6 +78,5 @@ private:
     Ui::MainWindow *ui;
     QTcpServer tcpServer;
     QTcpSocket *tcpSocket;
-
 };
-#endif // MAINWINDOW_H
+#endif   // MAINWINDOW_H

@@ -1,13 +1,13 @@
 #ifndef SIMCONNECTTHREAD_H
 #define SIMCONNECTTHREAD_H
 
-#include <QObject>
-#include <QThread>
-#include <QMutex>
-
 #include "aircraftData/engineDataDefs.h"
 #include "aircraftData/miscDataDefs.h"
 #include "aircraftData/pfdDataDefs.h"
+
+#include <QMutex>
+#include <QObject>
+#include <QThread>
 
 
 struct ActiveAirplaneSettings
@@ -28,7 +28,7 @@ struct ActiveAirplaneSettings
     bool fuelFlowByVolume = false;
     int8_t numEngines = 1;
     int8_t numTanks = 1;
-    int8_t type = 0; // 0: jet, 1: prop, 2: turboprop
+    int8_t type = 0;   // 0: jet, 1: prop, 2: turboprop
     double n1Epsilon = 0;
     double n2Epsilon = 0;
     double ittEpsilon = 0;
@@ -51,18 +51,17 @@ struct SharedDataStruct
 };
 
 
-
 class SimconnectThread : public QThread
 {
     Q_OBJECT
 
-    //shared data
+    // shared data
     std::atomic_bool *sharedDataUpdated;
     QMutex *sharedDataMutex;
 
     SharedDataStruct *sharedData;
 
-    //pfd data
+    // pfd data
     PfdAirspeedStruct d_lastAirspeedData;
     PfdAltimeterStruct d_lastAltimeterData;
     PfdAttitudeStruct d_lastAttitudeData;
@@ -74,10 +73,10 @@ class SimconnectThread : public QThread
     PfdWindStruct d_lastWindData;
     PfdApInfoStruct d_lastApInfoData;
 
-    int32_t d_lastVertMode = -1; // 0: none, 1: vdi, 2: gs, 3: gp, 4: gspreview
+    int32_t d_lastVertMode = -1;   // 0: none, 1: vdi, 2: gs, 3: gp, 4: gspreview
 
     bool d_lastDisplayDeviation = true;
-    int32_t d_lastNavSource = -1; // 0: GPS, 1: VOR1, 2: LOC1, 3: VOR2, 4: LOC2
+    int32_t d_lastNavSource = -1;   // 0: GPS, 1: VOR1, 2: LOC1, 3: VOR2, 4: LOC2
     double d_lastCourse = -5000;
     double d_lastCourseDeviation = -5000;
     int32_t d_lastToFrom = -1;
@@ -89,19 +88,19 @@ class SimconnectThread : public QThread
     QByteArray d_lastAP_LateralActive = "";
     QByteArray d_lastAP_LateralArmed = "";
 
-    //engine data
+    // engine data
     JetData d_lastJetData;
     PropData d_lastPropData;
     TurbopropData d_lastTurbopropData;
     ActiveAirplaneSettings d_currentAirplaneSettings;
 
-    //slow data
+    // slow data
     SlowDatadefStruct d_lastSlowData;
 
-    //strings data
+    // strings data
     StringsDataStruct d_lastStringsData;
 
-    //internal data
+    // internal data
     bool updateAircraft = false;
 
     HANDLE d_simConnectHandle = NULL;
@@ -111,12 +110,16 @@ class SimconnectThread : public QThread
     bool quit = false;
 
 public:
-    explicit SimconnectThread(std::atomic_bool *sharedAtomic, QMutex *sharedMutex, SharedDataStruct *sharedStruct, const ActiveAirplaneSettings &airplaneStartSettings, QObject *parent = nullptr);
+    explicit SimconnectThread(std::atomic_bool *sharedAtomic,
+                              QMutex *sharedMutex,
+                              SharedDataStruct *sharedStruct,
+                              const ActiveAirplaneSettings &airplaneStartSettings,
+                              QObject *parent = nullptr);
 
 
     void run() override
     {
-        if(tryConnecting())
+        if (tryConnecting())
             runDataLoop();
     }
 
@@ -184,4 +187,4 @@ private:
     void handleTurbopropTwinEngdata(SIMCONNECT_RECV_SIMOBJECT_DATA *pObjData);
 };
 
-#endif // SIMCONNECTTHREAD_H
+#endif   // SIMCONNECTTHREAD_H

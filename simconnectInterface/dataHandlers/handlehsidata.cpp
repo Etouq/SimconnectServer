@@ -12,28 +12,32 @@ void SimconnectThread::handleHsiData(const PfdHsiStruct &newData)
         d_lastHsiData.rotation = newData.rotation;
         id = SimconnectIds::ROTATION;
         dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char *>(&newData.rotation), sizeof(newData.rotation));
+        dataToSend.append(reinterpret_cast<const char *>(&newData.rotation),
+                          sizeof(newData.rotation));
     }
     if (fabs(d_lastHsiData.heading - newData.heading) >= 0.0009)
     {
         d_lastHsiData.heading = newData.heading;
         id = SimconnectIds::HEADING;
         dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char *>(&newData.heading), sizeof(newData.heading));
+        dataToSend.append(reinterpret_cast<const char *>(&newData.heading),
+                          sizeof(newData.heading));
     }
     if (fabs(d_lastHsiData.turn_rate - newData.turn_rate) >= 0.0009)
     {
         d_lastHsiData.turn_rate = newData.turn_rate;
         id = SimconnectIds::TURN_RATE;
         dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char *>(&newData.turn_rate), sizeof(newData.turn_rate));
+        dataToSend.append(reinterpret_cast<const char *>(&newData.turn_rate),
+                          sizeof(newData.turn_rate));
     }
     if (fabs(d_lastHsiData.current_track - newData.current_track) >= 0.0009)
     {
         d_lastHsiData.current_track = newData.current_track;
         id = SimconnectIds::CURRENT_TRACK;
         dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char *>(&newData.current_track), sizeof(newData.current_track));
+        dataToSend.append(reinterpret_cast<const char *>(&newData.current_track),
+                          sizeof(newData.current_track));
     }
 
     if (fabs(d_lastHsiData.gps_wp_desired_track - newData.gps_wp_desired_track) >= 0.009)
@@ -41,7 +45,8 @@ void SimconnectThread::handleHsiData(const PfdHsiStruct &newData)
         d_lastHsiData.gps_wp_desired_track = newData.gps_wp_desired_track;
         id = SimconnectIds::GPS_WP_DTK;
         dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char *>(&newData.gps_wp_desired_track), sizeof(newData.gps_wp_desired_track));
+        dataToSend.append(reinterpret_cast<const char *>(&newData.gps_wp_desired_track),
+                          sizeof(newData.gps_wp_desired_track));
     }
 
     id = SimconnectIds::COORDINATES;
@@ -54,12 +59,15 @@ void SimconnectThread::handleHsiData(const PfdHsiStruct &newData)
         d_lastHsiData.true_heading = newData.true_heading;
         id = SimconnectIds::TRUE_HEADING;
         dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char *>(&newData.true_heading), sizeof(newData.true_heading));
+        dataToSend.append(reinterpret_cast<const char *>(&newData.true_heading),
+                          sizeof(newData.true_heading));
     }
 
 
     int32_t cdiSource = 3;
-    if (!newData.gpsDrivesNav1 || (newData.autopilot_approach_hold && newData.gps_approach_approach_type == 10))   // 10 = rnav
+    if (!newData.gpsDrivesNav1
+        || (newData.autopilot_approach_hold
+            && newData.gps_approach_approach_type == 10))   // 10 = rnav
     {
         cdiSource = newData.autopilot_nav_selected;
     }
@@ -72,7 +80,8 @@ void SimconnectThread::handleHsiData(const PfdHsiStruct &newData)
                 d_lastDisplayDeviation = d_lastHsiData.nav1_has_nav;
                 id = SimconnectIds::DISPLAY_DEVIATION;
                 dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-                dataToSend.append(reinterpret_cast<const char *>(&d_lastHsiData.nav1_has_nav), sizeof(d_lastHsiData.nav1_has_nav));
+                dataToSend.append(reinterpret_cast<const char *>(&d_lastHsiData.nav1_has_nav),
+                                  sizeof(d_lastHsiData.nav1_has_nav));
             }
             if (newData.nav1_has_loc)
             {
@@ -81,7 +90,8 @@ void SimconnectThread::handleHsiData(const PfdHsiStruct &newData)
                     d_lastNavSource = 2;
                     id = SimconnectIds::NAV_SOURCE;
                     dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-                    dataToSend.append(reinterpret_cast<const char *>(&d_lastNavSource), sizeof(d_lastNavSource));
+                    dataToSend.append(reinterpret_cast<const char *>(&d_lastNavSource),
+                                      sizeof(d_lastNavSource));
 
                     // make sure all values get updated because of the modeswitch
                     d_lastCourseDeviation = newData.nav1_cdi + 5.0;
@@ -92,7 +102,8 @@ void SimconnectThread::handleHsiData(const PfdHsiStruct &newData)
                     d_lastCourse = newData.nav1_loc;
                     id = SimconnectIds::COURSE;
                     dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-                    dataToSend.append(reinterpret_cast<const char *>(&newData.nav1_loc), sizeof(newData.nav1_loc));
+                    dataToSend.append(reinterpret_cast<const char *>(&newData.nav1_loc),
+                                      sizeof(newData.nav1_loc));
                 }
             }
             else
@@ -102,7 +113,8 @@ void SimconnectThread::handleHsiData(const PfdHsiStruct &newData)
                     d_lastNavSource = 1;
                     id = SimconnectIds::NAV_SOURCE;
                     dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-                    dataToSend.append(reinterpret_cast<const char *>(&d_lastNavSource), sizeof(d_lastNavSource));
+                    dataToSend.append(reinterpret_cast<const char *>(&d_lastNavSource),
+                                      sizeof(d_lastNavSource));
 
                     // make sure all values get updated because of the modeswitch
                     d_lastCourseDeviation = newData.nav1_cdi + 5.0;
@@ -113,7 +125,8 @@ void SimconnectThread::handleHsiData(const PfdHsiStruct &newData)
                     d_lastCourse = newData.nav1_obs;
                     id = SimconnectIds::COURSE;
                     dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-                    dataToSend.append(reinterpret_cast<const char *>(&newData.nav1_obs), sizeof(newData.nav1_obs));
+                    dataToSend.append(reinterpret_cast<const char *>(&newData.nav1_obs),
+                                      sizeof(newData.nav1_obs));
                 }
             }
 
@@ -131,7 +144,8 @@ void SimconnectThread::handleHsiData(const PfdHsiStruct &newData)
                 d_lastToFrom = newData.nav1_to_from;
                 id = SimconnectIds::TO_FROM;
                 dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-                dataToSend.append(reinterpret_cast<const char *>(&newData.nav1_to_from), sizeof(newData.nav1_to_from));
+                dataToSend.append(reinterpret_cast<const char *>(&newData.nav1_to_from),
+                                  sizeof(newData.nav1_to_from));
             }
             break;
         }
@@ -142,7 +156,8 @@ void SimconnectThread::handleHsiData(const PfdHsiStruct &newData)
                 d_lastDisplayDeviation = d_lastHsiData.nav2_has_nav;
                 id = SimconnectIds::DISPLAY_DEVIATION;
                 dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-                dataToSend.append(reinterpret_cast<const char *>(&d_lastHsiData.nav2_has_nav), sizeof(d_lastHsiData.nav2_has_nav));
+                dataToSend.append(reinterpret_cast<const char *>(&d_lastHsiData.nav2_has_nav),
+                                  sizeof(d_lastHsiData.nav2_has_nav));
             }
 
             if (newData.nav2_has_loc)
@@ -152,7 +167,8 @@ void SimconnectThread::handleHsiData(const PfdHsiStruct &newData)
                     d_lastNavSource = 4;
                     id = SimconnectIds::NAV_SOURCE;
                     dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-                    dataToSend.append(reinterpret_cast<const char *>(&d_lastNavSource), sizeof(d_lastNavSource));
+                    dataToSend.append(reinterpret_cast<const char *>(&d_lastNavSource),
+                                      sizeof(d_lastNavSource));
 
                     // make sure all values get updated because of the modeswitch
                     d_lastCourseDeviation = newData.nav2_cdi + 5.0;
@@ -163,7 +179,8 @@ void SimconnectThread::handleHsiData(const PfdHsiStruct &newData)
                     d_lastCourse = newData.nav2_loc;
                     id = SimconnectIds::COURSE;
                     dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-                    dataToSend.append(reinterpret_cast<const char *>(&newData.nav2_loc), sizeof(newData.nav2_loc));
+                    dataToSend.append(reinterpret_cast<const char *>(&newData.nav2_loc),
+                                      sizeof(newData.nav2_loc));
                 }
             }
             else
@@ -173,7 +190,8 @@ void SimconnectThread::handleHsiData(const PfdHsiStruct &newData)
                     d_lastNavSource = 3;
                     id = SimconnectIds::NAV_SOURCE;
                     dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-                    dataToSend.append(reinterpret_cast<const char *>(&d_lastNavSource), sizeof(d_lastNavSource));
+                    dataToSend.append(reinterpret_cast<const char *>(&d_lastNavSource),
+                                      sizeof(d_lastNavSource));
 
                     // make sure all values get updated because of the modeswitch
                     d_lastCourseDeviation = newData.nav2_cdi + 5.0;
@@ -184,7 +202,8 @@ void SimconnectThread::handleHsiData(const PfdHsiStruct &newData)
                     d_lastCourse = newData.nav2_obs;
                     id = SimconnectIds::COURSE;
                     dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-                    dataToSend.append(reinterpret_cast<const char *>(&newData.nav2_obs), sizeof(newData.nav2_obs));
+                    dataToSend.append(reinterpret_cast<const char *>(&newData.nav2_obs),
+                                      sizeof(newData.nav2_obs));
                 }
             }
 
@@ -202,7 +221,8 @@ void SimconnectThread::handleHsiData(const PfdHsiStruct &newData)
                 d_lastToFrom = newData.nav2_to_from;
                 id = SimconnectIds::TO_FROM;
                 dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-                dataToSend.append(reinterpret_cast<const char *>(&newData.nav2_to_from), sizeof(newData.nav2_to_from));
+                dataToSend.append(reinterpret_cast<const char *>(&newData.nav2_to_from),
+                                  sizeof(newData.nav2_to_from));
             }
             break;
         }
@@ -213,7 +233,8 @@ void SimconnectThread::handleHsiData(const PfdHsiStruct &newData)
                 d_lastNavSource = 0;
                 id = SimconnectIds::NAV_SOURCE;
                 dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-                dataToSend.append(reinterpret_cast<const char *>(&d_lastNavSource), sizeof(d_lastNavSource));
+                dataToSend.append(reinterpret_cast<const char *>(&d_lastNavSource),
+                                  sizeof(d_lastNavSource));
 
                 // make sure all values get updated because of the modeswitch
                 d_lastCourseDeviation = newData.gps_wp_cross_track + 5.0;
@@ -225,7 +246,8 @@ void SimconnectThread::handleHsiData(const PfdHsiStruct &newData)
                 d_lastDisplayDeviation = (d_lastStringsData.gps_wp_next_id != "");
                 id = SimconnectIds::DISPLAY_DEVIATION;
                 dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-                dataToSend.append(reinterpret_cast<const char *>(&d_lastDisplayDeviation), sizeof(d_lastDisplayDeviation));
+                dataToSend.append(reinterpret_cast<const char *>(&d_lastDisplayDeviation),
+                                  sizeof(d_lastDisplayDeviation));
             }
 
             if (fabs(d_lastCourse - newData.gps_wp_desired_track) >= 0.0009)
@@ -233,7 +255,8 @@ void SimconnectThread::handleHsiData(const PfdHsiStruct &newData)
                 d_lastCourse = newData.gps_wp_desired_track;
                 id = SimconnectIds::COURSE;
                 dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-                dataToSend.append(reinterpret_cast<const char *>(&newData.gps_wp_desired_track), sizeof(newData.gps_wp_desired_track));
+                dataToSend.append(reinterpret_cast<const char *>(&newData.gps_wp_desired_track),
+                                  sizeof(newData.gps_wp_desired_track));
             }
 
             if (fabs(d_lastCourseDeviation - newData.gps_wp_cross_track) >= 0.3)
@@ -241,7 +264,8 @@ void SimconnectThread::handleHsiData(const PfdHsiStruct &newData)
                 d_lastCourseDeviation = newData.gps_wp_cross_track;
                 id = SimconnectIds::COURSE_DEVIATION;
                 dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-                dataToSend.append(reinterpret_cast<const char *>(&newData.gps_wp_cross_track), sizeof(newData.gps_wp_cross_track));
+                dataToSend.append(reinterpret_cast<const char *>(&newData.gps_wp_cross_track),
+                                  sizeof(newData.gps_wp_cross_track));
             }
 
             // maybe change to zero if preferred
@@ -250,7 +274,8 @@ void SimconnectThread::handleHsiData(const PfdHsiStruct &newData)
                 d_lastToFrom = 1;
                 id = SimconnectIds::TO_FROM;
                 dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-                dataToSend.append(reinterpret_cast<const char *>(&d_lastToFrom), sizeof(d_lastToFrom));
+                dataToSend.append(reinterpret_cast<const char *>(&d_lastToFrom),
+                                  sizeof(d_lastToFrom));
             }
 
             break;

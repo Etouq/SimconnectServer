@@ -1,6 +1,7 @@
 #include "../mainwindow.h"
-#include "common/dataIdentifiers.h"
 #include "common/binaryutil.h"
+#include "common/dataIdentifiers.h"
+
 #include <QMessageBox>
 
 void MainWindow::receivedDataFromClient()
@@ -13,7 +14,7 @@ void MainWindow::receivedDataFromClient()
         ClientToServerIds identifier = ClientToServerIds::QUIT;
         tcpSocket->read(reinterpret_cast<char *>(&identifier), sizeof(identifier));
 
-        switch(identifier)
+        switch (identifier)
         {
             case ClientToServerIds::CLIENT_NETWORK_VERSION:
             {
@@ -23,19 +24,30 @@ void MainWindow::receivedDataFromClient()
                     reading = false;
                     break;
                 }
+
                 uint8_t clientVersion = 0;
                 tcpSocket->read(reinterpret_cast<char *>(&clientVersion), sizeof(clientVersion));
                 tcpSocket->commitTransaction();
+
                 if (latestSimconnectNetworkVersion < clientVersion)
                 {
                     tcpSocket->disconnectFromHost();
-                    QMessageBox::critical(this, "Error", "The network data transfer version of the Flight Display Companion is newer than the one used by this application. Please update this application.");
+                    QMessageBox::critical(
+                      this,
+                      "Error",
+                      "The network data transfer version of the Flight Display Companion is newer "
+                      "than the one used by this application. Please update this application.");
                     return;
                 }
                 if (latestSimconnectNetworkVersion > clientVersion)
                 {
                     tcpSocket->disconnectFromHost();
-                    QMessageBox::critical(this, "Error", "The network data transfer version of the Flight Display Companion is older than the one used by this application. Please update the Flight Display Companion.");
+                    QMessageBox::critical(
+                      this,
+                      "Error",
+                      "The network data transfer version of the Flight Display Companion is older "
+                      "than the one used by this application. Please update the Flight Display "
+                      "Companion.");
                     return;
                 }
                 break;
@@ -54,12 +66,18 @@ void MainWindow::receivedDataFromClient()
                     reading = false;
                     break;
                 }
+
                 ActiveAirplaneSettings settings = BinaryUtil::readAirplaneSettings(*tcpSocket);
                 tcpSocket->commitTransaction();
+
+
                 QMutexLocker locker(&sharedDataMutex);
+
                 sharedData.airplaneSettings = settings;
                 sharedData.airplaneSettingsChanged = true;
+
                 locker.unlock();
+
                 sharedDataUpdated.store(true, std::memory_order_seq_cst);
                 break;
             }
@@ -71,16 +89,22 @@ void MainWindow::receivedDataFromClient()
                     reading = false;
                     break;
                 }
-                ActiveAirplaneSettings settings = BinaryUtil::readAirplaneSettings(*tcpSocket);
 
+                ActiveAirplaneSettings settings = BinaryUtil::readAirplaneSettings(*tcpSocket);
                 tcpSocket->commitTransaction();
+
                 if (simThread == nullptr || !simThread->isRunning())
                 {
                     QMutexLocker locker(&sharedDataMutex);
+
                     sharedData.airplaneSettings = settings;
                     sharedData.quit = false;
+
                     locker.unlock();
+
+
                     sharedDataUpdated.store(true, std::memory_order_seq_cst);
+
                     startSim(settings);
                 }
                 break;
@@ -106,9 +130,13 @@ void MainWindow::receivedDataFromClient()
                 QByteArray commandString = tcpSocket->read(commandSize);
                 tcpSocket->commitTransaction();
 
+
                 QMutexLocker locker(&sharedDataMutex);
+
                 sharedData.commandString = commandString;
+
                 locker.unlock();
+
 
                 sharedDataUpdated.store(true, std::memory_order_seq_cst);
                 break;
@@ -117,8 +145,6 @@ void MainWindow::receivedDataFromClient()
                 qDebug() << "received unknown data:" << static_cast<int>(identifier);
                 tcpSocket->commitTransaction();
                 break;
-
         }
-
     }
 }

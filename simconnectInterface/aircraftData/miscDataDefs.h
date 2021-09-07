@@ -2,6 +2,7 @@
 #define MISCDATADEFS_H
 
 #include "sharedStructs.h"
+
 #include <QByteArray>
 
 struct SlowDatadefRawStruct
@@ -38,7 +39,8 @@ struct SlowDatadefStruct
     {
         fuelWeight = rhs->fuelWeight;
         totalFuelQty = rhs->totalFuelQty;
-        totalFuelFlow = rhs->eng1FuelFlow + rhs->eng2FuelFlow + rhs->eng3FuelFlow + rhs->eng4FuelFlow;
+        totalFuelFlow
+          = rhs->eng1FuelFlow + rhs->eng2FuelFlow + rhs->eng3FuelFlow + rhs->eng4FuelFlow;
         groundSpeed = rhs->groundSpeed;
         hasAp = rhs->hasAp != 0;
         hasCom1 = rhs->hasCom1 == 0;
@@ -77,7 +79,9 @@ struct StringsDataStruct
     }
 };
 
-extern const std::vector<dataDef> stringsDatadefVector; // maybe add: ATC AIRLINE String (50), ATC ID String (10), ATC FLIGHT NUMBER String (6)
+extern const std::vector<dataDef>
+  stringsDatadefVector;   // maybe add: ATC AIRLINE String (50), ATC ID String (10), ATC FLIGHT
+                          // NUMBER String (6)
 
 
 struct SetXpndrStateStruct
@@ -85,4 +89,4 @@ struct SetXpndrStateStruct
     int32_t state = 0;
 };
 
-#endif // MISCDATADEFS_H
+#endif   // MISCDATADEFS_H

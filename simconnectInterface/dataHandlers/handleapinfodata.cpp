@@ -15,14 +15,16 @@ void SimconnectThread::handleApInfoData(const PfdApInfoStruct &newData)
         d_lastApInfoData.ap_master = newData.ap_master;
         id = SimconnectIds::AP_STATUS;
         dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char *>(&newData.ap_master), sizeof(newData.ap_master));
+        dataToSend.append(reinterpret_cast<const char *>(&newData.ap_master),
+                          sizeof(newData.ap_master));
     }
     if (d_lastApInfoData.ap_yaw_damper != newData.ap_yaw_damper)
     {
         d_lastApInfoData.ap_yaw_damper = newData.ap_yaw_damper;
         id = SimconnectIds::AP_YD_STATUS;
         dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char *>(&newData.ap_yaw_damper), sizeof(newData.ap_yaw_damper));
+        dataToSend.append(reinterpret_cast<const char *>(&newData.ap_yaw_damper),
+                          sizeof(newData.ap_yaw_damper));
     }
 
     QByteArray AP_VerticalActive = "";
@@ -201,7 +203,6 @@ void SimconnectThread::handleApInfoData(const PfdApInfoStruct &newData)
         dataToSend.append(reinterpret_cast<const char *>(&size), sizeof(size));
         dataToSend.append(AP_LateralArmed.constData(), size);
     }
-
 
 
     if (!dataToSend.isEmpty())

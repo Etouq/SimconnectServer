@@ -1,7 +1,6 @@
 #include "../simconnectthread.ih"
 
 
-
 void SimconnectThread::handleSlowData(SIMCONNECT_RECV_SIMOBJECT_DATA *pObjData)
 {
     SlowDatadefStruct newData(reinterpret_cast<SlowDatadefRawStruct *>(&pObjData->dwData));
@@ -10,8 +9,10 @@ void SimconnectThread::handleSlowData(SIMCONNECT_RECV_SIMOBJECT_DATA *pObjData)
 
     SimconnectIds id = SimconnectIds::FUEL_TEXT_DATA;
     QByteArray dataToSend(reinterpret_cast<char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<char *>(&newData.totalFuelQty), sizeof(newData.totalFuelQty));
-    dataToSend.append(reinterpret_cast<char *>(&newData.totalFuelFlow), sizeof(newData.totalFuelFlow));
+    dataToSend.append(reinterpret_cast<char *>(&newData.totalFuelQty),
+                      sizeof(newData.totalFuelQty));
+    dataToSend.append(reinterpret_cast<char *>(&newData.totalFuelFlow),
+                      sizeof(newData.totalFuelFlow));
     dataToSend.append(reinterpret_cast<char *>(&newData.groundSpeed), sizeof(newData.groundSpeed));
 
     if (d_lastSlowData.hasAp != newData.hasAp)
@@ -56,9 +57,7 @@ void SimconnectThread::handleSlowData(SIMCONNECT_RECV_SIMOBJECT_DATA *pObjData)
 
 
     emit sendData(dataToSend);
-
 }
-
 
 
 void SimconnectThread::sendBlankSlowData()
@@ -67,9 +66,12 @@ void SimconnectThread::sendBlankSlowData()
 
     SimconnectIds id = SimconnectIds::FUEL_TEXT_DATA;
     QByteArray dataToSend(reinterpret_cast<char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<char *>(&blankData.totalFuelQty), sizeof(blankData.totalFuelQty));
-    dataToSend.append(reinterpret_cast<char *>(&blankData.totalFuelFlow), sizeof(blankData.totalFuelFlow));
-    dataToSend.append(reinterpret_cast<char *>(&blankData.groundSpeed), sizeof(blankData.groundSpeed));
+    dataToSend.append(reinterpret_cast<char *>(&blankData.totalFuelQty),
+                      sizeof(blankData.totalFuelQty));
+    dataToSend.append(reinterpret_cast<char *>(&blankData.totalFuelFlow),
+                      sizeof(blankData.totalFuelFlow));
+    dataToSend.append(reinterpret_cast<char *>(&blankData.groundSpeed),
+                      sizeof(blankData.groundSpeed));
 
 
     id = SimconnectIds::AP_AVAILABLE;
@@ -94,16 +96,3 @@ void SimconnectThread::sendBlankSlowData()
 
     emit sendData(dataToSend);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

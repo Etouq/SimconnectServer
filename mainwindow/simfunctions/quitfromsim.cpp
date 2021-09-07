@@ -3,7 +3,8 @@
 
 void MainWindow::quitFromSim()
 {
-    //sim called quit so sim is already closing, only need to tell the client to close let the client close the connection
+    // sim called quit so sim is already closing, only need to tell the client to close let the
+    // client close the connection
     setSimConnectionState(DISCONNECTED);
 
     setClientConnectionState(DISCONNECTING);

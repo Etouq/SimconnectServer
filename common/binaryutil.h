@@ -1,8 +1,8 @@
 #ifndef BINARYUTIL_H
 #define BINARYUTIL_H
 
-#include <cstdint>
 #include <QList>
+#include <cstdint>
 
 class QByteArray;
 class QIODevice;
@@ -11,8 +11,7 @@ struct FlightPlanWaypoint;
 struct ActiveAirplaneSettings;
 
 
-namespace BinaryUtil
-{
+namespace BinaryUtil {
 // to binary converters
 // fundamental types
 QByteArray toBinary(int8_t val);
@@ -42,7 +41,6 @@ QByteArray toBinary(const ActiveAirplaneSettings &settings);
 
 // list types
 QByteArray toBinary(const QList<FlightPlanWaypoint> &wpList);
-
 
 
 // from binary converters

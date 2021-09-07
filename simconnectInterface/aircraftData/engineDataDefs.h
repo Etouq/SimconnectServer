@@ -92,6 +92,4 @@ struct TurbopropData
 };
 
 
-
-
-#endif // ENGINEDATADEFS_H
+#endif   // ENGINEDATADEFS_H

@@ -1,11 +1,10 @@
 #include "flightplanreader.h"
+
 #include "common/dataIdentifiers.h"
+
 #include <QFile>
 
-FlightplanReader::FlightplanReader()
-{
-
-}
+FlightplanReader::FlightplanReader() {}
 
 
 FlightPlanWaypoint FlightplanReader::readWaypoint()
@@ -45,7 +44,7 @@ FlightPlanWaypoint FlightplanReader::readWaypoint()
         {
             QString posString = flightPlanXml.readElementText().simplified().toUpper();
 
-            if(QRegularExpressionMatch match = llaRegExp.match(posString); match.hasMatch())
+            if (QRegularExpressionMatch match = llaRegExp.match(posString); match.hasMatch())
             {
                 bool northLat = match.captured(1) != "S";
                 int latDeg = match.captured(2).toInt();
@@ -62,7 +61,6 @@ FlightPlanWaypoint FlightplanReader::readWaypoint()
                 newWp.position = QGeoCoordinate(lat, lon);
                 if (!alt1Set)
                     newWp.alt1 = lround(QString(match.captured(9) + match.captured(10)).toFloat());
-
             }
         }
         else if (flightPlanXml.name() == "AltDescFP")
@@ -91,10 +89,8 @@ FlightPlanWaypoint FlightplanReader::readWaypoint()
     }
 
 
-
     return newWp;
 }
-
 
 
 QList<FlightPlanWaypoint> FlightplanReader::readFlightPlanFile(QFile &file)
@@ -105,11 +101,12 @@ QList<FlightPlanWaypoint> FlightplanReader::readFlightPlanFile(QFile &file)
 
     while (!flightPlanXml.atEnd())
     {
-        if(flightPlanXml.readNextStartElement())
+        if (flightPlanXml.readNextStartElement())
         {
             if (flightPlanXml.name() == "FlightPlan.FlightPlan")
             {
-                while (flightPlanXml.readNextStartElement()) {
+                while (flightPlanXml.readNextStartElement())
+                {
                     if (flightPlanXml.name() == "ATCWaypoint")
                         flightPlanList.append(readWaypoint());
                     else
@@ -124,38 +121,3 @@ QList<FlightPlanWaypoint> FlightplanReader::readFlightPlanFile(QFile &file)
 
     return flightPlanList;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

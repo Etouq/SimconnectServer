@@ -65,7 +65,7 @@ struct PfdAltimeterStruct
     PfdAltimeterStruct(PfdAltimeterRawStruct *data);
 };
 
-struct PfdAttitudeRawStruct // also handles aoa
+struct PfdAttitudeRawStruct   // also handles aoa
 {
     double angle_of_attack = 0;
 
@@ -79,7 +79,7 @@ struct PfdAttitudeRawStruct // also handles aoa
     int32_t fd_state = 0;
 };
 
-struct PfdAttitudeStruct // also handles aoa
+struct PfdAttitudeStruct   // also handles aoa
 {
     double angle_of_attack = 0;
 
@@ -104,7 +104,7 @@ struct PfdBottombarStruct
     float total_air_temp = 0;
 };
 
-struct PfdHsiRawStruct // also handles position
+struct PfdHsiRawStruct   // also handles position
 {
     double rotation = 0;
     double heading = 0;
@@ -140,7 +140,7 @@ struct PfdHsiRawStruct // also handles position
     int32_t nav2_to_from = 0;
 };
 
-struct PfdHsiStruct // also handles position
+struct PfdHsiStruct   // also handles position
 {
     double rotation = 0;
     double heading = 0;
@@ -350,7 +350,6 @@ struct PfdApInfoStruct
 };
 
 
-
 extern const std::vector<dataDef> pfdAirspeedDefs;
 
 extern const std::vector<dataDef> pfdAltimeterDefs;
@@ -371,5 +370,4 @@ extern const std::vector<dataDef> pfdWindDefs;
 
 extern const std::vector<dataDef> pfdApInfoDefs;
 
-#endif // PFDDATADEFS_H
-
+#endif   // PFDDATADEFS_H

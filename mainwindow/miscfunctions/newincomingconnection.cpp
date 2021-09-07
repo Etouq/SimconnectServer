@@ -16,12 +16,21 @@ void MainWindow::newIncomingConnection()
 
     tcpServer.pauseAccepting();
 
-    connect(tcpSocket, &QTcpSocket::disconnected, this, &MainWindow::clientDisconnected, Qt::UniqueConnection);
-    connect(tcpSocket, &QTcpSocket::readyRead, this, &MainWindow::receivedDataFromClient, Qt::UniqueConnection);
+    connect(tcpSocket,
+            &QTcpSocket::disconnected,
+            this,
+            &MainWindow::clientDisconnected,
+            Qt::UniqueConnection);
+    connect(tcpSocket,
+            &QTcpSocket::readyRead,
+            this,
+            &MainWindow::receivedDataFromClient,
+            Qt::UniqueConnection);
 
     setClientConnectionState(ConnectionState::CONNECTED);
 
     SharedServerIds id = SharedServerIds::SIMCONNECT_SERVER;
     tcpSocket->write(reinterpret_cast<const char *>(&id), sizeof(id));
-    tcpSocket->write(reinterpret_cast<const char *>(&latestSimconnectNetworkVersion), sizeof(latestSimconnectNetworkVersion));
+    tcpSocket->write(reinterpret_cast<const char *>(&latestSimconnectNetworkVersion),
+                     sizeof(latestSimconnectNetworkVersion));
 }

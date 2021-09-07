@@ -1,4 +1,5 @@
 #include "../mainwindow.h"
+
 #include <QFileDialog>
 #include <QSettings>
 
@@ -11,7 +12,7 @@ void MainWindow::readNewFlightplan()
     dialog.setDirectory(lastUsedDir);
     dialog.setNameFilter("pln files (*.PLN *.pln)");
 
-    if(dialog.exec() != 0)
+    if (dialog.exec() != 0)
     {
         QString selectedDir = dialog.directory().absolutePath();
         QString selectedFile = dialog.selectedFiles().at(0);

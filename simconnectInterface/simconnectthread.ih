@@ -1,12 +1,13 @@
 #ifndef SIMCONNECTTHREAD_IH
 #define SIMCONNECTTHREAD_IH
 
-#include "simconnectthread.h"
-#include <cmath>
-#include <windows.h>
-#include <windef.h>
 #include "C:/MSFS SDK/SimConnect SDK/include/SimConnect.h"
 #include "common/dataIdentifiers.h"
+#include "simconnectthread.h"
+
+#include <cmath>
+#include <windef.h>
+#include <windows.h>
 
 enum DATA_DEFINITION_IDS
 {
@@ -63,4 +64,4 @@ enum SIM_COMMAND_IDS
     SET_XPNDR_CODE
 };
 
-#endif // SIMCONNECTTHREAD_IH
+#endif   // SIMCONNECTTHREAD_IH

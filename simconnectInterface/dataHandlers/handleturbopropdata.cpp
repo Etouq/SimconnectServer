@@ -7,46 +7,54 @@ void SimconnectThread::handleTurbopropSingleEngdata(SIMCONNECT_RECV_SIMOBJECT_DA
     QByteArray dataToSend;
     SimconnectIds id;
 
-    //n1
-    if(fabs(d_lastTurbopropData.engine1N1 - newData->engine1N1) >= d_currentAirplaneSettings.n1Epsilon)
+    // n1
+    if (fabs(d_lastTurbopropData.engine1N1 - newData->engine1N1)
+        >= d_currentAirplaneSettings.n1Epsilon)
     {
         d_lastTurbopropData.engine1N1 = newData->engine1N1;
         id = SimconnectIds::ENGINE1_N1;
         dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<char *>(&newData->engine1N1), sizeof(newData->engine1N1));
+        dataToSend.append(reinterpret_cast<char *>(&newData->engine1N1),
+                          sizeof(newData->engine1N1));
     }
 
-    //trq
-    if(fabs(d_lastTurbopropData.engine1Trq - newData->engine1Trq) >= d_currentAirplaneSettings.trqEpsilon)
+    // trq
+    if (fabs(d_lastTurbopropData.engine1Trq - newData->engine1Trq)
+        >= d_currentAirplaneSettings.trqEpsilon)
     {
         d_lastTurbopropData.engine1Trq = newData->engine1Trq;
         id = SimconnectIds::ENGINE1_TRQ;
         dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<char *>(&newData->engine1Trq), sizeof(newData->engine1Trq));
+        dataToSend.append(reinterpret_cast<char *>(&newData->engine1Trq),
+                          sizeof(newData->engine1Trq));
     }
 
-    //itt
-    if(fabs(d_lastTurbopropData.engine1Itt - newData->engine1Itt) >= d_currentAirplaneSettings.ittEpsilon)
+    // itt
+    if (fabs(d_lastTurbopropData.engine1Itt - newData->engine1Itt)
+        >= d_currentAirplaneSettings.ittEpsilon)
     {
         d_lastTurbopropData.engine1Itt = newData->engine1Itt;
         id = SimconnectIds::ENGINE1_ITT;
         dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<char *>(&newData->engine1Itt), sizeof(newData->engine1Itt));
+        dataToSend.append(reinterpret_cast<char *>(&newData->engine1Itt),
+                          sizeof(newData->engine1Itt));
     }
 
-    //rpm
+    // rpm
     if (fabs(d_lastTurbopropData.engine1Rpm - newData->engine1Rpm) >= 1.0)
     {
         d_lastTurbopropData.engine1Rpm = newData->engine1Rpm;
         id = SimconnectIds::ENGINE1_RPM;
         dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<char *>(&newData->engine1Rpm), sizeof(newData->engine1Rpm));
+        dataToSend.append(reinterpret_cast<char *>(&newData->engine1Rpm),
+                          sizeof(newData->engine1Rpm));
     }
 
-    //fuel qty
+    // fuel qty
     if (d_currentAirplaneSettings.numTanks == 1)
     {
-        if(fabs(d_lastTurbopropData.commonData.fuelQtyTotal - newData->commonData.fuelQtyTotal) >= d_currentAirplaneSettings.fuelQtyEpsilon)
+        if (fabs(d_lastTurbopropData.commonData.fuelQtyTotal - newData->commonData.fuelQtyTotal)
+            >= d_currentAirplaneSettings.fuelQtyEpsilon)
         {
             d_lastTurbopropData.commonData.fuelQtyTotal = newData->commonData.fuelQtyTotal;
 
@@ -55,12 +63,14 @@ void SimconnectThread::handleTurbopropSingleEngdata(SIMCONNECT_RECV_SIMOBJECT_DA
 
             id = SimconnectIds::ENGINE1_FUEL_QTY;
             dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
-            dataToSend.append(reinterpret_cast<char *>(&newData->commonData.fuelQtyTotal), sizeof(newData->commonData.fuelQtyTotal));
+            dataToSend.append(reinterpret_cast<char *>(&newData->commonData.fuelQtyTotal),
+                              sizeof(newData->commonData.fuelQtyTotal));
         }
     }
     else
     {
-        if(fabs(d_lastTurbopropData.commonData.fuelQtyLeft - newData->commonData.fuelQtyLeft) >= d_currentAirplaneSettings.fuelQtyEpsilon)
+        if (fabs(d_lastTurbopropData.commonData.fuelQtyLeft - newData->commonData.fuelQtyLeft)
+            >= d_currentAirplaneSettings.fuelQtyEpsilon)
         {
             d_lastTurbopropData.commonData.fuelQtyLeft = newData->commonData.fuelQtyLeft;
 
@@ -69,9 +79,11 @@ void SimconnectThread::handleTurbopropSingleEngdata(SIMCONNECT_RECV_SIMOBJECT_DA
 
             id = SimconnectIds::ENGINE1_FUEL_QTY;
             dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
-            dataToSend.append(reinterpret_cast<char *>(&newData->commonData.fuelQtyLeft), sizeof(newData->commonData.fuelQtyLeft));
+            dataToSend.append(reinterpret_cast<char *>(&newData->commonData.fuelQtyLeft),
+                              sizeof(newData->commonData.fuelQtyLeft));
         }
-        if(fabs(d_lastTurbopropData.commonData.fuelQtyRight - newData->commonData.fuelQtyRight) >= d_currentAirplaneSettings.fuelQtyEpsilon)
+        if (fabs(d_lastTurbopropData.commonData.fuelQtyRight - newData->commonData.fuelQtyRight)
+            >= d_currentAirplaneSettings.fuelQtyEpsilon)
         {
             d_lastTurbopropData.commonData.fuelQtyRight = newData->commonData.fuelQtyRight;
 
@@ -80,12 +92,14 @@ void SimconnectThread::handleTurbopropSingleEngdata(SIMCONNECT_RECV_SIMOBJECT_DA
 
             id = SimconnectIds::ENGINE2_FUEL_QTY;
             dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
-            dataToSend.append(reinterpret_cast<char *>(&newData->commonData.fuelQtyRight), sizeof(newData->commonData.fuelQtyRight));
+            dataToSend.append(reinterpret_cast<char *>(&newData->commonData.fuelQtyRight),
+                              sizeof(newData->commonData.fuelQtyRight));
         }
     }
 
-    //fuel flow
-    if(fabs(d_lastTurbopropData.commonData.engine1FuelFlow - newData->commonData.engine1FuelFlow) >= d_currentAirplaneSettings.fuelFlowEpsilon)
+    // fuel flow
+    if (fabs(d_lastTurbopropData.commonData.engine1FuelFlow - newData->commonData.engine1FuelFlow)
+        >= d_currentAirplaneSettings.fuelFlowEpsilon)
     {
         d_lastTurbopropData.commonData.engine1FuelFlow = newData->commonData.engine1FuelFlow;
 
@@ -94,9 +108,11 @@ void SimconnectThread::handleTurbopropSingleEngdata(SIMCONNECT_RECV_SIMOBJECT_DA
 
         id = SimconnectIds::ENGINE1_FUEL_FLOW;
         dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<char *>(&newData->commonData.engine1FuelFlow), sizeof(newData->commonData.engine1FuelFlow));
+        dataToSend.append(reinterpret_cast<char *>(&newData->commonData.engine1FuelFlow),
+                          sizeof(newData->commonData.engine1FuelFlow));
     }
-    if(fabs(d_lastTurbopropData.commonData.engine2FuelFlow - newData->commonData.engine2FuelFlow) >= d_currentAirplaneSettings.fuelFlowEpsilon)
+    if (fabs(d_lastTurbopropData.commonData.engine2FuelFlow - newData->commonData.engine2FuelFlow)
+        >= d_currentAirplaneSettings.fuelFlowEpsilon)
     {
         d_lastTurbopropData.commonData.engine2FuelFlow = newData->commonData.engine2FuelFlow;
 
@@ -105,94 +121,119 @@ void SimconnectThread::handleTurbopropSingleEngdata(SIMCONNECT_RECV_SIMOBJECT_DA
 
         id = SimconnectIds::ENGINE2_FUEL_FLOW;
         dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<char *>(&newData->commonData.engine2FuelFlow), sizeof(newData->commonData.engine2FuelFlow));
+        dataToSend.append(reinterpret_cast<char *>(&newData->commonData.engine2FuelFlow),
+                          sizeof(newData->commonData.engine2FuelFlow));
     }
 
-    //oil temp
-    if(fabs(d_lastTurbopropData.commonData.engine1OilTemp - newData->commonData.engine1OilTemp) >= d_currentAirplaneSettings.oilTempEpsilon)
+    // oil temp
+    if (fabs(d_lastTurbopropData.commonData.engine1OilTemp - newData->commonData.engine1OilTemp)
+        >= d_currentAirplaneSettings.oilTempEpsilon)
     {
         d_lastTurbopropData.commonData.engine1OilTemp = newData->commonData.engine1OilTemp;
         id = SimconnectIds::ENGINE1_OIL_TEMP;
         dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<char *>(&newData->commonData.engine1OilTemp), sizeof(newData->commonData.engine1OilTemp));
+        dataToSend.append(reinterpret_cast<char *>(&newData->commonData.engine1OilTemp),
+                          sizeof(newData->commonData.engine1OilTemp));
     }
 
-    //oil press
-    if(fabs(d_lastTurbopropData.commonData.engine1OilPress - newData->commonData.engine1OilPress) >= d_currentAirplaneSettings.oilPressEpsilon)
+    // oil press
+    if (fabs(d_lastTurbopropData.commonData.engine1OilPress - newData->commonData.engine1OilPress)
+        >= d_currentAirplaneSettings.oilPressEpsilon)
     {
         d_lastTurbopropData.commonData.engine1OilPress = newData->commonData.engine1OilPress;
         id = SimconnectIds::ENGINE1_OIL_PRESS;
         dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<char *>(&newData->commonData.engine1OilPress), sizeof(newData->commonData.engine1OilPress));
+        dataToSend.append(reinterpret_cast<char *>(&newData->commonData.engine1OilPress),
+                          sizeof(newData->commonData.engine1OilPress));
     }
 
-    //egt
+    // egt
     if (d_currentAirplaneSettings.hasEgt)
-        if (fabs(d_lastTurbopropData.engine1Egt - newData->engine1Egt) >= d_currentAirplaneSettings.egtEpsilon)
+        if (fabs(d_lastTurbopropData.engine1Egt - newData->engine1Egt)
+            >= d_currentAirplaneSettings.egtEpsilon)
         {
             d_lastTurbopropData.engine1Egt = newData->engine1Egt;
             id = SimconnectIds::ENGINE1_EGT;
             dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
-            dataToSend.append(reinterpret_cast<char *>(&newData->engine1Egt), sizeof(newData->engine1Egt));
+            dataToSend.append(reinterpret_cast<char *>(&newData->engine1Egt),
+                              sizeof(newData->engine1Egt));
         }
 
-    //flaps\spoilers
+    // flaps\spoilers
     if (d_currentAirplaneSettings.hasFlaps)
     {
-        //flaps
-        if (fabs(d_lastTurbopropData.commonData.flapsLeftAngle + d_lastTurbopropData.commonData.flapsRightAngle - newData->commonData.flapsLeftAngle - newData->commonData.flapsRightAngle) >= 1.0)
+        // flaps
+        if (fabs(d_lastTurbopropData.commonData.flapsLeftAngle
+                 + d_lastTurbopropData.commonData.flapsRightAngle
+                 - newData->commonData.flapsLeftAngle - newData->commonData.flapsRightAngle)
+            >= 1.0)
         {
             d_lastTurbopropData.commonData.flapsLeftAngle = newData->commonData.flapsLeftAngle;
             d_lastTurbopropData.commonData.flapsRightAngle = newData->commonData.flapsRightAngle;
 
-            newData->commonData.flapsRightAngle = (newData->commonData.flapsLeftAngle + newData->commonData.flapsRightAngle) / 2.0;
+            newData->commonData.flapsRightAngle
+              = (newData->commonData.flapsLeftAngle + newData->commonData.flapsRightAngle) / 2.0;
             id = SimconnectIds::FLAPS_ANGLE;
             dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
-            dataToSend.append(reinterpret_cast<char *>(&newData->commonData.flapsRightAngle), sizeof(newData->commonData.flapsRightAngle));
+            dataToSend.append(reinterpret_cast<char *>(&newData->commonData.flapsRightAngle),
+                              sizeof(newData->commonData.flapsRightAngle));
         }
 
-        //spoilers
+        // spoilers
         if (d_currentAirplaneSettings.hasSpoilers)
-            if (fabs(d_lastTurbopropData.commonData.spoilersLeftPct + d_lastTurbopropData.commonData.spoilersRightPct - newData->commonData.spoilersLeftPct - newData->commonData.spoilersRightPct) >= 1.0)
+            if (fabs(d_lastTurbopropData.commonData.spoilersLeftPct
+                     + d_lastTurbopropData.commonData.spoilersRightPct
+                     - newData->commonData.spoilersLeftPct - newData->commonData.spoilersRightPct)
+                >= 1.0)
             {
-                d_lastTurbopropData.commonData.spoilersLeftPct = newData->commonData.spoilersLeftPct;
-                d_lastTurbopropData.commonData.spoilersRightPct = newData->commonData.spoilersRightPct;
+                d_lastTurbopropData.commonData.spoilersLeftPct
+                  = newData->commonData.spoilersLeftPct;
+                d_lastTurbopropData.commonData.spoilersRightPct
+                  = newData->commonData.spoilersRightPct;
 
-                newData->commonData.spoilersRightPct = (newData->commonData.spoilersLeftPct + newData->commonData.spoilersRightPct) / 2.0;
+                newData->commonData.spoilersRightPct
+                  = (newData->commonData.spoilersLeftPct + newData->commonData.spoilersRightPct)
+                    / 2.0;
                 id = SimconnectIds::SPOILERS_PCT;
                 dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
-                dataToSend.append(reinterpret_cast<char *>(&newData->commonData.spoilersRightPct), sizeof(newData->commonData.spoilersRightPct));
+                dataToSend.append(reinterpret_cast<char *>(&newData->commonData.spoilersRightPct),
+                                  sizeof(newData->commonData.spoilersRightPct));
             }
     }
 
-    //elev trim
+    // elev trim
     if (d_currentAirplaneSettings.hasElevTrim)
         if (fabs(d_lastJetData.commonData.elevTrimPct - newData->commonData.elevTrimPct) >= 0.002)
         {
             d_lastJetData.commonData.elevTrimPct = newData->commonData.elevTrimPct;
             id = SimconnectIds::ELEV_TRIM_PCT;
             dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
-            dataToSend.append(reinterpret_cast<char *>(&newData->commonData.elevTrimPct), sizeof(newData->commonData.elevTrimPct));
+            dataToSend.append(reinterpret_cast<char *>(&newData->commonData.elevTrimPct),
+                              sizeof(newData->commonData.elevTrimPct));
         }
 
-    //rudder trim
+    // rudder trim
     if (d_currentAirplaneSettings.hasRudderTrim)
-        if (fabs(d_lastTurbopropData.commonData.rudderTrimPct - newData->commonData.rudderTrimPct) >= 0.002)
+        if (fabs(d_lastTurbopropData.commonData.rudderTrimPct - newData->commonData.rudderTrimPct)
+            >= 0.002)
         {
             d_lastTurbopropData.commonData.rudderTrimPct = newData->commonData.rudderTrimPct;
             id = SimconnectIds::RUDD_TRIM_PCT;
             dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
-            dataToSend.append(reinterpret_cast<char *>(&newData->commonData.rudderTrimPct), sizeof(newData->commonData.rudderTrimPct));
+            dataToSend.append(reinterpret_cast<char *>(&newData->commonData.rudderTrimPct),
+                              sizeof(newData->commonData.rudderTrimPct));
         }
 
-    //aileron trim
+    // aileron trim
     if (d_currentAirplaneSettings.hasAileronTrim)
-        if (fabs(d_lastTurbopropData.commonData.aileronTrimPct - newData->commonData.aileronTrimPct) >= 0.002)
+        if (fabs(d_lastTurbopropData.commonData.aileronTrimPct - newData->commonData.aileronTrimPct)
+            >= 0.002)
         {
             d_lastTurbopropData.commonData.aileronTrimPct = newData->commonData.aileronTrimPct;
             id = SimconnectIds::AIL_TRIM_PCT;
             dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
-            dataToSend.append(reinterpret_cast<char *>(&newData->commonData.aileronTrimPct), sizeof(newData->commonData.aileronTrimPct));
+            dataToSend.append(reinterpret_cast<char *>(&newData->commonData.aileronTrimPct),
+                              sizeof(newData->commonData.aileronTrimPct));
         }
 
     if (!dataToSend.isEmpty())
@@ -206,74 +247,89 @@ void SimconnectThread::handleTurbopropTwinEngdata(SIMCONNECT_RECV_SIMOBJECT_DATA
     QByteArray dataToSend;
     SimconnectIds id;
 
-    //n1
-    if(fabs(d_lastTurbopropData.engine1N1 - newData->engine1N1) >= d_currentAirplaneSettings.n1Epsilon)
+    // n1
+    if (fabs(d_lastTurbopropData.engine1N1 - newData->engine1N1)
+        >= d_currentAirplaneSettings.n1Epsilon)
     {
         d_lastTurbopropData.engine1N1 = newData->engine1N1;
         id = SimconnectIds::ENGINE1_N1;
         dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<char *>(&newData->engine1N1), sizeof(newData->engine1N1));
+        dataToSend.append(reinterpret_cast<char *>(&newData->engine1N1),
+                          sizeof(newData->engine1N1));
     }
-    if(fabs(d_lastTurbopropData.engine2N1 - newData->engine2N1) >= d_currentAirplaneSettings.n1Epsilon)
+    if (fabs(d_lastTurbopropData.engine2N1 - newData->engine2N1)
+        >= d_currentAirplaneSettings.n1Epsilon)
     {
         d_lastTurbopropData.engine2N1 = newData->engine2N1;
         id = SimconnectIds::ENGINE2_N1;
         dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<char *>(&newData->engine2N1), sizeof(newData->engine2N1));
+        dataToSend.append(reinterpret_cast<char *>(&newData->engine2N1),
+                          sizeof(newData->engine2N1));
     }
 
-    //trq
-    if(fabs(d_lastTurbopropData.engine1Trq - newData->engine1Trq) >= d_currentAirplaneSettings.trqEpsilon)
+    // trq
+    if (fabs(d_lastTurbopropData.engine1Trq - newData->engine1Trq)
+        >= d_currentAirplaneSettings.trqEpsilon)
     {
         d_lastTurbopropData.engine1Trq = newData->engine1Trq;
         id = SimconnectIds::ENGINE1_TRQ;
         dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<char *>(&newData->engine1Trq), sizeof(newData->engine1Trq));
+        dataToSend.append(reinterpret_cast<char *>(&newData->engine1Trq),
+                          sizeof(newData->engine1Trq));
     }
-    if(fabs(d_lastTurbopropData.engine2Trq - newData->engine2Trq) >= d_currentAirplaneSettings.trqEpsilon)
+    if (fabs(d_lastTurbopropData.engine2Trq - newData->engine2Trq)
+        >= d_currentAirplaneSettings.trqEpsilon)
     {
         d_lastTurbopropData.engine2Trq = newData->engine2Trq;
         id = SimconnectIds::ENGINE2_TRQ;
         dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<char *>(&newData->engine2Trq), sizeof(newData->engine2Trq));
+        dataToSend.append(reinterpret_cast<char *>(&newData->engine2Trq),
+                          sizeof(newData->engine2Trq));
     }
 
-    //itt
-    if(fabs(d_lastTurbopropData.engine1Itt - newData->engine1Itt) >= d_currentAirplaneSettings.ittEpsilon)
+    // itt
+    if (fabs(d_lastTurbopropData.engine1Itt - newData->engine1Itt)
+        >= d_currentAirplaneSettings.ittEpsilon)
     {
         d_lastTurbopropData.engine1Itt = newData->engine1Itt;
         id = SimconnectIds::ENGINE1_ITT;
         dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<char *>(&newData->engine1Itt), sizeof(newData->engine1Itt));
+        dataToSend.append(reinterpret_cast<char *>(&newData->engine1Itt),
+                          sizeof(newData->engine1Itt));
     }
-    if(fabs(d_lastTurbopropData.engine2Itt - newData->engine2Itt) >= d_currentAirplaneSettings.ittEpsilon)
+    if (fabs(d_lastTurbopropData.engine2Itt - newData->engine2Itt)
+        >= d_currentAirplaneSettings.ittEpsilon)
     {
         d_lastTurbopropData.engine2Itt = newData->engine2Itt;
         id = SimconnectIds::ENGINE2_ITT;
         dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<char *>(&newData->engine2Itt), sizeof(newData->engine2Itt));
+        dataToSend.append(reinterpret_cast<char *>(&newData->engine2Itt),
+                          sizeof(newData->engine2Itt));
     }
 
-    //rpm
+    // rpm
     if (fabs(d_lastTurbopropData.engine1Rpm - newData->engine1Rpm) >= 1.0)
     {
         d_lastTurbopropData.engine1Rpm = newData->engine1Rpm;
         id = SimconnectIds::ENGINE1_RPM;
         dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<char *>(&newData->engine1Rpm), sizeof(newData->engine1Rpm));
+        dataToSend.append(reinterpret_cast<char *>(&newData->engine1Rpm),
+                          sizeof(newData->engine1Rpm));
     }
     if (fabs(d_lastTurbopropData.engine2Rpm - newData->engine2Rpm) >= 1.0)
     {
         d_lastTurbopropData.engine2Rpm = newData->engine2Rpm;
         id = SimconnectIds::ENGINE2_RPM;
         dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<char *>(&newData->engine2Rpm), sizeof(newData->engine2Rpm));
+        dataToSend.append(reinterpret_cast<char *>(&newData->engine2Rpm),
+                          sizeof(newData->engine2Rpm));
     }
 
-    //fuel qty
+    // fuel qty
     if (d_currentAirplaneSettings.numTanks == 1)
     {
-        if(fabs(d_lastTurbopropData.commonData.fuelQtyTotal - newData->commonData.fuelQtyTotal) >= d_currentAirplaneSettings.fuelQtyEpsilon)
+        if (fabs(d_lastTurbopropData.commonData.fuelQtyTotal - newData->commonData.fuelQtyTotal)
+            >= d_currentAirplaneSettings.fuelQtyEpsilon)
         {
             d_lastTurbopropData.commonData.fuelQtyTotal = newData->commonData.fuelQtyTotal;
 
@@ -282,12 +338,14 @@ void SimconnectThread::handleTurbopropTwinEngdata(SIMCONNECT_RECV_SIMOBJECT_DATA
 
             id = SimconnectIds::ENGINE1_FUEL_QTY;
             dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
-            dataToSend.append(reinterpret_cast<char *>(&newData->commonData.fuelQtyTotal), sizeof(newData->commonData.fuelQtyTotal));
+            dataToSend.append(reinterpret_cast<char *>(&newData->commonData.fuelQtyTotal),
+                              sizeof(newData->commonData.fuelQtyTotal));
         }
     }
     else
     {
-        if(fabs(d_lastTurbopropData.commonData.fuelQtyLeft - newData->commonData.fuelQtyLeft) >= d_currentAirplaneSettings.fuelQtyEpsilon)
+        if (fabs(d_lastTurbopropData.commonData.fuelQtyLeft - newData->commonData.fuelQtyLeft)
+            >= d_currentAirplaneSettings.fuelQtyEpsilon)
         {
             d_lastTurbopropData.commonData.fuelQtyLeft = newData->commonData.fuelQtyLeft;
 
@@ -296,9 +354,11 @@ void SimconnectThread::handleTurbopropTwinEngdata(SIMCONNECT_RECV_SIMOBJECT_DATA
 
             id = SimconnectIds::ENGINE1_FUEL_QTY;
             dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
-            dataToSend.append(reinterpret_cast<char *>(&newData->commonData.fuelQtyLeft), sizeof(newData->commonData.fuelQtyLeft));
+            dataToSend.append(reinterpret_cast<char *>(&newData->commonData.fuelQtyLeft),
+                              sizeof(newData->commonData.fuelQtyLeft));
         }
-        if(fabs(d_lastTurbopropData.commonData.fuelQtyRight - newData->commonData.fuelQtyRight) >= d_currentAirplaneSettings.fuelQtyEpsilon)
+        if (fabs(d_lastTurbopropData.commonData.fuelQtyRight - newData->commonData.fuelQtyRight)
+            >= d_currentAirplaneSettings.fuelQtyEpsilon)
         {
             d_lastTurbopropData.commonData.fuelQtyRight = newData->commonData.fuelQtyRight;
 
@@ -307,12 +367,14 @@ void SimconnectThread::handleTurbopropTwinEngdata(SIMCONNECT_RECV_SIMOBJECT_DATA
 
             id = SimconnectIds::ENGINE2_FUEL_QTY;
             dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
-            dataToSend.append(reinterpret_cast<char *>(&newData->commonData.fuelQtyRight), sizeof(newData->commonData.fuelQtyRight));
+            dataToSend.append(reinterpret_cast<char *>(&newData->commonData.fuelQtyRight),
+                              sizeof(newData->commonData.fuelQtyRight));
         }
     }
 
-    //fuel flow
-    if(fabs(d_lastTurbopropData.commonData.engine1FuelFlow - newData->commonData.engine1FuelFlow) >= d_currentAirplaneSettings.fuelFlowEpsilon)
+    // fuel flow
+    if (fabs(d_lastTurbopropData.commonData.engine1FuelFlow - newData->commonData.engine1FuelFlow)
+        >= d_currentAirplaneSettings.fuelFlowEpsilon)
     {
         d_lastTurbopropData.commonData.engine1FuelFlow = newData->commonData.engine1FuelFlow;
 
@@ -321,9 +383,11 @@ void SimconnectThread::handleTurbopropTwinEngdata(SIMCONNECT_RECV_SIMOBJECT_DATA
 
         id = SimconnectIds::ENGINE1_FUEL_FLOW;
         dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<char *>(&newData->commonData.engine1FuelFlow), sizeof(newData->commonData.engine1FuelFlow));
+        dataToSend.append(reinterpret_cast<char *>(&newData->commonData.engine1FuelFlow),
+                          sizeof(newData->commonData.engine1FuelFlow));
     }
-    if(fabs(d_lastTurbopropData.commonData.engine2FuelFlow - newData->commonData.engine2FuelFlow) >= d_currentAirplaneSettings.fuelFlowEpsilon)
+    if (fabs(d_lastTurbopropData.commonData.engine2FuelFlow - newData->commonData.engine2FuelFlow)
+        >= d_currentAirplaneSettings.fuelFlowEpsilon)
     {
         d_lastTurbopropData.commonData.engine2FuelFlow = newData->commonData.engine2FuelFlow;
 
@@ -332,134 +396,151 @@ void SimconnectThread::handleTurbopropTwinEngdata(SIMCONNECT_RECV_SIMOBJECT_DATA
 
         id = SimconnectIds::ENGINE2_FUEL_FLOW;
         dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<char *>(&newData->commonData.engine2FuelFlow), sizeof(newData->commonData.engine2FuelFlow));
+        dataToSend.append(reinterpret_cast<char *>(&newData->commonData.engine2FuelFlow),
+                          sizeof(newData->commonData.engine2FuelFlow));
     }
 
-    //oil temp
-    if(fabs(d_lastTurbopropData.commonData.engine1OilTemp - newData->commonData.engine1OilTemp) >= d_currentAirplaneSettings.oilTempEpsilon)
+    // oil temp
+    if (fabs(d_lastTurbopropData.commonData.engine1OilTemp - newData->commonData.engine1OilTemp)
+        >= d_currentAirplaneSettings.oilTempEpsilon)
     {
         d_lastTurbopropData.commonData.engine1OilTemp = newData->commonData.engine1OilTemp;
         id = SimconnectIds::ENGINE1_OIL_TEMP;
         dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<char *>(&newData->commonData.engine1OilTemp), sizeof(newData->commonData.engine1OilTemp));
+        dataToSend.append(reinterpret_cast<char *>(&newData->commonData.engine1OilTemp),
+                          sizeof(newData->commonData.engine1OilTemp));
     }
-    if(fabs(d_lastTurbopropData.commonData.engine2OilTemp - newData->commonData.engine2OilTemp) >= d_currentAirplaneSettings.oilTempEpsilon)
+    if (fabs(d_lastTurbopropData.commonData.engine2OilTemp - newData->commonData.engine2OilTemp)
+        >= d_currentAirplaneSettings.oilTempEpsilon)
     {
         d_lastTurbopropData.commonData.engine2OilTemp = newData->commonData.engine2OilTemp;
         id = SimconnectIds::ENGINE2_OIL_TEMP;
         dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<char *>(&newData->commonData.engine2OilTemp), sizeof(newData->commonData.engine2OilTemp));
+        dataToSend.append(reinterpret_cast<char *>(&newData->commonData.engine2OilTemp),
+                          sizeof(newData->commonData.engine2OilTemp));
     }
 
-    //oil press
-    if(fabs(d_lastTurbopropData.commonData.engine1OilPress - newData->commonData.engine1OilPress) >= d_currentAirplaneSettings.oilPressEpsilon)
+    // oil press
+    if (fabs(d_lastTurbopropData.commonData.engine1OilPress - newData->commonData.engine1OilPress)
+        >= d_currentAirplaneSettings.oilPressEpsilon)
     {
         d_lastTurbopropData.commonData.engine1OilPress = newData->commonData.engine1OilPress;
         id = SimconnectIds::ENGINE1_OIL_PRESS;
         dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<char *>(&newData->commonData.engine1OilPress), sizeof(newData->commonData.engine1OilPress));
+        dataToSend.append(reinterpret_cast<char *>(&newData->commonData.engine1OilPress),
+                          sizeof(newData->commonData.engine1OilPress));
     }
-    if(fabs(d_lastTurbopropData.commonData.engine2OilPress - newData->commonData.engine2OilPress) >= d_currentAirplaneSettings.oilPressEpsilon)
+    if (fabs(d_lastTurbopropData.commonData.engine2OilPress - newData->commonData.engine2OilPress)
+        >= d_currentAirplaneSettings.oilPressEpsilon)
     {
         d_lastTurbopropData.commonData.engine2OilPress = newData->commonData.engine2OilPress;
         id = SimconnectIds::ENGINE2_OIL_PRESS;
         dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<char *>(&newData->commonData.engine2OilPress), sizeof(newData->commonData.engine2OilPress));
+        dataToSend.append(reinterpret_cast<char *>(&newData->commonData.engine2OilPress),
+                          sizeof(newData->commonData.engine2OilPress));
     }
 
-    //egt
+    // egt
     if (d_currentAirplaneSettings.hasEgt)
     {
-        if (fabs(d_lastTurbopropData.engine1Egt - newData->engine1Egt) >= d_currentAirplaneSettings.egtEpsilon)
+        if (fabs(d_lastTurbopropData.engine1Egt - newData->engine1Egt)
+            >= d_currentAirplaneSettings.egtEpsilon)
         {
             d_lastTurbopropData.engine1Egt = newData->engine1Egt;
             id = SimconnectIds::ENGINE1_EGT;
             dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
-            dataToSend.append(reinterpret_cast<char *>(&newData->engine1Egt), sizeof(newData->engine1Egt));
+            dataToSend.append(reinterpret_cast<char *>(&newData->engine1Egt),
+                              sizeof(newData->engine1Egt));
         }
-        if (fabs(d_lastTurbopropData.engine2Egt - newData->engine2Egt) >= d_currentAirplaneSettings.egtEpsilon)
+        if (fabs(d_lastTurbopropData.engine2Egt - newData->engine2Egt)
+            >= d_currentAirplaneSettings.egtEpsilon)
         {
             d_lastTurbopropData.engine2Egt = newData->engine2Egt;
             id = SimconnectIds::ENGINE2_EGT;
             dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
-            dataToSend.append(reinterpret_cast<char *>(&newData->engine2Egt), sizeof(newData->engine2Egt));
+            dataToSend.append(reinterpret_cast<char *>(&newData->engine2Egt),
+                              sizeof(newData->engine2Egt));
         }
     }
 
 
-    //flaps\spoilers
+    // flaps\spoilers
     if (d_currentAirplaneSettings.hasFlaps)
     {
-        //flaps
-        if (fabs(d_lastTurbopropData.commonData.flapsLeftAngle + d_lastTurbopropData.commonData.flapsRightAngle - newData->commonData.flapsLeftAngle - newData->commonData.flapsRightAngle) >= 1.0)
+        // flaps
+        if (fabs(d_lastTurbopropData.commonData.flapsLeftAngle
+                 + d_lastTurbopropData.commonData.flapsRightAngle
+                 - newData->commonData.flapsLeftAngle - newData->commonData.flapsRightAngle)
+            >= 1.0)
         {
             d_lastTurbopropData.commonData.flapsLeftAngle = newData->commonData.flapsLeftAngle;
             d_lastTurbopropData.commonData.flapsRightAngle = newData->commonData.flapsRightAngle;
 
-            newData->commonData.flapsRightAngle = (newData->commonData.flapsLeftAngle + newData->commonData.flapsRightAngle) / 2.0;
+            newData->commonData.flapsRightAngle
+              = (newData->commonData.flapsLeftAngle + newData->commonData.flapsRightAngle) / 2.0;
             id = SimconnectIds::FLAPS_ANGLE;
             dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
-            dataToSend.append(reinterpret_cast<char *>(&newData->commonData.flapsRightAngle), sizeof(newData->commonData.flapsRightAngle));
+            dataToSend.append(reinterpret_cast<char *>(&newData->commonData.flapsRightAngle),
+                              sizeof(newData->commonData.flapsRightAngle));
         }
 
-        //spoilers
+        // spoilers
         if (d_currentAirplaneSettings.hasSpoilers)
-            if (fabs(d_lastTurbopropData.commonData.spoilersLeftPct + d_lastTurbopropData.commonData.spoilersRightPct - newData->commonData.spoilersLeftPct - newData->commonData.spoilersRightPct) >= 1.0)
+            if (fabs(d_lastTurbopropData.commonData.spoilersLeftPct
+                     + d_lastTurbopropData.commonData.spoilersRightPct
+                     - newData->commonData.spoilersLeftPct - newData->commonData.spoilersRightPct)
+                >= 1.0)
             {
-                d_lastTurbopropData.commonData.spoilersLeftPct = newData->commonData.spoilersLeftPct;
-                d_lastTurbopropData.commonData.spoilersRightPct = newData->commonData.spoilersRightPct;
+                d_lastTurbopropData.commonData.spoilersLeftPct
+                  = newData->commonData.spoilersLeftPct;
+                d_lastTurbopropData.commonData.spoilersRightPct
+                  = newData->commonData.spoilersRightPct;
 
-                newData->commonData.spoilersRightPct = (newData->commonData.spoilersLeftPct + newData->commonData.spoilersRightPct) / 2.0;
+                newData->commonData.spoilersRightPct
+                  = (newData->commonData.spoilersLeftPct + newData->commonData.spoilersRightPct)
+                    / 2.0;
                 id = SimconnectIds::SPOILERS_PCT;
                 dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
-                dataToSend.append(reinterpret_cast<char *>(&newData->commonData.spoilersRightPct), sizeof(newData->commonData.spoilersRightPct));
+                dataToSend.append(reinterpret_cast<char *>(&newData->commonData.spoilersRightPct),
+                                  sizeof(newData->commonData.spoilersRightPct));
             }
     }
 
-    //elev trim
+    // elev trim
     if (d_currentAirplaneSettings.hasElevTrim)
         if (fabs(d_lastJetData.commonData.elevTrimPct - newData->commonData.elevTrimPct) >= 0.002)
         {
             d_lastJetData.commonData.elevTrimPct = newData->commonData.elevTrimPct;
             id = SimconnectIds::ELEV_TRIM_PCT;
             dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
-            dataToSend.append(reinterpret_cast<char *>(&newData->commonData.elevTrimPct), sizeof(newData->commonData.elevTrimPct));
+            dataToSend.append(reinterpret_cast<char *>(&newData->commonData.elevTrimPct),
+                              sizeof(newData->commonData.elevTrimPct));
         }
 
-    //rudder trim
+    // rudder trim
     if (d_currentAirplaneSettings.hasRudderTrim)
-        if (fabs(d_lastTurbopropData.commonData.rudderTrimPct - newData->commonData.rudderTrimPct) >= 0.002)
+        if (fabs(d_lastTurbopropData.commonData.rudderTrimPct - newData->commonData.rudderTrimPct)
+            >= 0.002)
         {
             d_lastTurbopropData.commonData.rudderTrimPct = newData->commonData.rudderTrimPct;
             id = SimconnectIds::RUDD_TRIM_PCT;
             dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
-            dataToSend.append(reinterpret_cast<char *>(&newData->commonData.rudderTrimPct), sizeof(newData->commonData.rudderTrimPct));
+            dataToSend.append(reinterpret_cast<char *>(&newData->commonData.rudderTrimPct),
+                              sizeof(newData->commonData.rudderTrimPct));
         }
 
-    //aileron trim
+    // aileron trim
     if (d_currentAirplaneSettings.hasAileronTrim)
-        if (fabs(d_lastTurbopropData.commonData.aileronTrimPct - newData->commonData.aileronTrimPct) >= 0.002)
+        if (fabs(d_lastTurbopropData.commonData.aileronTrimPct - newData->commonData.aileronTrimPct)
+            >= 0.002)
         {
             d_lastTurbopropData.commonData.aileronTrimPct = newData->commonData.aileronTrimPct;
             id = SimconnectIds::AIL_TRIM_PCT;
             dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
-            dataToSend.append(reinterpret_cast<char *>(&newData->commonData.aileronTrimPct), sizeof(newData->commonData.aileronTrimPct));
+            dataToSend.append(reinterpret_cast<char *>(&newData->commonData.aileronTrimPct),
+                              sizeof(newData->commonData.aileronTrimPct));
         }
 
     if (!dataToSend.isEmpty())
         emit sendData(dataToSend);
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

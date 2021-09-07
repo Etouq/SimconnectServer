@@ -1,11 +1,13 @@
 #include "binaryutil.h"
-#include <QByteArray>
-#include <QIODevice>
+
 #include "FlightplanReader/flightplanreader.h"
 #include "simconnectInterface/simconnectthread.h"
 
-//to binary converters
-//fundamental types
+#include <QByteArray>
+#include <QIODevice>
+
+// to binary converters
+// fundamental types
 QByteArray BinaryUtil::toBinary(int8_t val)
 {
     return QByteArray(reinterpret_cast<char *>(&val), sizeof(val));
@@ -54,7 +56,7 @@ QByteArray BinaryUtil::toBinary(double dbl)
 }
 
 
-//basic types
+// basic types
 QByteArray BinaryUtil::toBinary(const QString &str)
 {
     QByteArray bytes = str.toUtf8();
@@ -64,7 +66,7 @@ QByteArray BinaryUtil::toBinary(const QString &str)
 }
 
 
-//struct types
+// struct types
 QByteArray BinaryUtil::toBinary(const FlightPlanWaypoint &wp)
 {
     QByteArray ret = toBinary(wp.position.latitude());
@@ -111,7 +113,7 @@ QByteArray BinaryUtil::toBinary(const ActiveAirplaneSettings &settings)
 }
 
 
-//list types
+// list types
 QByteArray BinaryUtil::toBinary(const QList<FlightPlanWaypoint> &wpList)
 {
     uint16_t size = wpList.size();
@@ -122,9 +124,8 @@ QByteArray BinaryUtil::toBinary(const QList<FlightPlanWaypoint> &wpList)
 }
 
 
-
-//from binary converters
-//fundamental types
+// from binary converters
+// fundamental types
 int8_t BinaryUtil::readInt8_t(QIODevice &data)
 {
     int8_t val = 0;
@@ -195,7 +196,7 @@ double BinaryUtil::readDouble(QIODevice &data)
 }
 
 
-//basic types
+// basic types
 QString BinaryUtil::readString(QIODevice &data)
 {
     uint8_t size = readUint8_t(data);
@@ -203,7 +204,7 @@ QString BinaryUtil::readString(QIODevice &data)
 }
 
 
-//struct types
+// struct types
 FlightPlanWaypoint BinaryUtil::readFpWp(QIODevice &data)
 {
     FlightPlanWaypoint ret;
@@ -251,7 +252,7 @@ ActiveAirplaneSettings BinaryUtil::readAirplaneSettings(QIODevice &data)
 }
 
 
-//list types
+// list types
 QList<FlightPlanWaypoint> BinaryUtil::readFpList(QIODevice &data)
 {
     uint16_t size = readUint16_t(data);

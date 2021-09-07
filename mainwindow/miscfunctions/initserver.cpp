@@ -1,15 +1,17 @@
-#include <QMessageBox>
-#include <QNetworkInterface>
-
 #include "../mainwindow.h"
 #include "../ui_mainwindow.h"
+
+#include <QMessageBox>
+#include <QNetworkInterface>
 
 void MainWindow::initServer()
 {
     if (!tcpServer.listen(QHostAddress::Any, 42069))   // epic meme number lol
         if (!tcpServer.listen())
         {
-            QMessageBox::critical(this, "Simconnect Server", "Unable to start the server: " + tcpServer.errorString() + ".");
+            QMessageBox::critical(this,
+                                  "Simconnect Server",
+                                  "Unable to start the server: " + tcpServer.errorString() + ".");
             return;
         }
 
@@ -20,7 +22,8 @@ void MainWindow::initServer()
     // use the first non-loopback ipv4 address
     for (int i = 0; i < ipAddressesList.size(); ++i)
     {
-        if (!ipAddressesList.at(i).isLoopback() && ipAddressesList.at(i).protocol() == QAbstractSocket::IPv4Protocol)
+        if (!ipAddressesList.at(i).isLoopback()
+            && ipAddressesList.at(i).protocol() == QAbstractSocket::IPv4Protocol)
         {
             ipAddress = ipAddressesList.at(i).toString();
             break;
@@ -47,7 +50,8 @@ void MainWindow::initServer()
     QString ipv4List;
     for (int i = 0; i < ipAddressesList.size(); ++i)
     {
-        if (!ipAddressesList.at(i).isLoopback() && ipAddressesList.at(i).protocol() == QAbstractSocket::IPv4Protocol)
+        if (!ipAddressesList.at(i).isLoopback()
+            && ipAddressesList.at(i).protocol() == QAbstractSocket::IPv4Protocol)
         {
             ipv4List += "\n" + ipAddressesList.at(i).toString();
         }
@@ -56,7 +60,8 @@ void MainWindow::initServer()
     QString ipv6List;
     for (int i = 0; i < ipAddressesList.size(); ++i)
     {
-        if (!ipAddressesList.at(i).isLoopback() && ipAddressesList.at(i).protocol() == QAbstractSocket::IPv6Protocol)
+        if (!ipAddressesList.at(i).isLoopback()
+            && ipAddressesList.at(i).protocol() == QAbstractSocket::IPv6Protocol)
         {
             ipv6List += "\n" + ipAddressesList.at(i).toString();
         }
