@@ -11,6 +11,7 @@ void SimconnectThread::runDataLoop()
     while (!quit)
     {
         getDispatches();
+        QThread::msleep(10);
     }
 
     SimConnect_Close(d_simConnectHandle);
