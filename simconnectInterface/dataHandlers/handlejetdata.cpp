@@ -92,6 +92,8 @@ void SimconnectThread::handleJetSingleEngdata(SIMCONNECT_RECV_SIMOBJECT_DATA *pO
 
         if (!d_currentAirplaneSettings.fuelFlowByVolume)
             newData->commonData.engine1FuelFlow *= 3600.0;
+        else
+            newData->commonData.engine1FuelFlow /= 0.2641720523;
 
         id = SimconnectIds::ENGINE1_FUEL_FLOW;
         dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
@@ -327,6 +329,8 @@ void SimconnectThread::handleJetTwinEngdata(SIMCONNECT_RECV_SIMOBJECT_DATA *pObj
 
         if (!d_currentAirplaneSettings.fuelFlowByVolume)
             newData->commonData.engine1FuelFlow *= 3600.0;
+        else
+            newData->commonData.engine1FuelFlow /= 0.2641720523;
 
         id = SimconnectIds::ENGINE1_FUEL_FLOW;
         dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
@@ -340,6 +344,8 @@ void SimconnectThread::handleJetTwinEngdata(SIMCONNECT_RECV_SIMOBJECT_DATA *pObj
 
         if (!d_currentAirplaneSettings.fuelFlowByVolume)
             newData->commonData.engine2FuelFlow *= 3600.0;
+        else
+            newData->commonData.engine2FuelFlow /= 0.2641720523;
 
         id = SimconnectIds::ENGINE2_FUEL_FLOW;
         dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
@@ -648,6 +654,8 @@ void SimconnectThread::handleJetQuadEngdata(SIMCONNECT_RECV_SIMOBJECT_DATA *pObj
 
         if (!d_currentAirplaneSettings.fuelFlowByVolume)
             newData->commonData.engine1FuelFlow *= 3600.0;
+        else
+            newData->commonData.engine1FuelFlow /= 0.2641720523;
 
         id = SimconnectIds::ENGINE1_FUEL_FLOW;
         dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
@@ -666,6 +674,8 @@ void SimconnectThread::handleJetQuadEngdata(SIMCONNECT_RECV_SIMOBJECT_DATA *pObj
 
         if (!d_currentAirplaneSettings.fuelFlowByVolume)
             newData->commonData.engine3FuelFlow *= 3600.0;
+        else
+            newData->commonData.engine3FuelFlow /= 0.2641720523;
 
         id = SimconnectIds::ENGINE2_FUEL_FLOW;
         dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));

@@ -3,6 +3,8 @@
 #include <QFileDialog>
 #include <QSettings>
 
+#include "common/dataIdentifiers.h"
+
 void MainWindow::readNewFlightplan()
 {
 

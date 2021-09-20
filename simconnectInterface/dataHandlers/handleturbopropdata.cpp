@@ -105,24 +105,13 @@ void SimconnectThread::handleTurbopropSingleEngdata(SIMCONNECT_RECV_SIMOBJECT_DA
 
         if (!d_currentAirplaneSettings.fuelFlowByVolume)
             newData->commonData.engine1FuelFlow *= 3600.0;
+        else
+            newData->commonData.engine1FuelFlow /= 0.2641720523;
 
         id = SimconnectIds::ENGINE1_FUEL_FLOW;
         dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
         dataToSend.append(reinterpret_cast<char *>(&newData->commonData.engine1FuelFlow),
                           sizeof(newData->commonData.engine1FuelFlow));
-    }
-    if (fabs(d_lastTurbopropData.commonData.engine2FuelFlow - newData->commonData.engine2FuelFlow)
-        >= d_currentAirplaneSettings.fuelFlowEpsilon)
-    {
-        d_lastTurbopropData.commonData.engine2FuelFlow = newData->commonData.engine2FuelFlow;
-
-        if (!d_currentAirplaneSettings.fuelFlowByVolume)
-            newData->commonData.engine2FuelFlow *= 3600.0;
-
-        id = SimconnectIds::ENGINE2_FUEL_FLOW;
-        dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<char *>(&newData->commonData.engine2FuelFlow),
-                          sizeof(newData->commonData.engine2FuelFlow));
     }
 
     // oil temp
@@ -380,6 +369,8 @@ void SimconnectThread::handleTurbopropTwinEngdata(SIMCONNECT_RECV_SIMOBJECT_DATA
 
         if (!d_currentAirplaneSettings.fuelFlowByVolume)
             newData->commonData.engine1FuelFlow *= 3600.0;
+        else
+            newData->commonData.engine1FuelFlow /= 0.2641720523;
 
         id = SimconnectIds::ENGINE1_FUEL_FLOW;
         dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
@@ -393,6 +384,8 @@ void SimconnectThread::handleTurbopropTwinEngdata(SIMCONNECT_RECV_SIMOBJECT_DATA
 
         if (!d_currentAirplaneSettings.fuelFlowByVolume)
             newData->commonData.engine2FuelFlow *= 3600.0;
+        else
+            newData->commonData.engine2FuelFlow /= 0.2641720523;
 
         id = SimconnectIds::ENGINE2_FUEL_FLOW;
         dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));

@@ -84,6 +84,8 @@ void SimconnectThread::handlePropSingleEngdata(SIMCONNECT_RECV_SIMOBJECT_DATA *p
 
         if (!d_currentAirplaneSettings.fuelFlowByVolume)
             newData->commonData.engine1FuelFlow *= 3600.0;
+        else
+            newData->commonData.engine1FuelFlow /= 0.2641720523;
 
         id = SimconnectIds::ENGINE1_FUEL_FLOW;
         dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
@@ -308,6 +310,8 @@ void SimconnectThread::handlePropTwinEngdata(SIMCONNECT_RECV_SIMOBJECT_DATA *pOb
 
         if (!d_currentAirplaneSettings.fuelFlowByVolume)
             newData->commonData.engine1FuelFlow *= 3600.0;
+        else
+            newData->commonData.engine1FuelFlow /= 0.2641720523;
 
         id = SimconnectIds::ENGINE1_FUEL_FLOW;
         dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));
@@ -321,6 +325,8 @@ void SimconnectThread::handlePropTwinEngdata(SIMCONNECT_RECV_SIMOBJECT_DATA *pOb
 
         if (!d_currentAirplaneSettings.fuelFlowByVolume)
             newData->commonData.engine2FuelFlow *= 3600.0;
+        else
+            newData->commonData.engine2FuelFlow /= 0.2641720523;
 
         id = SimconnectIds::ENGINE2_FUEL_FLOW;
         dataToSend.append(reinterpret_cast<char *>(&id), sizeof(id));

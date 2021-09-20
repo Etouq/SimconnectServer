@@ -20,11 +20,14 @@ void SimconnectThread::readCommandString(const QByteArray &data)
 {
     QBuffer buffer;
     buffer.buffer() = data;
+    buffer.open(QBuffer::ReadOnly);
     CommandIds commandId = CommandIds::SET_COM1_FREQ;
+    //emit receivedError("Command string is: " + data.toHex());
 
     while (buffer.bytesAvailable() > 0)
     {
         buffer.read(reinterpret_cast<char *>(&commandId), sizeof(commandId));
+        //emit receivedError("Received command: " + QString::number(static_cast<int>(commandId)));
 
         switch (commandId)
         {
@@ -39,8 +42,8 @@ void SimconnectThread::readCommandString(const QByteArray &data)
                                                SIMCONNECT_OBJECT_ID_USER,
                                                SIM_COMMAND_IDS::SET_COM1_STBY,
                                                newFreq,
-                                               SIMCONNECT_GROUP_PRIORITY_DEFAULT,
-                                               0);
+                                               SIMCONNECT_GROUP_PRIORITY_HIGHEST,
+                                               SIMCONNECT_EVENT_FLAG_GROUPID_IS_PRIORITY);
 
                 if (!swap)
                     break;
@@ -50,8 +53,8 @@ void SimconnectThread::readCommandString(const QByteArray &data)
                                                SIMCONNECT_OBJECT_ID_USER,
                                                SIM_COMMAND_IDS::SWAP_COM1,
                                                1,
-                                               SIMCONNECT_GROUP_PRIORITY_DEFAULT,
-                                               0);
+                                               SIMCONNECT_GROUP_PRIORITY_HIGHEST,
+                                               SIMCONNECT_EVENT_FLAG_GROUPID_IS_PRIORITY);
                 break;
             case CommandIds::SET_COM2_FREQ:
             {
@@ -64,8 +67,8 @@ void SimconnectThread::readCommandString(const QByteArray &data)
                                                SIMCONNECT_OBJECT_ID_USER,
                                                SIM_COMMAND_IDS::SET_COM2_STBY,
                                                newFreq,
-                                               SIMCONNECT_GROUP_PRIORITY_DEFAULT,
-                                               0);
+                                               SIMCONNECT_GROUP_PRIORITY_HIGHEST,
+                                               SIMCONNECT_EVENT_FLAG_GROUPID_IS_PRIORITY);
 
                 if (!swap)
                     break;
@@ -75,8 +78,8 @@ void SimconnectThread::readCommandString(const QByteArray &data)
                                                SIMCONNECT_OBJECT_ID_USER,
                                                SIM_COMMAND_IDS::SWAP_COM2,
                                                1,
-                                               SIMCONNECT_GROUP_PRIORITY_DEFAULT,
-                                               0);
+                                               SIMCONNECT_GROUP_PRIORITY_HIGHEST,
+                                               SIMCONNECT_EVENT_FLAG_GROUPID_IS_PRIORITY);
                 break;
             case CommandIds::SET_NAV1_FREQ:
             {
@@ -89,8 +92,8 @@ void SimconnectThread::readCommandString(const QByteArray &data)
                                                SIMCONNECT_OBJECT_ID_USER,
                                                SIM_COMMAND_IDS::SET_NAV1_STBY,
                                                newFreq,
-                                               SIMCONNECT_GROUP_PRIORITY_DEFAULT,
-                                               0);
+                                               SIMCONNECT_GROUP_PRIORITY_HIGHEST,
+                                               SIMCONNECT_EVENT_FLAG_GROUPID_IS_PRIORITY);
 
                 if (!swap)
                     break;
@@ -100,8 +103,8 @@ void SimconnectThread::readCommandString(const QByteArray &data)
                                                SIMCONNECT_OBJECT_ID_USER,
                                                SIM_COMMAND_IDS::SWAP_NAV1,
                                                1,
-                                               SIMCONNECT_GROUP_PRIORITY_DEFAULT,
-                                               0);
+                                               SIMCONNECT_GROUP_PRIORITY_HIGHEST,
+                                               SIMCONNECT_EVENT_FLAG_GROUPID_IS_PRIORITY);
                 break;
             case CommandIds::SET_NAV2_FREQ:
             {
@@ -114,8 +117,8 @@ void SimconnectThread::readCommandString(const QByteArray &data)
                                                SIMCONNECT_OBJECT_ID_USER,
                                                SIM_COMMAND_IDS::SET_NAV2_STBY,
                                                newFreq,
-                                               SIMCONNECT_GROUP_PRIORITY_DEFAULT,
-                                               0);
+                                               SIMCONNECT_GROUP_PRIORITY_HIGHEST,
+                                               SIMCONNECT_EVENT_FLAG_GROUPID_IS_PRIORITY);
 
                 if (!swap)
                     break;
@@ -125,8 +128,8 @@ void SimconnectThread::readCommandString(const QByteArray &data)
                                                SIMCONNECT_OBJECT_ID_USER,
                                                SIM_COMMAND_IDS::SWAP_NAV2,
                                                1,
-                                               SIMCONNECT_GROUP_PRIORITY_DEFAULT,
-                                               0);
+                                               SIMCONNECT_GROUP_PRIORITY_HIGHEST,
+                                               SIMCONNECT_EVENT_FLAG_GROUPID_IS_PRIORITY);
                 break;
             case CommandIds::SET_XPDR_CODE:
             {
@@ -137,14 +140,15 @@ void SimconnectThread::readCommandString(const QByteArray &data)
                                                SIMCONNECT_OBJECT_ID_USER,
                                                SIM_COMMAND_IDS::SET_XPNDR_CODE,
                                                newCode,
-                                               SIMCONNECT_GROUP_PRIORITY_DEFAULT,
-                                               0);
+                                               SIMCONNECT_GROUP_PRIORITY_HIGHEST,
+                                               SIMCONNECT_EVENT_FLAG_GROUPID_IS_PRIORITY);
                 break;
             }
             case CommandIds::SET_XPDR_STATE:
             {
                 SetXpndrStateStruct newState;
                 buffer.read(reinterpret_cast<char *>(&newState.state), sizeof(newState.state));
+
 
                 // set data
                 SimConnect_SetDataOnSimObject(d_simConnectHandle,
@@ -154,6 +158,7 @@ void SimconnectThread::readCommandString(const QByteArray &data)
                                               0,
                                               sizeof(newState),
                                               &newState);
+
                 break;
             }
         }

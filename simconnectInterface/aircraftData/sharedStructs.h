@@ -1,12 +1,11 @@
 #ifndef SHAREDSTRUCTS_H
 #define SHAREDSTRUCTS_H
 
+#include <windows.h>
 #include "C:/MSFS SDK/SimConnect SDK/include/SimConnect.h"
 
 #include <stdint.h>
 #include <vector>
-#include <windef.h>
-#include <windows.h>
 
 struct dataDef
 {

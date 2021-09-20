@@ -1,13 +1,12 @@
 #ifndef SIMCONNECTTHREAD_IH
 #define SIMCONNECTTHREAD_IH
 
+#include <windows.h>
 #include "C:/MSFS SDK/SimConnect SDK/include/SimConnect.h"
 #include "common/dataIdentifiers.h"
 #include "simconnectthread.h"
 
 #include <cmath>
-#include <windef.h>
-#include <windows.h>
 
 enum DATA_DEFINITION_IDS
 {
@@ -53,7 +52,7 @@ enum EVENT_IDS
 
 enum SIM_COMMAND_IDS
 {
-    SET_COM1_STBY,
+    SET_COM1_STBY = 3, // to prevent conflict with EVENT_IDS
     SET_COM2_STBY,
     SET_NAV1_STBY,
     SET_NAV2_STBY,

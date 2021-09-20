@@ -358,25 +358,25 @@ void SimconnectThread::setupAircraftData()
         SimConnect_AddToDataDefinition(d_simConnectHandle,
                                        ENGINE_DEFINITION,
                                        "ENG FUEL FLOW GPH:1",
-                                       "liter per hour",
+                                       "gallon per hour",
                                        SIMCONNECT_DATATYPE_FLOAT64,
                                        d_currentAirplaneSettings.fuelFlowEpsilon);
         SimConnect_AddToDataDefinition(d_simConnectHandle,
                                        ENGINE_DEFINITION,
                                        "ENG FUEL FLOW GPH:2",
-                                       "liter per hour",
+                                       "gallon per hour",
                                        SIMCONNECT_DATATYPE_FLOAT64,
                                        d_currentAirplaneSettings.fuelFlowEpsilon);
         SimConnect_AddToDataDefinition(d_simConnectHandle,
                                        ENGINE_DEFINITION,
                                        "ENG FUEL FLOW GPH:3",
-                                       "liter per hour",
+                                       "gallon per hour",
                                        SIMCONNECT_DATATYPE_FLOAT64,
                                        d_currentAirplaneSettings.fuelFlowEpsilon);
         SimConnect_AddToDataDefinition(d_simConnectHandle,
                                        ENGINE_DEFINITION,
                                        "ENG FUEL FLOW GPH:4",
-                                       "liter per hour",
+                                       "gallon per hour",
                                        SIMCONNECT_DATATYPE_FLOAT64,
                                        d_currentAirplaneSettings.fuelFlowEpsilon);
     }

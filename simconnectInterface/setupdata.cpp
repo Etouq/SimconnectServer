@@ -14,8 +14,8 @@ void SimconnectThread::setupData()
 
     SimConnect_AddToDataDefinition(d_simConnectHandle,
                                    SET_XPNDR_STATE_DEF,
-                                   "TRANSPONDER STATE",
-                                   "number",
+                                   "TRANSPONDER STATE:1",
+                                   "enum",
                                    SIMCONNECT_DATATYPE_INT32);
 
     for (const dataDef &def : pfdAirspeedDefs)
