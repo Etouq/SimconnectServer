@@ -16,7 +16,7 @@ FlightPlanWaypoint FlightplanReader::readWaypoint()
 
     while (flightPlanXml.readNextStartElement())
     {
-        if (flightPlanXml.name() == "ATCWaypointType")
+        if (flightPlanXml.name().toUtf8() == "ATCWaypointType")
         {
             QString wpTypeString = flightPlanXml.readElementText().toLower();
             if (wpTypeString == "airport")
@@ -40,7 +40,7 @@ FlightPlanWaypoint FlightplanReader::readWaypoint()
                 newWp.wpType = 3;
             }
         }
-        else if (flightPlanXml.name() == "WorldPosition")
+        else if (flightPlanXml.name().toUtf8() == "WorldPosition")
         {
             QString posString = flightPlanXml.readElementText().simplified().toUpper();
 
@@ -63,7 +63,7 @@ FlightPlanWaypoint FlightplanReader::readWaypoint()
                     newWp.alt1 = lround(QString(match.captured(9) + match.captured(10)).toFloat());
             }
         }
-        else if (flightPlanXml.name() == "AltDescFP")
+        else if (flightPlanXml.name().toUtf8() == "AltDescFP")
         {
             QString altTypeString = flightPlanXml.readElementText().simplified().toUpper();
             if (altTypeString == "AT_OR_ABOVE" || altTypeString == "ALT_DESC_AT_OR_ABOVE")
@@ -75,12 +75,12 @@ FlightPlanWaypoint FlightplanReader::readWaypoint()
             else if (altTypeString == "IN_BETWEEN" || altTypeString == "ALT_DESC_IN_BETWEEN")
                 newWp.altType = 3;
         }
-        else if (flightPlanXml.name() == "Alt1FP")
+        else if (flightPlanXml.name().toUtf8() == "Alt1FP")
         {
             newWp.alt1 = lround(flightPlanXml.readElementText().simplified().toFloat());
             alt1Set = true;
         }
-        else if (flightPlanXml.name() == "Alt2FP")
+        else if (flightPlanXml.name().toUtf8() == "Alt2FP")
         {
             newWp.alt2 = lround(flightPlanXml.readElementText().simplified().toFloat());
         }
@@ -103,11 +103,11 @@ QList<FlightPlanWaypoint> FlightplanReader::readFlightPlanFile(QFile &file)
     {
         if (flightPlanXml.readNextStartElement())
         {
-            if (flightPlanXml.name() == "FlightPlan.FlightPlan")
+            if (flightPlanXml.name().toUtf8() == "FlightPlan.FlightPlan")
             {
                 while (flightPlanXml.readNextStartElement())
                 {
-                    if (flightPlanXml.name() == "ATCWaypoint")
+                    if (flightPlanXml.name().toUtf8() == "ATCWaypoint")
                         flightPlanList.append(readWaypoint());
                     else
                         flightPlanXml.skipCurrentElement();

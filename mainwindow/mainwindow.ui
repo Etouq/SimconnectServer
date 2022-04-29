@@ -220,7 +220,6 @@ padding-right: 1em;</string>
       </property>
       <property name="font">
        <font>
-        <weight>75</weight>
         <bold>true</bold>
        </font>
       </property>
@@ -301,7 +300,6 @@ background-color: qlineargradient(spread:pad, x1:0.145, y1:0.16, x2:0.92, y2:0.9
        <font>
         <family>MS Shell Dlg 2</family>
         <pointsize>8</pointsize>
-        <weight>75</weight>
         <italic>false</italic>
         <bold>true</bold>
        </font>
