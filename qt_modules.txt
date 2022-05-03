@@ -1,0 +1,7 @@
+set(QT_MODULES
+    Core
+    Widgets
+    Gui
+    Network
+    Positioning
+)

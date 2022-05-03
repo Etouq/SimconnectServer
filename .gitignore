@@ -31,4 +31,8 @@
 *.out
 *.app
 
-*.pro.user
+*.user
+
+# output directories
+build/
+deploy/

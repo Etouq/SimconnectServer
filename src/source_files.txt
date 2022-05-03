@@ -1,0 +1,65 @@
+set(PROJECT_SOURCES
+        main.cpp
+        FlightplanReader/readwaypoint.cpp
+        FlightplanReader/readfile.cpp
+        mainwindow/mainwindow.cpp
+        mainwindow/clientfunctions/clientdisconnected.cpp
+        mainwindow/clientfunctions/quitfromclient.cpp
+        mainwindow/clientfunctions/receiveddatafromclient.cpp
+        mainwindow/miscfunctions/clearflightplan.cpp
+        mainwindow/miscfunctions/initserver.cpp
+        mainwindow/miscfunctions/newincomingconnection.cpp
+        mainwindow/miscfunctions/readflightplan.cpp
+        mainwindow/miscfunctions/readnewflightplan.cpp
+        mainwindow/simfunctions/closesim.cpp
+        mainwindow/simfunctions/quitfromsim.cpp
+        mainwindow/simfunctions/showsimmsg.cpp
+        mainwindow/simfunctions/simconnected.cpp
+        mainwindow/simfunctions/simconnectfailed.cpp
+        mainwindow/simfunctions/startsim.cpp
+        simconnectInterface/getdispatches.cpp
+        simconnectInterface/readcommandstring.cpp
+        simconnectInterface/readshareddata.cpp
+        simconnectInterface/rundataloop.cpp
+        simconnectInterface/sendblankenginedata.cpp
+        simconnectInterface/sendblankpfddata.cpp
+        simconnectInterface/setupaircraftdata.cpp
+        simconnectInterface/setupdata.cpp
+        simconnectInterface/setupevents.cpp
+        simconnectInterface/simconnectthread.cpp
+        simconnectInterface/tryconnecting.cpp
+        simconnectInterface/aircraftData/miscDataDefs.cpp
+        simconnectInterface/aircraftData/pfdDataDefs.cpp
+        simconnectInterface/dataHandlers/handleairspeeddata.cpp
+        simconnectInterface/dataHandlers/handlealtimeterdata.cpp
+        simconnectInterface/dataHandlers/handleapinfodata.cpp
+        simconnectInterface/dataHandlers/handleattitudedata.cpp
+        simconnectInterface/dataHandlers/handlebottombardata.cpp
+        simconnectInterface/dataHandlers/handlehsibrgdata.cpp
+        simconnectInterface/dataHandlers/handlehsidata.cpp
+        simconnectInterface/dataHandlers/handlejetdata.cpp
+        simconnectInterface/dataHandlers/handlenavinfodata.cpp
+        simconnectInterface/dataHandlers/handlepropdata.cpp
+        simconnectInterface/dataHandlers/handleradiodata.cpp
+        simconnectInterface/dataHandlers/handleslowdata.cpp
+        simconnectInterface/dataHandlers/handlestringsdata.cpp
+        simconnectInterface/dataHandlers/handleturbopropdata.cpp
+        simconnectInterface/dataHandlers/handlewinddata.cpp
+)
+
+list(TRANSFORM PROJECT_SOURCES PREPEND src/)
+
+set(PROJECT_HEADERS
+        common/binaryconverter.hpp
+        common/dataIdentifiers.hpp
+        FlightplanReader/flightplanreader.hpp
+        mainwindow/mainwindow.hpp
+        simconnectInterface/simconnectthread.hpp
+        simconnectInterface/aircraftData/engineDataDefs.hpp
+        simconnectInterface/aircraftData/miscDataDefs.hpp
+        simconnectInterface/aircraftData/pfdDataDefs.hpp
+        simconnectInterface/aircraftData/sharedStructs.hpp
+        simconnectInterface/simconnectthread.ih
+)
+
+list(TRANSFORM PROJECT_HEADERS PREPEND src/)
