@@ -1,70 +1,25 @@
-#ifndef ALTITUDEHANDLER_HPP
-#define ALTITUDEHANDLER_HPP
+#ifndef __ALTITUDEHANDLER_HPP__
+#define __ALTITUDEHANDLER_HPP__
+
+#include "DataStruct.hpp"
+#include "common/dataIdentifiers.hpp"
 
 #include <QObject>
+
 
 typedef void *HANDLE;
 
 class SimInterface;
 
+namespace altitude
+{
+
 class AltitudeHandler : public QObject
 {
     Q_OBJECT
 
-    struct RawStruct
-    {
-        double altitude = 0;
-        double radar_altitude = 0;
-
-        double pressure = 29.92;
-
-        double vspeed = 0;
-
-        double nav1_gsi = 0;
-        double nav2_gsi = 0;
-        double gps_vert_error = 0;
-
-        int32_t ref_altitude = 0;
-
-        int32_t ref_vspeed = 0;
-
-        int32_t gpsDrivesNav1 = 0;
-        int32_t autopilot_nav_selected = 0;
-        int32_t gps_approach_approach_type = 0;
-
-        int32_t nav1_has_glideslope = 0;
-        int32_t nav2_has_glideslope = 0;
-        int32_t gps_approach_active = 0;
-    };
-
-    struct DataStruct
-    {
-        double altitude = 0;
-        double radar_altitude = 0;
-        int32_t ref_altitude = 0;
-
-        double pressure = 29.92;
-
-        double vspeed = 0;
-        int32_t ref_vspeed = 0;
-
-        bool gpsDrivesNav1 = false;
-        int32_t autopilot_nav_selected = 0;
-        int32_t gps_approach_approach_type = 0;
-
-        bool nav1_has_glideslope = false;
-        bool nav2_has_glideslope = false;
-        bool gps_approach_active = false;
-
-        double nav1_gsi = 0;
-        double nav2_gsi = 0;
-        double gps_vert_error = 0;
-
-        DataStruct() = default;
-        DataStruct(RawStruct *data);
-    };
-
-    int32_t d_lastVertMode = -1;   // 0: none, 1: vdi, 2: gs, 3: gp, 4: gspreview
+    VerticalDeviationMode d_lastVertMode = VerticalDeviationMode::NONE;
+    double d_deviation = 0.0;
 
     DataStruct d_previous;
 
@@ -79,6 +34,10 @@ public:
     void processData(unsigned long *raw);
 
     void reset();
+
+    void sendCurrentData();
 };
 
-#endif  // ALTITUDEHANDLER_HPP
+}  // namespace altitude
+
+#endif  // __ALTITUDEHANDLER_HPP__

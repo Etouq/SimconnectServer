@@ -4,38 +4,43 @@
 
 #include <cmath>
 
+namespace airspeed
+{
+
 void AirspeedHandler::processData(unsigned long *raw)
 {
     DataStruct newData(*reinterpret_cast<DataStruct *>(raw));
     SimconnectIds id = SimconnectIds::AIRSPEED;
-    QByteArray dataToSend(reinterpret_cast<char *>(&id), sizeof(id));
+    QByteArray dataToSend(reinterpret_cast<const char *>(&id), sizeof(id));
 
     d_previous.airspeed = newData.airspeed;
-    dataToSend.append(reinterpret_cast<const char *>(&newData.airspeed), sizeof(d_previous.airspeed));
+    dataToSend.append(reinterpret_cast<const char *>(&newData.airspeed), sizeof(newData.airspeed));
 
-    if (std::abs(d_previous.max_speed - newData.max_speed) >= 0.09)
+    if (std::abs(d_previous.maxSpeed - newData.maxSpeed) >= 0.09)
     {
-        d_previous.max_speed = newData.max_speed;
+        d_previous.maxSpeed = newData.maxSpeed;
         id = SimconnectIds::MAX_SPEED;
         dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char *>(&newData.max_speed), sizeof(newData.max_speed));
+        dataToSend.append(reinterpret_cast<const char *>(&newData.maxSpeed), sizeof(newData.maxSpeed));
     }
 
-    if (d_previous.true_airspeed != newData.true_airspeed)
+    if (d_previous.trueAirspeed != newData.trueAirspeed)
     {
-        d_previous.true_airspeed = newData.true_airspeed;
+        d_previous.trueAirspeed = newData.trueAirspeed;
         id = SimconnectIds::TRUE_AIRSPEED;
         dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char *>(&newData.true_airspeed), sizeof(newData.true_airspeed));
+        dataToSend.append(reinterpret_cast<const char *>(&newData.trueAirspeed), sizeof(newData.trueAirspeed));
     }
 
-    if (d_previous.ref_speed != newData.ref_speed)
+    if (d_previous.refSpeed != newData.refSpeed)
     {
-        d_previous.ref_speed = newData.ref_speed;
+        d_previous.refSpeed = newData.refSpeed;
         id = SimconnectIds::REF_SPEED;
         dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char *>(&newData.ref_speed), sizeof(newData.ref_speed));
+        dataToSend.append(reinterpret_cast<const char *>(&newData.refSpeed), sizeof(newData.refSpeed));
     }
 
     emit d_parent->sendData(dataToSend);
 }
+
+}  // namespace airspeed

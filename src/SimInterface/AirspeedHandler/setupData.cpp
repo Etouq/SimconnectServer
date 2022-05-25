@@ -4,6 +4,9 @@
 #include "C:/MSFS SDK/SimConnect SDK/include/SimConnect.h"
 
 
+namespace airspeed
+{
+
 void AirspeedHandler::setupData(HANDLE simConnectHandle)
 {
     SimConnect_AddToDataDefinition(simConnectHandle,
@@ -33,5 +36,6 @@ void AirspeedHandler::setupData(HANDLE simConnectHandle)
                                    "knots",
                                    SIMCONNECT_DATATYPE_INT32,
                                    0.0);
-
 }
+
+}  // namespace airspeed

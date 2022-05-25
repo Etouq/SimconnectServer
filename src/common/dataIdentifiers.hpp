@@ -54,6 +54,8 @@ enum class SimconnectIds : uint8_t
     LOCAL_SECONDS,
     GROUND_SPEED,
     TOTAL_AIR_TEMP,
+    OUTSIDE_AIR_TEMP,
+    ISA_AIR_TEMP,
     // hsi
     ROTATION,
     HEADING,
@@ -172,4 +174,26 @@ enum class ClientToServerIds : uint8_t
 };
 
 
-#endif   // DATAIDENTIFIERS_H
+enum class HsiNavSource : uint8_t
+{
+    NONE,
+    GPS,
+    VOR1,
+    LOC1,
+    TCN1,
+    VOR2,
+    LOC2,
+    TCN2
+};
+
+enum class VerticalDeviationMode : uint8_t
+{
+    NONE,
+    VDI,
+    GS,
+    GP,
+    GSPREVIEW
+};
+
+
+#endif  // DATAIDENTIFIERS_H

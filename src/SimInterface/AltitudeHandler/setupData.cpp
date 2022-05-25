@@ -3,6 +3,10 @@
 #include "windows.h"
 #include "C:/MSFS SDK/SimConnect SDK/include/SimConnect.h"
 
+
+namespace altitude
+{
+
 void AltitudeHandler::setupData(HANDLE simConnectHandle)
 {
 
@@ -24,7 +28,7 @@ void AltitudeHandler::setupData(HANDLE simConnectHandle)
                                    "KOHLSMAN SETTING HG:1",
                                    "inches of mercury",
                                    SIMCONNECT_DATATYPE_FLOAT64,
-                                   0.009);
+                                   0.0009);
 
     SimConnect_AddToDataDefinition(simConnectHandle,
                                    DATA_DEFINITION_IDS::ALTIMETER_DEFINITION,
@@ -103,4 +107,12 @@ void AltitudeHandler::setupData(HANDLE simConnectHandle)
                                    "Bool",
                                    SIMCONNECT_DATATYPE_INT32,
                                    0.0);
+    SimConnect_AddToDataDefinition(simConnectHandle,
+                                   DATA_DEFINITION_IDS::ALTIMETER_DEFINITION,
+                                   "AUTOPILOT APPROACH ACTIVE",
+                                   "Bool",
+                                   SIMCONNECT_DATATYPE_INT32,
+                                   0.0);
 }
+
+}  // namespace altitude

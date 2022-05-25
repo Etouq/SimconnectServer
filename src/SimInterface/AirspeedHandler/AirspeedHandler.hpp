@@ -1,24 +1,21 @@
 #ifndef __AIRSPEEDHANDLER_HPP__
 #define __AIRSPEEDHANDLER_HPP__
 
+#include "DataStruct.hpp"
+
 #include <QObject>
+
 
 typedef void *HANDLE;
 
 class SimInterface;
 
+namespace airspeed
+{
+
 class AirspeedHandler : public QObject
 {
     Q_OBJECT
-
-    struct DataStruct
-    {
-        double airspeed = 0;
-        double max_speed = 0;
-
-        int32_t true_airspeed = 0;
-        int32_t ref_speed = 0;
-    };
 
     DataStruct d_previous;
 
@@ -32,7 +29,11 @@ public:
 
     void processData(unsigned long *raw);
 
-    void sendBlankData() const;
+    void reset();
+
+    void sendCurrentData();
 };
+
+}  // namespace airspeed
 
 #endif  // __AIRSPEEDHANDLER_HPP__

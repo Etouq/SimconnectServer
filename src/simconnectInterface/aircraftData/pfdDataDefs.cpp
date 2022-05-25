@@ -7,142 +7,142 @@ using namespace std;
 PfdAltimeterStruct::PfdAltimeterStruct(PfdAltimeterRawStruct *data)
 {
     altitude = data->altitude;
-    radar_altitude = data->radar_altitude;
-    ref_altitude = data->ref_altitude;
+    radarAltitude = data->radarAltitude;
+    refAltitude = data->refAltitude;
 
     pressure = data->pressure;
 
     vspeed = data->vspeed;
-    ref_vspeed = data->ref_vspeed;
+    refVspeed = data->refVspeed;
 
     gpsDrivesNav1 = data->gpsDrivesNav1 != 0;
-    autopilot_nav_selected = data->autopilot_nav_selected;
-    gps_approach_approach_type = data->gps_approach_approach_type;
+    autopilotNavSelected = data->autopilotNavSelected;
+    gpsApproachApproachType = data->gpsApproachApproachType;
 
-    nav1_has_glideslope = data->nav1_has_glideslope != 0;
-    nav2_has_glideslope = data->nav2_has_glideslope != 0;
-    gps_approach_active = data->gps_approach_active != 0;
+    nav1HasGlideslope = data->nav1HasGlideslope != 0;
+    nav2HasGlideslope = data->nav2HasGlideslope != 0;
+    gpsApproachActive = data->gpsApproachActive != 0;
 
-    nav1_gsi = data->nav1_gsi;
-    nav2_gsi = data->nav2_gsi;
-    gps_vert_error = data->gps_vert_error;
+    nav1Gsi = data->nav1Gsi;
+    nav2Gsi = data->nav2Gsi;
+    gpsVertError = data->gpsVertError;
 }
 
 PfdAttitudeStruct::PfdAttitudeStruct(PfdAttitudeRawStruct *data)
 {
-    angle_of_attack = data->angle_of_attack;
+    angleOfAttack = data->angleOfAttack;
     bank = data->bank;
     pitch = data->pitch;
     slipskid = data->slipskid;
-    fd_bank = data->fd_bank;
-    fd_pitch = data->fd_pitch;
-    fd_state = data->fd_state != 0;
+    fdBank = data->fdBank;
+    fdPitch = data->fdPitch;
+    fdState = data->fdState != 0;
 }
 
 PfdHsiStruct::PfdHsiStruct(PfdHsiRawStruct *data)
 {
     rotation = data->rotation;
     heading = data->heading;
-    turn_rate = data->turn_rate;
-    current_track = data->current_track;
-    gps_wp_desired_track = data->gps_wp_desired_track;
+    turnRate = data->turnRate;
+    currentTrack = data->currentTrack;
+    gpsWpDesiredTrack = data->gpsWpDesiredTrack;
 
     currLat = data->currLat;
     currLon = data->currLon;
 
-    gps_wp_cross_track = data->gps_wp_cross_track;
-    true_heading = data->true_heading;
+    gpsWpCrossTrack = data->gpsWpCrossTrack;
+    trueHeading = data->trueHeading;
 
-    autopilot_nav_selected = data->autopilot_nav_selected;
-    gps_approach_approach_type = data->gps_approach_approach_type;
+    autopilotNavSelected = data->autopilotNavSelected;
+    gpsApproachApproachType = data->gpsApproachApproachType;
     gpsDrivesNav1 = data->gpsDrivesNav1 != 0;
-    autopilot_approach_hold = data->autopilot_approach_hold != 0;
+    autopilotApproachHold = data->autopilotApproachHold != 0;
 
-    nav1_has_nav = data->nav1_has_nav != 0;
-    nav1_has_loc = data->nav1_has_loc != 0;
-    nav1_to_from = data->nav1_to_from;
-    nav1_loc = data->nav1_loc;
-    nav1_cdi = data->nav1_cdi;
-    nav1_obs = data->nav1_obs;
+    nav1HasNav = data->nav1HasNav != 0;
+    nav1HasLoc = data->nav1HasLoc != 0;
+    nav1ToFrom = data->nav1ToFrom;
+    nav1Loc = data->nav1Loc;
+    nav1Cdi = data->nav1Cdi;
+    nav1Obs = data->nav1Obs;
 
-    nav2_has_nav = data->nav2_has_nav != 0;
-    nav2_has_loc = data->nav2_has_loc != 0;
-    nav2_to_from = data->nav2_to_from;
-    nav2_loc = data->nav2_loc;
-    nav2_cdi = data->nav2_cdi;
-    nav2_obs = data->nav2_obs;
+    nav2HasNav = data->nav2HasNav != 0;
+    nav2HasLoc = data->nav2HasLoc != 0;
+    nav2ToFrom = data->nav2ToFrom;
+    nav2Loc = data->nav2Loc;
+    nav2Cdi = data->nav2Cdi;
+    nav2Obs = data->nav2Obs;
 }
 
 PfdHsiBrgStruct::PfdHsiBrgStruct(PfdHsiBrgRawStruct *data)
 {
-    nav1_dme = data->nav1_dme;
-    nav1_radial = data->nav1_radial;
-    nav1_has_nav = data->nav1_has_nav != 0;
-    nav1_has_signal = data->nav1_has_signal != 0;
-    nav1_has_dme = data->nav1_has_dme != 0;
+    nav1Dme = data->nav1Dme;
+    nav1Radial = data->nav1Radial;
+    nav1HasNav = data->nav1HasNav != 0;
+    nav1HasSignal = data->nav1HasSignal != 0;
+    nav1HasDme = data->nav1HasDme != 0;
 
-    nav2_dme = data->nav2_dme;
-    nav2_radial = data->nav2_radial;
-    nav2_has_nav = data->nav2_has_nav != 0;
-    nav2_has_signal = data->nav2_has_signal != 0;
-    nav2_has_dme = data->nav2_has_dme != 0;
+    nav2Dme = data->nav2Dme;
+    nav2Radial = data->nav2Radial;
+    nav2HasNav = data->nav2HasNav != 0;
+    nav2HasSignal = data->nav2HasSignal != 0;
+    nav2HasDme = data->nav2HasDme != 0;
 
-    gps_next_wp_dist = data->gps_next_wp_dist;
-    gps_next_wp_bearing = fmod(360.0 + fmod(data->gps_next_wp_bearing, 360.0), 360.0);
+    gpsNextWpDist = data->gpsNextWpDist;
+    gpsNextWpBearing = fmod(360.0 + fmod(data->gpsNextWpBearing, 360.0), 360.0);
 
-    adf_active_freq = data->adf_active_freq;
-    adf_radial = data->adf_radial + data->rotation;
-    adf_has_signal = data->adf_has_signal != 0;
-    if (adf_radial > 360.0)
-        adf_radial -= 360.0;
+    adfActiveFreq = data->adfActiveFreq;
+    adfRadial = data->adfRadial + data->rotation;
+    adfHasSignal = data->adfHasSignal != 0;
+    if (adfRadial > 360.0)
+        adfRadial -= 360.0;
 }
 
 PfdNavInfoStruct::PfdNavInfoStruct(PfdNavInfoRawStruct *data)
 {
-    gps_is_active_flightplan = data->gps_is_active_flightplan != 0;
-    gps_is_directto = data->gps_is_directto != 0;
+    gpsIsActiveFlightplan = data->gpsIsActiveFlightplan != 0;
+    gpsIsDirectto = data->gpsIsDirectto != 0;
 
-    gps_wp_ete = data->gps_wp_ete;
-    gps_ete = data->gps_ete;
+    gpsWpEte = data->gpsWpEte;
+    gpsEte = data->gpsEte;
 }
 
 PfdWindStruct::PfdWindStruct(PfdWindRawStruct *data)
 {
-    wind_velocity = data->ambient_wind_velocity;
-    wind_true_direction = data->ambient_wind_direction;
-    wind_direction
-      = fmod(360.0 + fmod(data->ambient_wind_direction + 180.0 - data->rotation, 360.0), 360.0);
+    windVelocity = data->ambientWindVelocity;
+    windTrueDirection = data->ambientWindDirection;
+    windDirection
+      = fmod(360.0 + fmod(data->ambientWindDirection + 180.0 - data->rotation, 360.0), 360.0);
 }
 
 PfdApInfoStruct::PfdApInfoStruct(PfdApInfoRawStruct *data)
 {
-    ap_master = data->ap_master != 0;
-    ap_yaw_damper = data->ap_yaw_damper != 0;
+    apMaster = data->apMaster != 0;
+    apYawDamper = data->apYawDamper != 0;
 
-    ap_pitch_hold = data->ap_pitch_hold != 0;
-    ap_flc = data->ap_flc != 0;
-    ap_altitude_lock = data->ap_altitude_lock != 0;
-    ap_vertical_hold = data->ap_vertical_hold != 0;
-    ap_glideslope_active = data->ap_glideslope_active != 0;
+    apPitchHold = data->apPitchHold != 0;
+    apFlc = data->apFlc != 0;
+    apAltitudeLock = data->apAltitudeLock != 0;
+    apVerticalHold = data->apVerticalHold != 0;
+    apGlideslopeActive = data->apGlideslopeActive != 0;
 
-    ap_altitude_arm = data->ap_altitude_arm != 0;
-    ap_glideslope_arm = data->ap_glideslope_arm != 0;
+    apAltitudeArm = data->apAltitudeArm != 0;
+    apGlideslopeArm = data->apGlideslopeArm != 0;
 
-    ap_wing_leveler = data->ap_wing_leveler != 0;
-    ap_bank_hold = data->ap_bank_hold != 0;
-    ap_heading_lock = data->ap_heading_lock != 0;
-    ap_nav1_lock = data->ap_nav1_lock != 0;
-    ap_backcourse_hold = data->ap_backcourse_hold != 0;
-    autopilot_approach_hold = data->autopilot_approach_hold != 0;
+    apWingLeveler = data->apWingLeveler != 0;
+    apBankHold = data->apBankHold != 0;
+    apHeadingLock = data->apHeadingLock != 0;
+    apNav1Lock = data->apNav1Lock != 0;
+    apBackcourseHold = data->apBackcourseHold != 0;
+    autopilotApproachHold = data->autopilotApproachHold != 0;
 
-    ref_speed = data->ref_speed;
-    ref_altitude = data->ref_altitude;
-    ref_vspeed = data->ref_vspeed;
+    refSpeed = data->refSpeed;
+    refAltitude = data->refAltitude;
+    refVspeed = data->refVspeed;
 
     gpsDrivesNav1 = data->gpsDrivesNav1 != 0;
-    autopilot_nav_selected = data->autopilot_nav_selected;
-    nav1_has_loc = data->nav1_has_loc != 0;
-    nav2_has_loc = data->nav2_has_loc != 0;
+    autopilotNavSelected = data->autopilotNavSelected;
+    nav1HasLoc = data->nav1HasLoc != 0;
+    nav2HasLoc = data->nav2HasLoc != 0;
 }
 
 const vector<dataDef> pfdAirspeedDefs

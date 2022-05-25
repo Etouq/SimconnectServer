@@ -7,6 +7,9 @@
 #include <QObject>
 #include <QThread>
 
+using airspeed::AirspeedHandler;
+using altitude::AltitudeHandler;
+
 class SimInterface : public QThread
 {
     Q_OBJECT

@@ -1,65 +1,65 @@
-#ifndef PFDDATADEFS_H
-#define PFDDATADEFS_H
+#ifndef PFDDATADEFSH
+#define PFDDATADEFSH
 
 #include "sharedStructs.hpp"
 
 struct PfdAirspeedStruct
 {
     double airspeed = 0;
-    double max_speed = 0;
+    double maxSpeed = 0;
 
-    int32_t true_airspeed = 0;
-    int32_t ref_speed = 0;
+    int32_t trueAirspeed = 0;
+    int32_t refSpeed = 0;
 };
 
 struct PfdAltimeterRawStruct
 {
     double altitude = 0;
-    double radar_altitude = 0;
+    double radarAltitude = 0;
 
     double pressure = 29.92;
 
     double vspeed = 0;
 
-    double nav1_gsi = 0;
-    double nav2_gsi = 0;
-    double gps_vert_error = 0;
+    double nav1Gsi = 0;
+    double nav2Gsi = 0;
+    double gpsVertError = 0;
 
-    int32_t ref_altitude = 0;
+    int32_t refAltitude = 0;
 
-    int32_t ref_vspeed = 0;
+    int32_t refVspeed = 0;
 
     int32_t gpsDrivesNav1 = 0;
-    int32_t autopilot_nav_selected = 0;
-    int32_t gps_approach_approach_type = 0;
+    int32_t autopilotNavSelected = 0;
+    int32_t gpsApproachApproachType = 0;
 
-    int32_t nav1_has_glideslope = 0;
-    int32_t nav2_has_glideslope = 0;
-    int32_t gps_approach_active = 0;
+    int32_t nav1HasGlideslope = 0;
+    int32_t nav2HasGlideslope = 0;
+    int32_t gpsApproachActive = 0;
 };
 
 struct PfdAltimeterStruct
 {
     double altitude = 0;
-    double radar_altitude = 0;
-    int32_t ref_altitude = 0;
+    double radarAltitude = 0;
+    int32_t refAltitude = 0;
 
     double pressure = 29.92;
 
     double vspeed = 0;
-    int32_t ref_vspeed = 0;
+    int32_t refVspeed = 0;
 
     bool gpsDrivesNav1 = false;
-    int32_t autopilot_nav_selected = 0;
-    int32_t gps_approach_approach_type = 0;
+    int32_t autopilotNavSelected = 0;
+    int32_t gpsApproachApproachType = 0;
 
-    bool nav1_has_glideslope = false;
-    bool nav2_has_glideslope = false;
-    bool gps_approach_active = false;
+    bool nav1HasGlideslope = false;
+    bool nav2HasGlideslope = false;
+    bool gpsApproachActive = false;
 
-    double nav1_gsi = 0;
-    double nav2_gsi = 0;
-    double gps_vert_error = 0;
+    double nav1Gsi = 0;
+    double nav2Gsi = 0;
+    double gpsVertError = 0;
 
     PfdAltimeterStruct() = default;
     PfdAltimeterStruct(PfdAltimeterRawStruct *data);
@@ -67,29 +67,29 @@ struct PfdAltimeterStruct
 
 struct PfdAttitudeRawStruct   // also handles aoa
 {
-    double angle_of_attack = 0;
+    double angleOfAttack = 0;
 
     double bank = 0;
     double pitch = 0;
     double slipskid = 0;
 
-    double fd_bank = 0;
-    double fd_pitch = 0;
+    double fdBank = 0;
+    double fdPitch = 0;
 
-    int32_t fd_state = 0;
+    int32_t fdState = 0;
 };
 
 struct PfdAttitudeStruct   // also handles aoa
 {
-    double angle_of_attack = 0;
+    double angleOfAttack = 0;
 
     double bank = 0;
     double pitch = 0;
     double slipskid = 0;
 
-    bool fd_state = false;
-    double fd_bank = 0;
-    double fd_pitch = 0;
+    bool fdState = false;
+    double fdBank = 0;
+    double fdPitch = 0;
 
     PfdAttitudeStruct() = default;
     PfdAttitudeStruct(PfdAttitudeRawStruct *data);
@@ -97,81 +97,81 @@ struct PfdAttitudeStruct   // also handles aoa
 
 struct PfdBottombarStruct
 {
-    int32_t zulu_seconds = 0;
-    int32_t local_seconds = 0;
+    int32_t zuluSeconds = 0;
+    int32_t localSeconds = 0;
 
-    int32_t ground_speed = 0;
-    float total_air_temp = 0;
+    int32_t groundSpeed = 0;
+    float totalAirTemp = 0;
 };
 
 struct PfdHsiRawStruct   // also handles position
 {
     double rotation = 0;
     double heading = 0;
-    double turn_rate = 0;
-    double current_track = 0;
-    double gps_wp_desired_track = 0;
+    double turnRate = 0;
+    double currentTrack = 0;
+    double gpsWpDesiredTrack = 0;
 
     double currLat = 0;
     double currLon = 0;
 
-    double gps_wp_cross_track = 0;
-    double true_heading = 0;
+    double gpsWpCrossTrack = 0;
+    double trueHeading = 0;
 
-    double nav1_loc = 0;
-    double nav1_cdi = 0;
-    double nav1_obs = 0;
+    double nav1Loc = 0;
+    double nav1Cdi = 0;
+    double nav1Obs = 0;
 
-    double nav2_loc = 0;
-    double nav2_cdi = 0;
-    double nav2_obs = 0;
+    double nav2Loc = 0;
+    double nav2Cdi = 0;
+    double nav2Obs = 0;
 
-    int32_t autopilot_nav_selected = 0;
-    int32_t gps_approach_approach_type = 0;
+    int32_t autopilotNavSelected = 0;
+    int32_t gpsApproachApproachType = 0;
     int32_t gpsDrivesNav1 = 0;
-    int32_t autopilot_approach_hold = 0;
+    int32_t autopilotApproachHold = 0;
 
-    int32_t nav1_has_nav = 0;
-    int32_t nav1_has_loc = 0;
-    int32_t nav1_to_from = 0;
+    int32_t nav1HasNav = 0;
+    int32_t nav1HasLoc = 0;
+    int32_t nav1ToFrom = 0;
 
-    int32_t nav2_has_nav = 0;
-    int32_t nav2_has_loc = 0;
-    int32_t nav2_to_from = 0;
+    int32_t nav2HasNav = 0;
+    int32_t nav2HasLoc = 0;
+    int32_t nav2ToFrom = 0;
 };
 
 struct PfdHsiStruct   // also handles position
 {
     double rotation = 0;
     double heading = 0;
-    double turn_rate = 0;
-    double current_track = 0;
-    double gps_wp_desired_track = 0;
+    double turnRate = 0;
+    double currentTrack = 0;
+    double gpsWpDesiredTrack = 0;
 
     double currLat = 0;
     double currLon = 0;
 
-    double gps_wp_cross_track = 0;
-    double true_heading = 0;
+    double gpsWpCrossTrack = 0;
+    double trueHeading = 0;
 
-    int32_t autopilot_nav_selected = 0;
-    int32_t gps_approach_approach_type = 0;
+    int32_t autopilotNavSelected = 0;
+    int32_t gpsApproachApproachType = 0;
     bool gpsDrivesNav1 = false;
-    bool autopilot_approach_hold = false;
+    bool autopilotApproachHold = false;
 
-    bool nav1_has_nav = false;
-    bool nav1_has_loc = false;
-    int32_t nav1_to_from = 0;
-    double nav1_loc = 0;
-    double nav1_cdi = 0;
-    double nav1_obs = 0;
+    bool nav1HasNav = false;
+    bool nav1HasLoc = false;
+    int32_t nav1ToFrom = 0;
+    double nav1Loc = 0;
+    double nav1Cdi = 0;
+    double nav1Obs = 0;
 
-    bool nav2_has_nav = false;
-    bool nav2_has_loc = false;
-    int32_t nav2_to_from = 0;
-    double nav2_loc = 0;
-    double nav2_cdi = 0;
-    double nav2_obs = 0;
+    bool nav2HasNav = false;
+    bool nav2HasLoc = false;
+    int32_t nav2ToFrom = 0;
+    double nav2Loc = 0;
+    double nav2Cdi = 0;
+    double nav2Obs = 0;
 
     PfdHsiStruct() = default;
     PfdHsiStruct(PfdHsiRawStruct *data);
@@ -179,50 +179,50 @@ struct PfdHsiStruct   // also handles position
 
 struct PfdHsiBrgRawStruct
 {
-    double nav1_dme = 0;
-    double nav1_radial = 0;
+    double nav1Dme = 0;
+    double nav1Radial = 0;
 
-    double nav2_dme = 0;
-    double nav2_radial = 0;
+    double nav2Dme = 0;
+    double nav2Radial = 0;
 
-    double gps_next_wp_dist = 0;
-    double gps_next_wp_bearing = 0;
+    double gpsNextWpDist = 0;
+    double gpsNextWpBearing = 0;
 
-    double adf_active_freq = 0;
-    double adf_radial = 0;
+    double adfActiveFreq = 0;
+    double adfRadial = 0;
     double rotation = 0;
 
-    int32_t nav1_has_nav = 0;
-    int32_t nav1_has_signal = 0;
-    int32_t nav1_has_dme = 0;
+    int32_t nav1HasNav = 0;
+    int32_t nav1HasSignal = 0;
+    int32_t nav1HasDme = 0;
 
-    int32_t nav2_has_nav = 0;
-    int32_t nav2_has_signal = 0;
-    int32_t nav2_has_dme = 0;
+    int32_t nav2HasNav = 0;
+    int32_t nav2HasSignal = 0;
+    int32_t nav2HasDme = 0;
 
-    int32_t adf_has_signal = 0;
+    int32_t adfHasSignal = 0;
 };
 
 struct PfdHsiBrgStruct
 {
-    double nav1_dme = 0;
-    double nav1_radial = 0;
-    bool nav1_has_nav = false;
-    bool nav1_has_signal = false;
-    bool nav1_has_dme = false;
+    double nav1Dme = 0;
+    double nav1Radial = 0;
+    bool nav1HasNav = false;
+    bool nav1HasSignal = false;
+    bool nav1HasDme = false;
 
-    double nav2_dme = 0;
-    double nav2_radial = 0;
-    bool nav2_has_nav = false;
-    bool nav2_has_signal = false;
-    bool nav2_has_dme = false;
+    double nav2Dme = 0;
+    double nav2Radial = 0;
+    bool nav2HasNav = false;
+    bool nav2HasSignal = false;
+    bool nav2HasDme = false;
 
-    double gps_next_wp_dist = 0;
-    double gps_next_wp_bearing = 0;
+    double gpsNextWpDist = 0;
+    double gpsNextWpBearing = 0;
 
-    double adf_active_freq = 0;
-    double adf_radial = 0;
-    bool adf_has_signal = false;
+    double adfActiveFreq = 0;
+    double adfRadial = 0;
+    bool adfHasSignal = false;
 
     PfdHsiBrgStruct() = default;
     PfdHsiBrgStruct(PfdHsiBrgRawStruct *data);
@@ -230,38 +230,38 @@ struct PfdHsiBrgStruct
 
 struct PfdRadioStruct
 {
-    float com1_freq = 0;
-    float com2_freq = 0;
+    float com1Freq = 0;
+    float com2Freq = 0;
 
-    float nav1_freq = 0;
-    float nav2_freq = 0;
+    float nav1Freq = 0;
+    float nav2Freq = 0;
 
-    float com1_stby = 0;
-    float com2_stby = 0;
+    float com1Stby = 0;
+    float com2Stby = 0;
 
-    float nav1_stby = 0;
-    float nav2_stby = 0;
+    float nav1Stby = 0;
+    float nav2Stby = 0;
 
-    int32_t xpdr_code = 0;
-    int32_t xpdr_state = 0;
+    int32_t xpdrCode = 0;
+    int32_t xpdrState = 0;
 };
 
 struct PfdNavInfoRawStruct
 {
-    int32_t gps_is_active_flightplan = 0;
-    int32_t gps_is_directto = 0;
+    int32_t gpsIsActiveFlightplan = 0;
+    int32_t gpsIsDirectto = 0;
 
-    int32_t gps_wp_ete = 0;
-    int32_t gps_ete = 0;
+    int32_t gpsWpEte = 0;
+    int32_t gpsEte = 0;
 };
 
 struct PfdNavInfoStruct
 {
-    bool gps_is_active_flightplan = false;
-    bool gps_is_directto = false;
+    bool gpsIsActiveFlightplan = false;
+    bool gpsIsDirectto = false;
 
-    int32_t gps_wp_ete = 0;
-    int32_t gps_ete = 0;
+    int32_t gpsWpEte = 0;
+    int32_t gpsEte = 0;
 
     PfdNavInfoStruct() = default;
     PfdNavInfoStruct(PfdNavInfoRawStruct *data);
@@ -270,15 +270,15 @@ struct PfdNavInfoStruct
 struct PfdWindRawStruct
 {
     double rotation = 0;
-    double ambient_wind_velocity = 0;
-    double ambient_wind_direction = 0;
+    double ambientWindVelocity = 0;
+    double ambientWindDirection = 0;
 };
 
 struct PfdWindStruct
 {
-    double wind_velocity = 0;
-    double wind_direction = 0;
-    double wind_true_direction = 0;
+    double windVelocity = 0;
+    double windDirection = 0;
+    double windTrueDirection = 0;
 
     PfdWindStruct() = default;
     PfdWindStruct(PfdWindRawStruct *data);
@@ -286,64 +286,64 @@ struct PfdWindStruct
 
 struct PfdApInfoRawStruct
 {
-    int32_t ap_master = 0;
-    int32_t ap_yaw_damper = 0;
+    int32_t apMaster = 0;
+    int32_t apYawDamper = 0;
 
-    int32_t ap_pitch_hold = 0;
-    int32_t ap_flc = 0;
-    int32_t ap_altitude_lock = 0;
-    int32_t ap_vertical_hold = 0;
-    int32_t ap_glideslope_active = 0;
+    int32_t apPitchHold = 0;
+    int32_t apFlc = 0;
+    int32_t apAltitudeLock = 0;
+    int32_t apVerticalHold = 0;
+    int32_t apGlideslopeActive = 0;
 
-    int32_t ap_altitude_arm = 0;
-    int32_t ap_glideslope_arm = 0;
+    int32_t apAltitudeArm = 0;
+    int32_t apGlideslopeArm = 0;
 
-    int32_t ap_wing_leveler = 0;
-    int32_t ap_bank_hold = 0;
-    int32_t ap_heading_lock = 0;
-    int32_t ap_nav1_lock = 0;
-    int32_t ap_backcourse_hold = 0;
-    int32_t autopilot_approach_hold = 0;
+    int32_t apWingLeveler = 0;
+    int32_t apBankHold = 0;
+    int32_t apHeadingLock = 0;
+    int32_t apNav1Lock = 0;
+    int32_t apBackcourseHold = 0;
+    int32_t autopilotApproachHold = 0;
 
-    int32_t ref_speed = 0;
-    int32_t ref_altitude = 0;
-    int32_t ref_vspeed = 0;
+    int32_t refSpeed = 0;
+    int32_t refAltitude = 0;
+    int32_t refVspeed = 0;
 
     int32_t gpsDrivesNav1 = 0;
-    int32_t autopilot_nav_selected = 0;
-    int32_t nav1_has_loc = 0;
-    int32_t nav2_has_loc = 0;
+    int32_t autopilotNavSelected = 0;
+    int32_t nav1HasLoc = 0;
+    int32_t nav2HasLoc = 0;
 };
 
 struct PfdApInfoStruct
 {
-    bool ap_master = false;
-    bool ap_yaw_damper = false;
+    bool apMaster = false;
+    bool apYawDamper = false;
 
-    bool ap_pitch_hold = false;
-    bool ap_flc = false;
-    bool ap_altitude_lock = false;
-    bool ap_vertical_hold = false;
-    bool ap_glideslope_active = false;
+    bool apPitchHold = false;
+    bool apFlc = false;
+    bool apAltitudeLock = false;
+    bool apVerticalHold = false;
+    bool apGlideslopeActive = false;
 
-    bool ap_altitude_arm = false;
-    bool ap_glideslope_arm = false;
+    bool apAltitudeArm = false;
+    bool apGlideslopeArm = false;
 
-    bool ap_wing_leveler = false;
-    bool ap_bank_hold = false;
-    bool ap_heading_lock = false;
-    bool ap_nav1_lock = false;
-    bool ap_backcourse_hold = false;
-    bool autopilot_approach_hold = false;
+    bool apWingLeveler = false;
+    bool apBankHold = false;
+    bool apHeadingLock = false;
+    bool apNav1Lock = false;
+    bool apBackcourseHold = false;
+    bool autopilotApproachHold = false;
 
-    int32_t ref_speed = 0;
-    int32_t ref_altitude = 0;
-    int32_t ref_vspeed = 0;
+    int32_t refSpeed = 0;
+    int32_t refAltitude = 0;
+    int32_t refVspeed = 0;
 
     bool gpsDrivesNav1 = false;
-    int32_t autopilot_nav_selected = 0;
-    bool nav1_has_loc = false;
-    bool nav2_has_loc = false;
+    int32_t autopilotNavSelected = 0;
+    bool nav1HasLoc = false;
+    bool nav2HasLoc = false;
 
     PfdApInfoStruct() = default;
     PfdApInfoStruct(PfdApInfoRawStruct *data);
@@ -370,4 +370,4 @@ extern const std::vector<dataDef> pfdWindDefs;
 
 extern const std::vector<dataDef> pfdApInfoDefs;
 
-#endif   // PFDDATADEFS_H
+#endif   // PFDDATADEFSH
