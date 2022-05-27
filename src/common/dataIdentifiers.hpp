@@ -125,35 +125,21 @@ enum class SimconnectIds : uint8_t
     SIM_STOP_EVENT,
     SIM_CONNECTION_FAILED,
     ERROR_STRING,
-    // engine
-    ENGINE1_N1,
-    ENGINE2_N1,
-    ENGINE3_N1,
-    ENGINE4_N1,
-    ENGINE1_N2,
-    ENGINE2_N2,
-    ENGINE3_N2,
-    ENGINE4_N2,
-    ENGINE1_ITT,
-    ENGINE2_ITT,
-    ENGINE3_ITT,
-    ENGINE4_ITT,
-    ENGINE1_RPM,
-    ENGINE2_RPM,
-    ENGINE1_SECOND,
-    ENGINE2_SECOND,
-    ENGINE1_TRQ,
-    ENGINE2_TRQ,
-    ENGINE1_FUEL_QTY,
-    ENGINE2_FUEL_QTY,
-    ENGINE1_FUEL_FLOW,
-    ENGINE2_FUEL_FLOW,
-    ENGINE1_OIL_PRESS,
-    ENGINE2_OIL_PRESS,
-    ENGINE1_OIL_TEMP,
-    ENGINE2_OIL_TEMP,
-    ENGINE1_EGT,
-    ENGINE2_EGT,
+    // engine (indexed)
+    ENGINE_N1,
+    ENGINE_N2,
+    ENGINE_ITT,
+    ENGINE_RPM,
+    ENGINE_POWER,
+    ENGINE_MANIFOLD_PRESSURE,
+    ENGINE_TRQ,
+    ENGINE_CHT,
+    ENGINE_FUEL_FLOW,
+    ENGINE_EGT,
+    ENGINE_OIL_TEMP,
+    ENGINE_OIL_PRESS,
+    FUEL_LEFT_QTY,
+    FUEL_RIGHT_QTY,
     // misc ed
     APU_RPM_PCT,
     FUEL_TEXT_DATA,
@@ -161,7 +147,9 @@ enum class SimconnectIds : uint8_t
     FLAPS_ANGLE,
     ELEV_TRIM_PCT,
     RUDD_TRIM_PCT,
-    AIL_TRIM_PCT
+    AIL_TRIM_PCT,
+    // aliases
+    FUEL_TOTAL_QTY = FUEL_LEFT_QTY
 };
 
 enum class ClientToServerIds : uint8_t
@@ -193,6 +181,20 @@ enum class VerticalDeviationMode : uint8_t
     GS,
     GP,
     GSPREVIEW
+};
+
+enum AircraftType : uint8_t
+{
+    JET,
+    PROP,
+    TURBOPROP
+};
+
+enum TemperatureGaugeType : uint8_t
+{
+    EGT,
+    ITT,
+    CHT
 };
 
 
