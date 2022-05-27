@@ -1,7 +1,9 @@
 #ifndef __SIM_ENUMS_HPP__
 #define __SIM_ENUMS_HPP__
 
-enum ApproachType
+#include <cstdint>
+
+enum ApproachType : int32_t
 {
     NONE = 0,
     GPS = 1,
@@ -18,7 +20,7 @@ enum ApproachType
 };
 
 
-enum TransponderState
+enum TransponderState : int32_t
 {
     OFF = 0,
     STANDBY = 1,

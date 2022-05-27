@@ -1,21 +1,26 @@
 #ifndef __SIMINTERFACE_HPP__
 #define __SIMINTERFACE_HPP__
 
-#include "AirspeedHandler/AirspeedHandler.hpp"
-#include "AltitudeHandler/AltitudeHandler.hpp"
+#include "DataHandlers/DataHandlers.hpp"
 
 #include <QObject>
 #include <QThread>
 
-using airspeed::AirspeedHandler;
-using altitude::AltitudeHandler;
 
 class SimInterface : public QThread
 {
     Q_OBJECT
 
-    AirspeedHandler airspeedHandler;
-    AltitudeHandler altitudeHandler;
+    AirspeedHandler d_airspeedHandler;
+    AltitudeHandler d_altitudeHandler;
+    ApInfoHandler d_autopilotHandler;
+    AttitudeHandler d_attitudeHandler;
+    BottombarHandler d_bottombarHandler;
+    HsiBrgHandler d_bearingHandler;
+    HsiHandler d_hsiHandler;
+    NavInfoHandler d_navInfoHandler;
+    RadioHandler d_radioHandler;
+    WindInfoHandler d_windHandler;
 
 public:
 
