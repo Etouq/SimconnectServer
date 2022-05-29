@@ -6,7 +6,7 @@ set(_PROJECT_VERSION 0.1)
 project(${_PROJECT_NAME} VERSION ${_PROJECT_VERSION} LANGUAGES CXX)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-set(CMAKE_CXX_CLANG_TIDY clang-tidy -checks=-*,clang-*,readability-*)
+set(CMAKE_CXX_CLANG_TIDY clang-tidy -checks=-*,clang-*)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 

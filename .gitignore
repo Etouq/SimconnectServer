@@ -36,3 +36,4 @@
 # output directories
 build/
 deploy/
+.cache/
