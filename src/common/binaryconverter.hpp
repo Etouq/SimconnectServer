@@ -2,279 +2,270 @@
 #define BINARYCONVERTER_HPP
 
 #include "FlightplanReader/flightplanreader.hpp"
-#include "simconnectInterface/simconnectthread.hpp"
+#include "SimInterface/AircraftConfig.hpp"
 
+#include <concepts>
 #include <cstdint>
 #include <QByteArray>
 #include <QIODevice>
 #include <QList>
 
+#include <type_traits>
+
 namespace BinaryConverter
 {
+
+template<typename T>
+concept Numeric = std::is_arithmetic_v<T> || std::is_enum_v<T>;
+
+template<typename T>
+concept ToConvertible = requires(T a)
+{
+    convert(a);
+};
+
+template<typename T>
+concept FromConvertible = requires(T a, QIODevice &data)
+{
+    a = convert<T>(data);
+};
+
 // to binary converters
-// fundamental types
-inline QByteArray toBinary(int8_t val)
+template<Numeric T>
+[[nodiscard]] inline QByteArray convert(T val)
 {
     return QByteArray(reinterpret_cast<char *>(&val), sizeof(val));
 }
 
-inline QByteArray toBinary(uint8_t val)
-{
-    return QByteArray(reinterpret_cast<char *>(&val), sizeof(val));
-}
-
-inline QByteArray toBinary(int16_t val)
-{
-    return QByteArray(reinterpret_cast<char *>(&val), sizeof(val));
-}
-
-inline QByteArray toBinary(uint16_t val)
-{
-    return QByteArray(reinterpret_cast<char *>(&val), sizeof(val));
-}
-
-inline QByteArray toBinary(int32_t val)
-{
-    return QByteArray(reinterpret_cast<char *>(&val), sizeof(val));
-}
-
-inline QByteArray toBinary(uint32_t val)
-{
-    return QByteArray(reinterpret_cast<char *>(&val), sizeof(val));
-}
-
-inline QByteArray toBinary(int64_t val)
-{
-    return QByteArray(reinterpret_cast<char *>(&val), sizeof(val));
-}
-
-inline QByteArray toBinary(uint64_t val)
-{
-    return QByteArray(reinterpret_cast<char *>(&val), sizeof(val));
-}
-
-inline QByteArray toBinary(bool bl)
-{
-    return QByteArray(reinterpret_cast<char *>(&bl), sizeof(bl));
-}
-
-inline QByteArray toBinary(float flt)
-{
-    return QByteArray(reinterpret_cast<char *>(&flt), sizeof(flt));
-}
-
-inline QByteArray toBinary(double dbl)
-{
-    return QByteArray(reinterpret_cast<char *>(&dbl), sizeof(dbl));
-}
-
-// basic types
-inline QByteArray toBinary(const QString &str)
+[[nodiscard]] inline QByteArray convert(const QString &str)
 {
     QByteArray bytes = str.toUtf8();
     uint8_t size = bytes.size();
-    bytes.prepend(reinterpret_cast<char *>(&size), sizeof(size));
-    return bytes;
+    return bytes.prepend(reinterpret_cast<char *>(&size), sizeof(size));
 }
 
-// struct types
-inline QByteArray toBinary(const FlightPlanWaypoint &wp)
+[[nodiscard]] inline QByteArray convert(const FlightPlanWaypoint &wp)
 {
-    QByteArray ret = toBinary(wp.position.latitude());
-    ret += toBinary(wp.position.longitude());
-    ret += toBinary(wp.alt1);
-    ret += toBinary(wp.alt2);
-    ret += toBinary(wp.ident);
-    ret += toBinary(wp.wpType);
-    ret += toBinary(wp.altType);
-    return ret;
+    return convert(wp.position.latitude())
+    + convert(wp.position.longitude())
+    + convert(wp.alt1)
+    + convert(wp.alt2)
+    + convert(wp.ident)
+    + convert(wp.wpType)
+    + convert(wp.altType);
 }
 
-inline QByteArray toBinary(const ActiveAirplaneSettings &settings)
+[[nodiscard]] inline QByteArray convert(const AircraftConfig &config)
 {
-    QByteArray ret = toBinary(settings.secondDivFactor);
-    ret += toBinary(settings.egtReplacesItt);
-    ret += toBinary(settings.torqueAsPct);
-    ret += toBinary(settings.usePropRpm);
-    ret += toBinary(settings.secondIsLoad);
-    ret += toBinary(settings.hasApu);
-    ret += toBinary(settings.hasFlaps);
-    ret += toBinary(settings.hasSpoilers);
-    ret += toBinary(settings.hasElevTrim);
-    ret += toBinary(settings.hasRudderTrim);
-    ret += toBinary(settings.hasAileronTrim);
-    ret += toBinary(settings.hasEgt);
-    ret += toBinary(settings.fuelQtyByVolume);
-    ret += toBinary(settings.fuelFlowByVolume);
-    ret += toBinary(settings.numEngines);
-    ret += toBinary(settings.numTanks);
-    ret += toBinary(settings.type);
-    ret += toBinary(settings.n1Epsilon);
-    ret += toBinary(settings.n2Epsilon);
-    ret += toBinary(settings.ittEpsilon);
-    ret += toBinary(settings.rpmEpsilon);
-    ret += toBinary(settings.secondEpsilon);
-    ret += toBinary(settings.trqEpsilon);
-    ret += toBinary(settings.fuelQtyEpsilon);
-    ret += toBinary(settings.fuelFlowEpsilon);
-    ret += toBinary(settings.oilTempEpsilon);
-    ret += toBinary(settings.oilPressEpsilon);
-    ret += toBinary(settings.egtEpsilon);
-    return ret;
+    return convert(config.numEngines)
+    + convert(config.type)
+    + convert(config.n1Epsilon)
+    + convert(config.n2Epsilon)
+    + convert(config.ittEpsilon)
+    + convert(config.rpmEpsilon)
+    + convert(config.powerEpsilon)
+    + convert(config.manPressEpsilon)
+    + convert(config.chtEpsilon)
+    + convert(config.trqEpsilon)
+    + convert(config.fuelFlowEpsilon)
+    + convert(config.egtEpsilon)
+    + convert(config.oilTempEpsilon)
+    + convert(config.oilPressEpsilon)
+    + convert(config.fuelQtyEpsilon)
+    + convert(config.ittGaugeType)
+    + convert(config.hasRpm)
+    + convert(config.usePropRpm)
+    + convert(config.hasPower)
+    + convert(config.powerAsPct)
+    + convert(config.maxPower)
+    + convert(config.hasManPress)
+    + convert(config.hasCht)
+    + convert(config.chtGaugeType)
+    + convert(config.trqAsPct)
+    + convert(config.rpmAsPct)
+    + convert(config.fuelFlowByWeight)
+    + convert(config.singleTank)
+    + convert(config.fuelQtyByWeight)
+    + convert(config.hasApu)
+    + convert(config.hasEgt)
+    + convert(config.egtGaugeType)
+    + convert(config.hasFlaps)
+    + convert(config.hasSpoilers)
+    + convert(config.hasElevTrim)
+    + convert(config.hasRudderTrim)
+    + convert(config.hasAileronTrim);
 }
 
-// list types
-inline QByteArray toBinary(const QList<FlightPlanWaypoint> &wpList)
+template<class T> requires requires(T a) { convert(a); }
+[[nodiscard]] inline QByteArray convert(const QList<T> &list)
 {
-    uint16_t size = wpList.size();
-    QByteArray ret = toBinary(size);
-    for (int i = 0; i < size; i++)
-        ret += toBinary(wpList[i]);
+    QByteArray ret = convert(static_cast<uint16_t>(list.size()));
+    for (const T &val : list)
+        ret += convert(val);
+
     return ret;
 }
 
 // from binary converters
-// fundamental types
-inline int8_t readInt8_t(QIODevice &data)
+template<Numeric T>
+[[nodiscard]] inline T convert(QIODevice &data)
 {
-    int8_t val = 0;
+    T val;
     data.read(reinterpret_cast<char *>(&val), sizeof(val));
     return val;
 }
 
-inline uint8_t readUint8_t(QIODevice &data)
+template<Numeric T>
+inline void convert(QIODevice &data, T &val)
 {
-    uint8_t val = 0;
     data.read(reinterpret_cast<char *>(&val), sizeof(val));
-    return val;
 }
 
-inline int16_t readInt16_t(QIODevice &data)
-{
-    int16_t val = 0;
-    data.read(reinterpret_cast<char *>(&val), sizeof(val));
-    return val;
-}
+template<class T>
+requires std::is_same_v<T, QString>
 
-inline uint16_t readUint16_t(QIODevice &data)
+[[nodiscard]] inline QString convert(QIODevice &data)
 {
-    uint16_t val = 0;
-    data.read(reinterpret_cast<char *>(&val), sizeof(val));
-    return val;
-}
-
-inline int32_t readInt32_t(QIODevice &data)
-{
-    int32_t val = 0;
-    data.read(reinterpret_cast<char *>(&val), sizeof(val));
-    return val;
-}
-
-inline uint32_t readUint32_t(QIODevice &data)
-{
-    uint32_t val = 0;
-    data.read(reinterpret_cast<char *>(&val), sizeof(val));
-    return val;
-}
-
-inline int64_t readInt64_t(QIODevice &data)
-{
-    int64_t val = 0;
-    data.read(reinterpret_cast<char *>(&val), sizeof(val));
-    return val;
-}
-
-inline uint64_t readUint64_t(QIODevice &data)
-{
-    uint64_t val = 0;
-    data.read(reinterpret_cast<char *>(&val), sizeof(val));
-    return val;
-}
-
-inline bool readBool(QIODevice &data)
-{
-    bool val = false;
-    data.read(reinterpret_cast<char *>(&val), sizeof(val));
-    return val;
-}
-
-inline float readFloat(QIODevice &data)
-{
-    float val = 0;
-    data.read(reinterpret_cast<char *>(&val), sizeof(val));
-    return val;
-}
-
-inline double readDouble(QIODevice &data)
-{
-    double val = 0;
-    data.read(reinterpret_cast<char *>(&val), sizeof(val));
-    return val;
-}
-
-// basic types
-inline QString readString(QIODevice &data)
-{
-    uint8_t size = readUint8_t(data);
+    const uint8_t size = convert<uint8_t>(data);
     return size == 0 ? "" : QString::fromUtf8(data.read(size));
 }
 
-// struct types
-inline FlightPlanWaypoint readFpWp(QIODevice &data)
+template<class T>
+requires std::is_same_v<T, FlightPlanWaypoint>
+
+[[nodiscard]] inline FlightPlanWaypoint convert(QIODevice &data)
 {
     FlightPlanWaypoint ret;
-    ret.position = QGeoCoordinate(readDouble(data), readDouble(data));
-    ret.alt1 = readInt32_t(data);
-    ret.alt2 = readInt32_t(data);
-    ret.ident = readString(data);
-    ret.wpType = readInt8_t(data);
-    ret.altType = readInt8_t(data);
+    ret.position = QGeoCoordinate(convert<double>(data), convert<double>(data));
+    convert(data, ret.alt1);
+    convert(data, ret.alt2);
+    convert(data, ret.wpType);
+    convert(data, ret.altType);
+    ret.ident = convert<QString>(data);
     return ret;
 }
 
-inline ActiveAirplaneSettings readAirplaneSettings(QIODevice &data)
+inline void convert(QIODevice &data, FlightPlanWaypoint &val)
 {
-    ActiveAirplaneSettings ret;
-    ret.secondDivFactor = readDouble(data);
-    ret.egtReplacesItt = readBool(data);
-    ret.torqueAsPct = readBool(data);
-    ret.usePropRpm = readBool(data);
-    ret.secondIsLoad = readBool(data);
-    ret.hasApu = readBool(data);
-    ret.hasFlaps = readBool(data);
-    ret.hasSpoilers = readBool(data);
-    ret.hasElevTrim = readBool(data);
-    ret.hasRudderTrim = readBool(data);
-    ret.hasAileronTrim = readBool(data);
-    ret.hasEgt = readBool(data);
-    ret.fuelQtyByVolume = readBool(data);
-    ret.fuelFlowByVolume = readBool(data);
-    ret.numEngines = readInt8_t(data);
-    ret.numTanks = readInt8_t(data);
-    ret.type = readInt8_t(data);
-    ret.n1Epsilon = readDouble(data);
-    ret.n2Epsilon = readDouble(data);
-    ret.ittEpsilon = readDouble(data);
-    ret.rpmEpsilon = readDouble(data);
-    ret.secondEpsilon = readDouble(data);
-    ret.trqEpsilon = readDouble(data);
-    ret.fuelQtyEpsilon = readDouble(data);
-    ret.fuelFlowEpsilon = readDouble(data);
-    ret.oilTempEpsilon = readDouble(data);
-    ret.oilPressEpsilon = readDouble(data);
-    ret.egtEpsilon = readDouble(data);
+    val.position = QGeoCoordinate(convert<double>(data), convert<double>(data));
+    convert(data, val.alt1);
+    convert(data, val.alt2);
+    convert(data, val.wpType);
+    convert(data, val.altType);
+    val.ident = convert<QString>(data);
+}
+
+template<class T>
+requires std::is_same_v<T, AircraftConfig>
+[[nodiscard]] inline AircraftConfig convert(QIODevice &data)
+{
+    AircraftConfig ret;
+    convert(data, ret.numEngines);
+    convert(data, ret.type);
+    convert(data, ret.n1Epsilon);
+    convert(data, ret.n2Epsilon);
+    convert(data, ret.ittEpsilon);
+    convert(data, ret.rpmEpsilon);
+    convert(data, ret.powerEpsilon);
+    convert(data, ret.manPressEpsilon);
+    convert(data, ret.chtEpsilon);
+    convert(data, ret.trqEpsilon);
+    convert(data, ret.fuelFlowEpsilon);
+    convert(data, ret.egtEpsilon);
+    convert(data, ret.oilTempEpsilon);
+    convert(data, ret.oilPressEpsilon);
+    convert(data, ret.fuelQtyEpsilon);
+    convert(data, ret.ittGaugeType);
+    convert(data, ret.hasRpm);
+    convert(data, ret.usePropRpm);
+    convert(data, ret.hasPower);
+    convert(data, ret.powerAsPct);
+    convert(data, ret.maxPower);
+    convert(data, ret.hasManPress);
+    convert(data, ret.hasCht);
+    convert(data, ret.chtGaugeType);
+    convert(data, ret.trqAsPct);
+    convert(data, ret.rpmAsPct);
+    convert(data, ret.fuelFlowByWeight);
+    convert(data, ret.singleTank);
+    convert(data, ret.fuelQtyByWeight);
+    convert(data, ret.hasApu);
+    convert(data, ret.hasEgt);
+    convert(data, ret.egtGaugeType);
+    convert(data, ret.hasFlaps);
+    convert(data, ret.hasSpoilers);
+    convert(data, ret.hasElevTrim);
+    convert(data, ret.hasRudderTrim);
+    convert(data, ret.hasAileronTrim);
+
     return ret;
 }
 
-// list types
-inline QList<FlightPlanWaypoint> readFpList(QIODevice &data)
+inline void convert(QIODevice &data, AircraftConfig &val)
 {
-    uint16_t size = readUint16_t(data);
-    QList<FlightPlanWaypoint> ret;
+    convert(data, val.numEngines);
+    convert(data, val.type);
+    convert(data, val.n1Epsilon);
+    convert(data, val.n2Epsilon);
+    convert(data, val.ittEpsilon);
+    convert(data, val.rpmEpsilon);
+    convert(data, val.powerEpsilon);
+    convert(data, val.manPressEpsilon);
+    convert(data, val.chtEpsilon);
+    convert(data, val.trqEpsilon);
+    convert(data, val.fuelFlowEpsilon);
+    convert(data, val.egtEpsilon);
+    convert(data, val.oilTempEpsilon);
+    convert(data, val.oilPressEpsilon);
+    convert(data, val.fuelQtyEpsilon);
+    convert(data, val.ittGaugeType);
+    convert(data, val.hasRpm);
+    convert(data, val.usePropRpm);
+    convert(data, val.hasPower);
+    convert(data, val.powerAsPct);
+    convert(data, val.maxPower);
+    convert(data, val.hasManPress);
+    convert(data, val.hasCht);
+    convert(data, val.chtGaugeType);
+    convert(data, val.trqAsPct);
+    convert(data, val.rpmAsPct);
+    convert(data, val.fuelFlowByWeight);
+    convert(data, val.singleTank);
+    convert(data, val.fuelQtyByWeight);
+    convert(data, val.hasApu);
+    convert(data, val.hasEgt);
+    convert(data, val.egtGaugeType);
+    convert(data, val.hasFlaps);
+    convert(data, val.hasSpoilers);
+    convert(data, val.hasElevTrim);
+    convert(data, val.hasRudderTrim);
+    convert(data, val.hasAileronTrim);
+}
+
+template<typename T> requires requires(T a, QIODevice &data) { convert(data, a); }
+[[nodiscard]] inline QList<T> convertList(QIODevice &data)
+{
+    uint16_t size = convert<uint16_t>(data);
+    QList<T> ret;
     ret.reserve(size);
-    for (int i = 0; i < size; i++)
-        ret.append(readFpWp(data));
+
+    ++size;
+    while (--size)
+        ret.append(convert<T>(data));
+
     return ret;
+}
+
+template<typename T> requires requires(T a, QIODevice &data) { convert(data, a); }
+inline void convertList(QIODevice &data, QList<T> &list)
+{
+    list.clear();
+    uint16_t size = convert<uint16_t>(data);
+    list.reserve(size);
+
+    ++size;
+    while (--size)
+        list.append(convert<T>(data));
 }
 
 }  // namespace BinaryConverter
