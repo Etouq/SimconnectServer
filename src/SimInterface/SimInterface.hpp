@@ -1,16 +1,29 @@
 #ifndef __SIMINTERFACE_HPP__
 #define __SIMINTERFACE_HPP__
 
+#include "AircraftConfig.hpp"
+#include "SharedThreadData.hpp"
+#include "windows.h"
+#include "common/dataIdentifiers.hpp"
 #include "DataHandlers/DataHandlers.hpp"
 
+#include <atomic>
+#include <QMutex>
 #include <QObject>
 #include <QThread>
 
+#include "C:/MSFS SDK/SimConnect SDK/include/SimConnect.h"
 
 class SimInterface : public QThread
 {
     Q_OBJECT
 
+    // inter-thread communication
+    std::atomic_bool *d_sharedDataUpdated;
+    QMutex *d_sharedDataMutex;
+    SharedThreadData *d_sharedData;
+
+    // data handlers
     AirspeedHandler d_airspeedHandler;
     AltitudeHandler d_altitudeHandler;
     ApInfoHandler d_autopilotHandler;
@@ -21,10 +34,47 @@ class SimInterface : public QThread
     NavInfoHandler d_navInfoHandler;
     RadioHandler d_radioHandler;
     WindInfoHandler d_windHandler;
+    MiscHandler d_miscHandler;
+
+    AircraftHandler *d_aircraftHandler = nullptr;
+
+
+    // internal data
+    bool updateAircraft = false;
+    AircraftConfig d_aircraftConfig;
+
+    HANDLE d_simConnectHandle = NULL;
+
+    bool quit = false;
+
 
 public:
 
-    explicit SimInterface(QObject *parent = nullptr);
+    explicit SimInterface(std::atomic_bool *sharedAtomic,
+                              QMutex *sharedMutex,
+                              SharedThreadData *sharedData,
+                              const AircraftConfig &airplaneStartConfig,
+                              QObject *parent = nullptr);
+
+    void run() override
+    {
+        if (tryConnecting())
+        {
+            setupEvents();
+            setupData();
+
+            SimconnectIds id = SimconnectIds::SIM_START_EVENT;
+            emit sendData(QByteArray(reinterpret_cast<char *>(&id), sizeof(id)));
+
+            while (!quit)
+            {
+                processDispatches();
+                QThread::msleep(15);
+            }
+
+            SimConnect_Close(d_simConnectHandle);
+        }
+    }
 
 signals:
     void sendData(const QByteArray &data) const;
@@ -32,6 +82,20 @@ signals:
     void simConnectQuit();
     void connected();
     void simConnectionFailed();
+
+private:
+
+    bool tryConnecting();
+
+    void processDispatches();
+
+    void processException(DWORD exceptionId);
+
+    void processSharedData();
+    void parseCommandString(const QByteArray &data);
+
+    void setupData();
+    void setupEvents();
 };
 
 #endif  // __SIMINTERFACE_HPP__
