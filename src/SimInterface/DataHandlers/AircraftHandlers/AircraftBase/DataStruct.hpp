@@ -30,6 +30,7 @@ struct DataStruct
     double fuelTotalQty = 0;
 
     double apuN1 = 0;
+    double fuelDensity = 1;
 };
 
 }  // namespace aircraft::base

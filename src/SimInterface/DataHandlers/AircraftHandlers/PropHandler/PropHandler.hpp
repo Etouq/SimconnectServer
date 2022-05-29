@@ -15,7 +15,7 @@ struct AircraftConfig;
 namespace aircraft::prop
 {
 
-class PropHandler : base::AircraftHandler
+class PropHandler : public base::AircraftHandler
 {
 
     EngineStruct d_engine1;

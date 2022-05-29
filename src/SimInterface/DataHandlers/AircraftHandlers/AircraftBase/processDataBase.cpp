@@ -60,13 +60,15 @@ QByteArray AircraftHandler::processDataBase(const unsigned long *raw)
         dataToSend.append(reinterpret_cast<const char *>(&newData.ruddTrim), sizeof(newData.ruddTrim));
     }
 
+    d_previous.fuelDensity = newData.fuelDensity;
+
     if (d_singleTank) [[unlikely]]
     {
         if (std::abs(d_previous.fuelTotalQty - newData.fuelTotalQty) >= d_fuelQtyEps) [[unlikely]]
         {
             d_previous.fuelTotalQty = newData.fuelTotalQty;
             if (d_fuelQtyByWeight)
-                newData.fuelTotalQty *= d_fuelDensity;
+                newData.fuelTotalQty *= newData.fuelDensity;
 
             id = SimconnectIds::FUEL_TOTAL_QTY;
             dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
@@ -79,7 +81,7 @@ QByteArray AircraftHandler::processDataBase(const unsigned long *raw)
         {
             d_previous.fuelLeftQty = newData.fuelLeftQty;
             if (d_fuelQtyByWeight)
-                newData.fuelLeftQty *= d_fuelDensity;
+                newData.fuelLeftQty *= newData.fuelDensity;
 
             id = SimconnectIds::FUEL_LEFT_QTY;
             dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
@@ -90,7 +92,7 @@ QByteArray AircraftHandler::processDataBase(const unsigned long *raw)
         {
             d_previous.fuelRightQty = newData.fuelRightQty;
             if (d_fuelQtyByWeight)
-                newData.fuelRightQty *= d_fuelDensity;
+                newData.fuelRightQty *= newData.fuelDensity;
 
             id = SimconnectIds::FUEL_RIGHT_QTY;
             dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
@@ -98,7 +100,7 @@ QByteArray AircraftHandler::processDataBase(const unsigned long *raw)
         }
     }
 
-    if (d_checkApu && std::abs(d_previous.apuN1 - newData.apuN1) >= 0.5)
+    if (d_checkApu && std::abs(d_previous.apuN1 - newData.apuN1) >= 0.5) [[unlikely]]
     {
         d_previous.apuN1 = newData.apuN1;
         id = SimconnectIds::APU_RPM_PCT;

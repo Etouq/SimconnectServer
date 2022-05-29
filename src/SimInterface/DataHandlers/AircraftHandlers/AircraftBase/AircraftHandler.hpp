@@ -47,11 +47,11 @@ protected:
 
     bool d_singleTank = false;
     bool d_fuelQtyByWeight = false;
-    double d_fuelDensity = 1;
 
 public:
 
     AircraftHandler() = default;
+    virtual ~AircraftHandler() = default;
 
     virtual void setupData(HANDLE simConnectHandle, const AircraftConfig &config) = 0;
 
@@ -120,7 +120,6 @@ protected:
 
         d_singleTank = false;
         d_fuelQtyByWeight = false;
-        d_fuelDensity = 1;
     }
 
     void sendCurrentEngineData(const EngineCommon &data, QByteArray &dataToSend, const uint8_t engineIdx);

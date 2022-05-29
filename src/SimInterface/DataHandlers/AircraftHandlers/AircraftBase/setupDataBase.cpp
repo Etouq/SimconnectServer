@@ -1,10 +1,10 @@
-#include "../../../enums.hpp"
 #include "AircraftHandler.hpp"
-#include "common/dataIdentifiers.hpp"
 #include "windows.h"
-#include "C:/MSFS SDK/SimConnect SDK/include/SimConnect.h"
+#include "../../../enums.hpp"
+
 #include <string>
 
+#include "C:/MSFS SDK/SimConnect SDK/include/SimConnect.h"
 
 namespace aircraft::base
 {
@@ -90,6 +90,13 @@ void AircraftHandler::setupDataBase(HANDLE simConnectHandle)
                                    "percent",
                                    SIMCONNECT_DATATYPE_FLOAT64,
                                    d_checkApu ? 0.5 : 1000000);
+
+    SimConnect_AddToDataDefinition(simConnectHandle,
+                                   DATA_DEFINITION_IDS::ENGINE_DEFINITION,
+                                   "FUEL WEIGHT PER GALLON",
+                                   "kilograms",
+                                   SIMCONNECT_DATATYPE_FLOAT64,
+                                   100);
 }
 
 }  // namespace aircraft::base

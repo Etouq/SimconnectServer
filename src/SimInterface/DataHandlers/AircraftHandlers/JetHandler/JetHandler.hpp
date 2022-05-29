@@ -15,7 +15,7 @@ struct AircraftConfig;
 namespace aircraft::jet
 {
 
-class JetHandler : base::AircraftHandler
+class JetHandler : public base::AircraftHandler
 {
 
     EngineStruct d_engine1;
