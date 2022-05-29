@@ -8,7 +8,7 @@ struct AircraftConfig
     int8_t numEngines = 1;
     AircraftType type = AircraftType::JET;
 
-    // jet
+    // jet aircraft
     double n1Epsilon = 10000;
     double n2Epsilon = 10000;
     double ittEpsilon = 10000;
@@ -19,6 +19,7 @@ struct AircraftConfig
     double manPressEpsilon = 10000;
     double chtEpsilon = 10000;
 
+    // turboprop aircraft
     double trqEpsilon = 10000;
 
     // general
@@ -43,6 +44,10 @@ struct AircraftConfig
     bool hasManPress = true;
     bool hasCht = false;
     TemperatureGaugeType chtGaugeType = TemperatureGaugeType::CHT;
+
+    // turboprop aircraft
+    bool trqAsPct = true;
+    bool rpmAsPct = false;
 
     // general
     bool fuelFlowByWeight = false;
