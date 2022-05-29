@@ -27,9 +27,17 @@ public:
 
     HsiHandler() = default;
 
-    void gpsWpNextIdValid(bool valid)
+    QByteArray gpsWpNextIdValid(bool valid)
     {
-        d_nextGpsWpIdValid = valid;
+        QByteArray ret;
+        if (d_nextGpsWpIdValid != valid)
+        {
+            d_nextGpsWpIdValid = valid;
+            if (d_navSource == HsiNavSource::GPS)
+                handleGps(ret, d_previous);
+        }
+
+        return ret;
     }
 
     void setupData(HANDLE simConnectHandle);
