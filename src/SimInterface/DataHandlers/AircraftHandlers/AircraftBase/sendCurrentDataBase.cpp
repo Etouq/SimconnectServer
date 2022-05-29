@@ -7,7 +7,7 @@
 namespace aircraft::base
 {
 
-QByteArray AircraftHandler::sendCurrentData()
+QByteArray AircraftHandler::sendCurrentDataBase()
 {
     SimconnectIds id = SimconnectIds::FLAPS_ANGLE;
     id = SimconnectIds::FLAPS_ANGLE;
@@ -34,19 +34,19 @@ QByteArray AircraftHandler::sendCurrentData()
     double transformedValue = 0;
     if (d_singleTank)
     {
-        transformedValue = d_fuelQtyByWeight ? d_previous.fuelTotalQty *= d_fuelDensity : d_previous.fuelTotalQty;
+        transformedValue = d_fuelQtyByWeight ? d_previous.fuelTotalQty *= d_previous.fuelDensity : d_previous.fuelTotalQty;
         id = SimconnectIds::FUEL_TOTAL_QTY;
         dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
         dataToSend.append(reinterpret_cast<const char *>(&transformedValue), sizeof(transformedValue));
     }
     else
     {
-        transformedValue = d_fuelQtyByWeight ? d_previous.fuelLeftQty *= d_fuelDensity : d_previous.fuelLeftQty;
+        transformedValue = d_fuelQtyByWeight ? d_previous.fuelLeftQty *= d_previous.fuelDensity : d_previous.fuelLeftQty;
         id = SimconnectIds::FUEL_LEFT_QTY;
         dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
         dataToSend.append(reinterpret_cast<const char *>(&transformedValue), sizeof(transformedValue));
 
-        transformedValue = d_fuelQtyByWeight ? d_previous.fuelRightQty *= d_fuelDensity : d_previous.fuelRightQty;
+        transformedValue = d_fuelQtyByWeight ? d_previous.fuelRightQty *= d_previous.fuelDensity : d_previous.fuelRightQty;
         id = SimconnectIds::FUEL_RIGHT_QTY;
         dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
         dataToSend.append(reinterpret_cast<const char *>(&transformedValue), sizeof(transformedValue));
