@@ -1,4 +1,4 @@
-#include "../mainwindow.hpp"
+#include "mainwindow.hpp"
 #include "FlightplanReader/flightplanreader.hpp"
 #include "common/binaryconverter.hpp"
 #include "common/dataIdentifiers.hpp"
@@ -10,7 +10,7 @@ void MainWindow::readFlightplan(const QString &fileName)
     QFile file(fileName);
     if (file.open(QIODevice::ReadOnly))
     {
-        QByteArray dataToSend = BinaryConverter::toBinary(FlightplanReader::readFile(file));
+        QByteArray dataToSend = BinaryConverter::convert(FlightplanReader::readFile(file));
         file.close();
 
         int64_t byteSize = dataToSend.size();
@@ -19,6 +19,6 @@ void MainWindow::readFlightplan(const QString &fileName)
         SimconnectIds id = SimconnectIds::FLIGHTPLAN_LIST;
         dataToSend.prepend(reinterpret_cast<char *>(&id), sizeof(id));
 
-        tcpSocket->write(dataToSend);
+        d_connectionHandler.sendDataToClient(dataToSend);
     }
 }

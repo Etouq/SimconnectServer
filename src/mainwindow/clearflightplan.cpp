@@ -1,8 +1,8 @@
-#include "../mainwindow.hpp"
+#include "mainwindow.hpp"
 #include "common/dataIdentifiers.hpp"
 
 void MainWindow::clearFlightplan()
 {
     SimconnectIds id = SimconnectIds::CLEAR_FLIGHTPLAN;
-    tcpSocket->write(reinterpret_cast<char *>(&id), sizeof(id));
+    d_connectionHandler.sendDataToClient(QByteArray(reinterpret_cast<const char *>(&id), sizeof(id)));
 }

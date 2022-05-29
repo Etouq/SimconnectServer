@@ -123,7 +123,7 @@ enum class SimconnectIds : uint8_t
     QUIT,
     SIM_START_EVENT,
     SIM_STOP_EVENT,
-    SIM_CONNECTION_FAILED,
+    SIM_STARTUP_FAILED,
     ERROR_STRING,
     // engine (indexed)
     ENGINE_N1,

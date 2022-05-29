@@ -1,10 +1,9 @@
-#include "../mainwindow.hpp"
+#include "mainwindow.hpp"
 
 #include <QFileDialog>
 #include <QSettings>
 #include <QDir>
 
-#include "common/dataIdentifiers.hpp"
 
 void MainWindow::readNewFlightplan()
 {
