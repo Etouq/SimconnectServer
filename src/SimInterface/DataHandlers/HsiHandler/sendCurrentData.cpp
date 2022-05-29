@@ -75,13 +75,19 @@ QByteArray HsiHandler::sendCurrentData()
                               sizeof(d_previous.nav2TacanToFrom));
             break;
         case HsiNavSource::GPS:
-            static const int32_t gpsToFromValue = 1;
+        {
+            constexpr int32_t gpsToFromValue = 1;
             dataToSend.append(reinterpret_cast<const char *>(&gpsToFromValue), sizeof(gpsToFromValue));
             break;
+
+        }
         case HsiNavSource::NONE:
-            static const int32_t emptyToFromValue = 0;
+        {
+            constexpr int32_t emptyToFromValue = 0;
             dataToSend.append(reinterpret_cast<const char *>(&emptyToFromValue), sizeof(emptyToFromValue));
             break;
+
+        }
     }
 
     return dataToSend;
