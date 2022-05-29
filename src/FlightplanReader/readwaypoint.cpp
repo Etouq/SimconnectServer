@@ -41,21 +41,21 @@ FlightPlanWaypoint FlightplanReader::readWaypoint()
 
             if (QRegularExpressionMatch match = llaRegExp.match(posString); match.hasMatch())
             {
-                bool northLat = match.captured(1) != "S";
-                int latDeg = match.captured(2).toInt();
-                int latMin = match.captured(3).toInt();
-                float latSec = match.captured(4).toFloat();
+                bool northLat = match.captured(latDirIdx) != "S";
+                int latDeg = match.captured(latDegIdx).toInt();
+                int latMin = match.captured(latMinIdx).toInt();
+                float latSec = match.captured(latSecIdx).toFloat();
 
-                bool eastLon = match.captured(5) != "W";
-                int lonDeg = match.captured(6).toInt();
-                int lonMin = match.captured(7).toInt();
-                float lonSec = match.captured(8).toFloat();
+                bool eastLon = match.captured(lonDirIdx) != "W";
+                int lonDeg = match.captured(lonDegIdx).toInt();
+                int lonMin = match.captured(lonMinIdx).toInt();
+                float lonSec = match.captured(lonSecIdx).toFloat();
 
                 double lat = (latDeg + latMin / 60.0 + latSec / 3600.0) * (northLat ? 1.0 : -1.0);
                 double lon = (lonDeg + lonMin / 60.0 + lonSec / 3600.0) * (eastLon ? 1.0 : -1.0);
                 newWp.position = QGeoCoordinate(lat, lon);
                 if (!alt1Set)
-                    newWp.alt1 = lround(QString(match.captured(9) + match.captured(10)).toFloat());
+                    newWp.alt1 = lround(QString(match.captured(altPosIdx) + match.captured(altIdx)).toFloat());
             }
         }
         else if (flightPlanXml.name().toUtf8() == "AltDescFP")
