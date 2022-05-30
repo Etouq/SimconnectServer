@@ -11,35 +11,35 @@ struct RawStruct
 {
     float refMach = 0.0;
 
-    int32_t apMaster = 0;
-    int32_t apYawDamper = 0;
+    uint32_t apMaster = 0;
+    uint32_t apYawDamper = 0;
 
-    int32_t apPitchHold = 0;
-    int32_t apFlc = 0;
-    int32_t apManagedInMach = 0;
-    int32_t apMachHold = 0;
-    int32_t apAltitudeLock = 0;
-    int32_t apVerticalHold = 0;
-    int32_t apGlideslopeActive = 0;
+    uint32_t apPitchHold = 0;
+    uint32_t apFlc = 0;
+    uint32_t apManagedInMach = 0;
+    uint32_t apMachHold = 0;
+    uint32_t apAltitudeLock = 0;
+    uint32_t apVerticalHold = 0;
+    uint32_t apGlideslopeActive = 0;
 
-    int32_t apAltitudeArm = 0;
-    int32_t apGlideslopeArm = 0;
+    uint32_t apAltitudeArm = 0;
+    uint32_t apGlideslopeArm = 0;
 
-    int32_t apWingLeveler = 0;
-    int32_t apBankHold = 0;
-    int32_t apHeadingLock = 0;
-    int32_t apNav1Lock = 0;
-    int32_t apBackcourseHold = 0;
-    int32_t autopilotApproachHold = 0;
+    uint32_t apWingLeveler = 0;
+    uint32_t apBankHold = 0;
+    uint32_t apHeadingLock = 0;
+    uint32_t apNav1Lock = 0;
+    uint32_t apBackcourseHold = 0;
+    uint32_t autopilotApproachHold = 0;
 
-    int32_t refSpeed = 0;
-    int32_t refAltitude = 0;
-    int32_t refVspeed = 0;
+    uint32_t refSpeed = 0;
+    uint32_t refAltitude = 0;
+    uint32_t refVspeed = 0;
 
-    int32_t gpsDrivesNav1 = 0;
-    int32_t autopilotNavSelected = 0;
-    int32_t nav1HasLoc = 0;
-    int32_t nav2HasLoc = 0;
+    uint32_t gpsDrivesNav1 = 0;
+    uint32_t autopilotNavSelected = 0;
+    uint32_t nav1HasLoc = 0;
+    uint32_t nav2HasLoc = 0;
 };
 
 struct DataStruct
@@ -65,13 +65,13 @@ struct DataStruct
     bool apBackcourseHold = false;
     bool autopilotApproachHold = false;
 
-    int32_t refSpeed = 0;
+    uint32_t refSpeed = 0;
     float refMach = 0.0;
-    int32_t refAltitude = 0;
-    int32_t refVspeed = 0;
+    uint32_t refAltitude = 0;
+    uint32_t refVspeed = 0;
 
     bool gpsDrivesNav1 = false;
-    int32_t autopilotNavSelected = 0;
+    uint32_t autopilotNavSelected = 0;
     bool nav1HasLoc = false;
     bool nav2HasLoc = false;
 

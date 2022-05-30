@@ -8,10 +8,10 @@ namespace bottombar
 
 struct RawStruct
 {
-    int32_t zuluSeconds = 0;
-    int32_t localSeconds = 0;
+    uint32_t zuluSeconds = 0;
+    uint32_t localSeconds = 0;
 
-    int32_t groundSpeed = 0;
+    uint32_t groundSpeed = 0;
     float totalAirTemp = 0;
     float outsideAirTemp = 0;
     float stdAtmAirTemp = 0;
@@ -19,10 +19,10 @@ struct RawStruct
 
 struct DataStruct
 {
-    int32_t zuluSeconds = 0;
-    int32_t localSeconds = 0;
+    uint32_t zuluSeconds = 0;
+    uint32_t localSeconds = 0;
 
-    int32_t groundSpeed = 0;
+    uint32_t groundSpeed = 0;
     float totalAirTemp = 0;
     float outsideAirTemp = 0;
     float isaAirTemp = 0;

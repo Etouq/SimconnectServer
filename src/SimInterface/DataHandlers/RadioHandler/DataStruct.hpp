@@ -20,8 +20,8 @@ struct DataStruct
     float nav1Stby = 0;
     float nav2Stby = 0;
 
-    int32_t xpdrCode = 0;
-    int32_t xpdrState = 0;
+    uint32_t xpdrCode = 0;
+    uint32_t xpdrState = 0;
 };
 
 }  // namespace radio

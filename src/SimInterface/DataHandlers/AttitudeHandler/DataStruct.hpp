@@ -17,7 +17,7 @@ struct RawStruct
     double fdBank = 0;
     double fdPitch = 0;
 
-    int32_t fdState = 0;
+    uint32_t fdState = 0;
 };
 
 struct DataStruct  // also handles aoa

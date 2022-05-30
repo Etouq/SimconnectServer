@@ -22,11 +22,11 @@ struct RawStruct
     char nav2Ident[64];
     char gpsPrevWpId[64];
 
-    int32_t hasAp = 1;
-    int32_t hasCom1 = 1;
-    int32_t hasCom2 = 1;
-    int32_t hasNav1 = 1;
-    int32_t hasNav2 = 1;
+    uint32_t hasAp = 1;
+    uint32_t hasCom1 = 1;
+    uint32_t hasCom2 = 1;
+    uint32_t hasNav1 = 1;
+    uint32_t hasNav2 = 1;
 };
 
 struct DataStruct

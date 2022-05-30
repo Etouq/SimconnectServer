@@ -32,24 +32,24 @@ struct RawStruct
     double nav2TacanObs = 0;
     double nav2TacanCdi = 0;
 
-    int32_t autopilotNavSelected = 0;
-    int32_t gpsApproachApproachType = 0;
-    int32_t gpsDrivesNav1 = 0;
-    int32_t autopilotApproachHold = 0;
+    uint32_t autopilotNavSelected = 0;
+    uint32_t gpsApproachApproachType = 0;
+    uint32_t gpsDrivesNav1 = 0;
+    uint32_t autopilotApproachHold = 0;
 
-    int32_t tacanDrivesNav1 = 0;
-    int32_t nav1HasTacan = 0;
-    int32_t nav2HasTacan = 0;
+    uint32_t tacanDrivesNav1 = 0;
+    uint32_t nav1HasTacan = 0;
+    uint32_t nav2HasTacan = 0;
 
-    int32_t nav1HasNav = 0;
-    int32_t nav1HasLoc = 0;
-    int32_t nav1ToFrom = 0;
-    int32_t nav1TacanToFrom = 0;
+    uint32_t nav1HasNav = 0;
+    uint32_t nav1HasLoc = 0;
+    uint32_t nav1ToFrom = 0;
+    uint32_t nav1TacanToFrom = 0;
 
-    int32_t nav2HasNav = 0;
-    int32_t nav2HasLoc = 0;
-    int32_t nav2ToFrom = 0;
-    int32_t nav2TacanToFrom = 0;
+    uint32_t nav2HasNav = 0;
+    uint32_t nav2HasLoc = 0;
+    uint32_t nav2ToFrom = 0;
+    uint32_t nav2TacanToFrom = 0;
 };
 
 struct DataStruct  // also handles position
@@ -66,8 +66,8 @@ struct DataStruct  // also handles position
     double gpsWpCrossTrack = 0;
     double trueHeading = 0;
 
-    int32_t autopilotNavSelected = 0;
-    int32_t gpsApproachApproachType = 0;
+    uint32_t autopilotNavSelected = 0;
+    uint32_t gpsApproachApproachType = 0;
     bool gpsDrivesNav1 = false;
     bool autopilotApproachHold = false;
 
@@ -84,16 +84,16 @@ struct DataStruct  // also handles position
 
     bool nav1HasNav = false;
     bool nav1HasLoc = false;
-    int32_t nav1ToFrom = 0;
-    int32_t nav1TacanToFrom = 0;
+    uint32_t nav1ToFrom = 0;
+    uint32_t nav1TacanToFrom = 0;
     double nav1Loc = 0;
     double nav1Obs = 0;
     double nav1Cdi = 0;
 
     bool nav2HasNav = false;
     bool nav2HasLoc = false;
-    int32_t nav2ToFrom = 0;
-    int32_t nav2TacanToFrom = 0;
+    uint32_t nav2ToFrom = 0;
+    uint32_t nav2TacanToFrom = 0;
     double nav2Loc = 0;
     double nav2Cdi = 0;
     double nav2Obs = 0;

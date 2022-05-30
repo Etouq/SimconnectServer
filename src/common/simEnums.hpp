@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-enum ApproachType : int32_t
+enum ApproachType : uint32_t
 {
     NONE = 0,
     GPS = 1,
@@ -20,7 +20,7 @@ enum ApproachType : int32_t
 };
 
 
-enum TransponderState : int32_t
+enum TransponderState : uint32_t
 {
     OFF = 0,
     STANDBY = 1,

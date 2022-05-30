@@ -23,15 +23,15 @@ struct RawStruct
     double adfRadial = 0;
     double rotation = 0;
 
-    int32_t nav1HasNav = 0;
-    int32_t nav1HasSignal = 0;
-    int32_t nav1HasDme = 0;
+    uint32_t nav1HasNav = 0;
+    uint32_t nav1HasSignal = 0;
+    uint32_t nav1HasDme = 0;
 
-    int32_t nav2HasNav = 0;
-    int32_t nav2HasSignal = 0;
-    int32_t nav2HasDme = 0;
+    uint32_t nav2HasNav = 0;
+    uint32_t nav2HasSignal = 0;
+    uint32_t nav2HasDme = 0;
 
-    int32_t adfHasSignal = 0;
+    uint32_t adfHasSignal = 0;
 };
 
 struct DataStruct

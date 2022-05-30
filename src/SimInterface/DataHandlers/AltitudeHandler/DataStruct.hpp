@@ -19,34 +19,34 @@ struct RawStruct
     double nav2Gsi = 0;
     double gpsVertError = 0;
 
-    int32_t refAltitude = 0;
+    uint32_t refAltitude = 0;
 
-    int32_t refVspeed = 0;
+    uint32_t refVspeed = 0;
 
-    int32_t gpsDrivesNav1 = 0;
-    int32_t autopilotNavSelected = 0;
-    int32_t gpsApproachApproachType = 0;
+    uint32_t gpsDrivesNav1 = 0;
+    uint32_t autopilotNavSelected = 0;
+    uint32_t gpsApproachApproachType = 0;
 
-    int32_t nav1HasGlideslope = 0;
-    int32_t nav2HasGlideslope = 0;
-    int32_t gpsApproachActive = 0;
-    int32_t apApproachActive = 0;
+    uint32_t nav1HasGlideslope = 0;
+    uint32_t nav2HasGlideslope = 0;
+    uint32_t gpsApproachActive = 0;
+    uint32_t apApproachActive = 0;
 };
 
 struct DataStruct
 {
     double altitude = 0;
     double radarAltitude = 0;
-    int32_t refAltitude = 0;
+    uint32_t refAltitude = 0;
 
     double pressure = 29.92;
 
     double vspeed = 0;
-    int32_t refVspeed = 0;
+    uint32_t refVspeed = 0;
 
     bool gpsDrivesNav1 = false;
-    int32_t autopilotNavSelected = 0;
-    int32_t gpsApproachApproachType = 0;
+    uint32_t autopilotNavSelected = 0;
+    uint32_t gpsApproachApproachType = 0;
 
     bool nav1HasGlideslope = false;
     bool nav2HasGlideslope = false;

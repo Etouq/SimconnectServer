@@ -8,11 +8,11 @@ namespace navinfo
 
 struct RawStruct
 {
-    int32_t gpsIsActiveFlightplan = 0;
-    int32_t gpsIsDirectTo = 0;
+    uint32_t gpsIsActiveFlightplan = 0;
+    uint32_t gpsIsDirectTo = 0;
 
-    int32_t gpsWpEte = 0;
-    int32_t gpsEte = 0;
+    uint32_t gpsWpEte = 0;
+    uint32_t gpsEte = 0;
 };
 
 struct DataStruct
@@ -20,8 +20,8 @@ struct DataStruct
     bool gpsIsActiveFlightplan = false;
     bool gpsIsDirectTo = false;
 
-    int32_t gpsWpEte = 0;
-    int32_t gpsEte = 0;
+    uint32_t gpsWpEte = 0;
+    uint32_t gpsEte = 0;
 
     DataStruct() = default;
 
