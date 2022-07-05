@@ -1,24 +1,23 @@
-#ifndef _DATAIDENTIFIERS_H
-#define _DATAIDENTIFIERS_H
+#ifndef __DATAIDENTIFIERS_HPP__
+#define __DATAIDENTIFIERS_HPP__
 
 #include <cstdint>
 
-enum class SharedServerIds : uint8_t
+enum class DataGroupIdentifier : uint8_t
 {
-    // server identifier
-    SIMCONNECT_SERVER,
-    GAUGE_DESIGNER_SERVER,
+    PFD_DATA = 0,
+    MFD_DATA = 1,
+    TSC_DATA = 2,
+    SERVER_DATA = 3
 };
 
-enum class SimconnectIds : uint8_t
+enum class PfdIdentifier : uint8_t
 {
-    // pfd
     // airspeed
     AIRSPEED,
     MAX_SPEED,
     TRUE_AIRSPEED,
     REF_SPEED,
-    AP_FLC,
     // altimeter
     ALTITUDE,
     RADAR_ALTITUDE,
@@ -30,25 +29,11 @@ enum class SimconnectIds : uint8_t
     // vert dev
     VERT_DEV_MODE,
     VERT_DEV_VALUE,
+    // attitude
+    ATTITUDE,
+    FD_ATTITUDE,
     // aoa
     ANGLE_OF_ATTACK,
-    // ap info
-    AP_AVAILABLE,
-    AP_LATERAL_ACTIVE,
-    AP_LATERAL_ARMED,
-    AP_STATUS,
-    AP_YD_STATUS,
-    AP_FD_STATUS,
-    AP_VERTICAL_ACTIVE,
-    AP_MODE_REFERENCE,
-    AP_ARMED,
-    AP_ARMED_REFERENCE,
-    // attitude
-    BANK,
-    PITCH,
-    SLIPSKID,
-    FD_BANK,
-    FD_PITCH,
     // bottombar
     ZULU_SECONDS,
     LOCAL_SECONDS,
@@ -86,116 +71,118 @@ enum class SimconnectIds : uint8_t
     ADF_RADIAL,
     // nav info
     GPS_IS_ACTIVE_FLIGHTPLAN,
+    LEG_IS_DIRECT_TO,
     CURRENT_LEG_TO,
     CURRENT_LEG_FROM,
-    LEG_IS_DIRECT_TO,
-    CURRENT_LEG_DISTANCE,
-    CURRENT_LEG_BEARING,
-    // radio info
-    HAS_COM1,
-    HAS_COM2,
-    HAS_NAV1,
-    HAS_NAV2,
-    COM1_FREQ,
-    COM2_FREQ,
-    NAV1_FREQ,
-    NAV2_FREQ,
-    COM1_STBY,
-    COM2_STBY,
-    NAV1_STBY,
-    NAV2_STBY,
-    XPDR_CODE,
-    XPDR_STATE,
     // wind
     WIND_DIRECTION,
     WIND_STRENGTH,
     WIND_TRUE_DIRECTION,
-    // mfd
+    // ap info
+    AP_AVAILABLE,
+    AP_LATERAL_ACTIVE,
+    AP_LATERAL_ARMED,
+    AP_STATUS,
+    AP_YD_STATUS,
+    AP_FD_STATUS,
+    AP_FLC,
+    AP_VERTICAL_ACTIVE,
+    AP_MODE_REFERENCE,
+    AP_ARMED,
+    AP_ARMED_REFERENCE
+};
+
+enum class MfdIdentifier : uint8_t
+{
+    // map
     COORDINATES,
     TRUE_HEADING,
-    GPS_WP_DTK,
-    GPS_WP_ETE,
-    GPS_ETE,
     // flightplan
     CLEAR_FLIGHTPLAN,
     FLIGHTPLAN_LIST,
-    // simconnect server
+    GPS_WP_DTK,
+    GPS_WP_ETE,
+    GPS_DEST_ETE,
+    // fuel
+    FUEL_LEFT_QTY,
+    FUEL_RIGHT_QTY,
+    // engines (indexed)
+    ENGINE_FIRST_GAUGE,
+    ENGINE_SECOND_GAUGE,
+    ENGINE_THIRD_GAUGE,
+    ENGINE_FOURTH_GAUGE,
+    ENGINE_FUEL_FLOW,
+    ENGINE_OIL_TEMP,
+    ENGINE_SECONDARY_TEMP,
+    ENGINE_OIL_PRESS,
+    // misc engine display
+    APU_N1,
+    FUEL_TEXT_DATA,
+    FLAPS_ANGLE,
+    SPOILERS_PCT,
+    ELEV_TRIM_POSITION,
+    RUDD_TRIM_POSITION,
+    AIL_TRIM_POSITION
+};
+
+enum class TscIdentifier : uint8_t
+{
+    // radio info
+    COM1_AVAIL,
+    COM1_FREQ,
+    COM1_STBY_FREQ,
+    COM2_AVAIL,
+    COM2_FREQ,
+    COM2_STBY_FREQ,
+    COM3_AVAIL,
+    COM3_FREQ,
+    COM3_STBY_FREQ,
+    NAV1_AVAIL,
+    NAV1_FREQ,
+    NAV1_STBY_FREQ,
+    NAV2_AVAIL,
+    NAV2_FREQ,
+    NAV2_STBY_FREQ,
+    XPDR_AVAIL,
+    XPDR_CODE,
+    XPDR_STATE
+};
+
+enum class ServerMessageIdentifier : uint8_t
+{
     QUIT,
+    LOAD_AIRCRAFT,
     SIM_START_EVENT,
     SIM_STOP_EVENT,
     SIM_STARTUP_FAILED,
-    ERROR_STRING,
-    // engine (indexed)
-    ENGINE_N1,
-    ENGINE_N2,
-    ENGINE_ITT,
-    ENGINE_RPM,
-    ENGINE_POWER,
-    ENGINE_MANIFOLD_PRESSURE,
-    ENGINE_TRQ,
-    ENGINE_CHT,
-    ENGINE_FUEL_FLOW,
-    ENGINE_EGT,
-    ENGINE_OIL_TEMP,
-    ENGINE_OIL_PRESS,
-    FUEL_LEFT_QTY,
-    FUEL_RIGHT_QTY,
-    // misc ed
-    APU_RPM_PCT,
-    FUEL_TEXT_DATA,
-    SPOILERS_PCT,
-    FLAPS_ANGLE,
-    ELEV_TRIM_PCT,
-    RUDD_TRIM_PCT,
-    AIL_TRIM_PCT,
-    // aliases
-    FUEL_TOTAL_QTY = FUEL_LEFT_QTY
+    ERROR_MSG
 };
 
 enum class ClientToServerIds : uint8_t
 {
     CLIENT_NETWORK_VERSION,
     QUIT,
-    CHANGE_AIRCRAFT,
+    AIRCRAFT_LOADED,
     START,
-    SIM_COMMANDS
+    COMMAND_STRING
 };
 
-
-enum class HsiNavSource : uint8_t
+enum class SimCommandId : uint8_t
 {
-    NONE,
-    GPS,
-    VOR1,
-    LOC1,
-    TCN1,
-    VOR2,
-    LOC2,
-    TCN2
-};
-
-enum class VerticalDeviationMode : uint8_t
-{
-    NONE,
-    VDI,
-    GS,
-    GP,
-    GSPREVIEW
-};
-
-enum AircraftType : uint8_t
-{
-    JET,
-    PROP,
-    TURBOPROP
-};
-
-enum TemperatureGaugeType : uint8_t
-{
-    EGT,
-    ITT,
-    CHT
+    SET_COM1_FREQ,
+    SET_COM2_FREQ,
+    SET_COM3_FREQ,
+    SWAP_COM1,
+    SWAP_COM2,
+    SWAP_COM3,
+    SET_NAV1_FREQ,
+    SET_NAV2_FREQ,
+    SWAP_NAV1,
+    SWAP_NAV2,
+    SET_XPDR_STATE,
+    SET_XPDR_CODE,
+    NEXT_CDI_MODE
 };
 
 
-#endif  // DATAIDENTIFIERS_H
+#endif  // __DATAIDENTIFIERS_HPP__

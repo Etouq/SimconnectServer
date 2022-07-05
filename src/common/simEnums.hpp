@@ -2,6 +2,8 @@
 #define __SIM_ENUMS_HPP__
 
 #include <cstdint>
+namespace simenums
+{
 
 enum ApproachType : uint32_t
 {
@@ -29,5 +31,7 @@ enum TransponderState : uint32_t
     ALT = 4,
     GROUND = 5
 };
+
+}
 
 #endif  // __SIM_ENUMS_HPP__
