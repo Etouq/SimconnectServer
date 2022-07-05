@@ -15,20 +15,12 @@ void SimInterface::setupData()
     d_windHandler.setupData(d_simConnectHandle);
     d_miscHandler.setupData(d_simConnectHandle);
 
-    switch (d_aircraftConfig.type)
-    {
-        case AircraftType::JET:
-            d_aircraftHandler = new JetHandler();
-            break;
-        case AircraftType::PROP:
-            d_aircraftHandler = new PropHandler();
-            break;
-        case AircraftType::TURBOPROP:
-            d_aircraftHandler = new TurbopropHandler();
-            break;
-    }
+    d_engine1Handler.setupData(d_simConnectHandle, d_aircraftConfig);
+    d_engine2Handler.setupData(d_simConnectHandle, d_aircraftConfig);
+    d_engine3Handler.setupData(d_simConnectHandle, d_aircraftConfig);
+    d_engine4Handler.setupData(d_simConnectHandle, d_aircraftConfig);
 
-    d_aircraftHandler->setupData(d_simConnectHandle, d_aircraftConfig);
+    d_aircraftHandler.setupData(d_simConnectHandle, d_aircraftConfig);
 
     SimConnect_AddToDataDefinition(d_simConnectHandle,
                                    SET_XPNDR_STATE_DEF,
@@ -117,9 +109,42 @@ void SimInterface::setupData()
                                       SIMCONNECT_DATA_REQUEST_FLAG_CHANGED);
 
 
+    switch (d_aircraftConfig.numEngines)
+    {
+        case 4:
+            SimConnect_RequestDataOnSimObject(d_simConnectHandle,
+                                              ENGINE4_REQUEST,
+                                              ENGINE4_DEFINITION,
+                                              SIMCONNECT_OBJECT_ID_USER,
+                                              SIMCONNECT_PERIOD_SIM_FRAME,
+                                              SIMCONNECT_DATA_REQUEST_FLAG_CHANGED);
+            SimConnect_RequestDataOnSimObject(d_simConnectHandle,
+                                              ENGINE3_REQUEST,
+                                              ENGINE3_DEFINITION,
+                                              SIMCONNECT_OBJECT_ID_USER,
+                                              SIMCONNECT_PERIOD_SIM_FRAME,
+                                              SIMCONNECT_DATA_REQUEST_FLAG_CHANGED);
+        case 2:
+            SimConnect_RequestDataOnSimObject(d_simConnectHandle,
+                                              ENGINE2_REQUEST,
+                                              ENGINE2_DEFINITION,
+                                              SIMCONNECT_OBJECT_ID_USER,
+                                              SIMCONNECT_PERIOD_SIM_FRAME,
+                                              SIMCONNECT_DATA_REQUEST_FLAG_CHANGED);
+        case 1:
+        default:
+            SimConnect_RequestDataOnSimObject(d_simConnectHandle,
+                                              ENGINE1_REQUEST,
+                                              ENGINE1_DEFINITION,
+                                              SIMCONNECT_OBJECT_ID_USER,
+                                              SIMCONNECT_PERIOD_SIM_FRAME,
+                                              SIMCONNECT_DATA_REQUEST_FLAG_CHANGED);
+    }
+
+
     SimConnect_RequestDataOnSimObject(d_simConnectHandle,
-                                      ENGINE_REQUEST,
-                                      ENGINE_DEFINITION,
+                                      AIRCRAFT_GENERAL_REQUEST,
+                                      AIRCRAFT_GENERAL_DEFINITION,
                                       SIMCONNECT_OBJECT_ID_USER,
                                       SIMCONNECT_PERIOD_SIM_FRAME,
                                       SIMCONNECT_DATA_REQUEST_FLAG_CHANGED);

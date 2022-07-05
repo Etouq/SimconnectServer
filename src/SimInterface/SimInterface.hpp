@@ -1,11 +1,12 @@
 #ifndef __SIMINTERFACE_HPP__
 #define __SIMINTERFACE_HPP__
 
-#include "AircraftConfig.hpp"
+#include "common/definitions/AircraftConfig.hpp"
 #include "SharedThreadData.hpp"
 #include "windows.h"
 #include "common/dataIdentifiers.hpp"
 #include "DataHandlers/DataHandlers.hpp"
+#include "common/appendData.hpp"
 
 #include <atomic>
 #include <QMutex>
@@ -36,7 +37,12 @@ class SimInterface : public QThread
     WindInfoHandler d_windHandler;
     MiscHandler d_miscHandler;
 
-    AircraftHandler *d_aircraftHandler = nullptr;
+    AircraftHandler d_aircraftHandler;
+
+    EngineHandler d_engine1Handler = EngineHandler(1);
+    EngineHandler d_engine2Handler = EngineHandler(2);
+    EngineHandler d_engine3Handler = EngineHandler(3);
+    EngineHandler d_engine4Handler = EngineHandler(4);
 
 
     // internal data
@@ -63,8 +69,9 @@ public:
             setupEvents();
             setupData();
 
-            SimconnectIds id = SimconnectIds::SIM_START_EVENT;
-            emit sendData(QByteArray(reinterpret_cast<char *>(&id), sizeof(id)));
+            QByteArray dataToSend;
+            util::appendData(ServerMessageIdentifier::SIM_START_EVENT, dataToSend);
+            emit sendData(dataToSend);
 
             while (!quit)
             {
