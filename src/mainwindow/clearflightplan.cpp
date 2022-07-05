@@ -3,6 +3,8 @@
 
 void MainWindow::clearFlightplan()
 {
-    SimconnectIds id = SimconnectIds::CLEAR_FLIGHTPLAN;
-    d_connectionHandler.sendDataToClient(QByteArray(reinterpret_cast<const char *>(&id), sizeof(id)));
+    MfdIdentifier id = MfdIdentifier::CLEAR_FLIGHTPLAN;
+    QByteArray dataToSend;
+    util::appendData(MfdIdentifier::CLEAR_FLIGHTPLAN, dataToSend);
+    d_connectionHandler.sendDataToClient(dataToSend);
 }
