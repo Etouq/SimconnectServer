@@ -11,31 +11,31 @@ FlightPlanWaypoint FlightplanReader::readWaypoint()
 
     while (flightPlanXml.readNextStartElement())
     {
-        if (flightPlanXml.name().toUtf8() == "ATCWaypointType")
+        if (flightPlanXml.name() == QLatin1String("ATCWaypointType"))
         {
             QString wpTypeString = flightPlanXml.readElementText().toLower();
             if (wpTypeString == "airport")
-                newWp.wpType = 0;
+                newWp.wpType = WaypointType::AIRPORT;
             else if (wpTypeString == "intersection")
-                newWp.wpType = 1;
+                newWp.wpType = WaypointType::INTERSECTION;
             else if (wpTypeString == "ndb")
-                newWp.wpType = 2;
+                newWp.wpType = WaypointType::NDB;
             else if (wpTypeString == "vor")
-                newWp.wpType = 4;
+                newWp.wpType = WaypointType::VOR;
             else if (wpTypeString == "user")
-                newWp.wpType = 3;
+                newWp.wpType = WaypointType::USER;
             else if (wpTypeString == "atc")
             {
-                newWp.wpType = 3;
+                newWp.wpType = WaypointType::ATC;
 
                 newWp.ident += " (ATC)";
             }
             else if (wpTypeString == "none")
             {
-                newWp.wpType = 3;
+                newWp.wpType = WaypointType::NONE;
             }
         }
-        else if (flightPlanXml.name().toUtf8() == "WorldPosition")
+        else if (flightPlanXml.name() == QLatin1String("WorldPosition"))
         {
             QString posString = flightPlanXml.readElementText().simplified().toUpper();
 
@@ -58,24 +58,24 @@ FlightPlanWaypoint FlightplanReader::readWaypoint()
                     newWp.alt1 = lround(QString(match.captured(altPosIdx) + match.captured(altIdx)).toFloat());
             }
         }
-        else if (flightPlanXml.name().toUtf8() == "AltDescFP")
+        else if (flightPlanXml.name() == QLatin1String("AltDescFP"))
         {
             QString altTypeString = flightPlanXml.readElementText().simplified().toUpper();
             if (altTypeString == "AT_OR_ABOVE" || altTypeString == "ALT_DESC_AT_OR_ABOVE")
-                newWp.altType = 1;
+                newWp.altType = WpAltitudeType::AT_OR_ABOVE;
             else if (altTypeString == "AT_OR_BELOW" || altTypeString == "ALT_DESC_AT_OR_BELOW")
-                newWp.altType = 2;
+                newWp.altType = WpAltitudeType::AT_OR_BELOW;
             else if (altTypeString == "AT" || altTypeString == "ALT_DESC_AT")
-                newWp.altType = 0;
+                newWp.altType = WpAltitudeType::AT;
             else if (altTypeString == "IN_BETWEEN" || altTypeString == "ALT_DESC_IN_BETWEEN")
-                newWp.altType = 3;
+                newWp.altType = WpAltitudeType::BETWEEN;
         }
-        else if (flightPlanXml.name().toUtf8() == "Alt1FP")
+        else if (flightPlanXml.name() == QLatin1String("Alt1FP"))
         {
             newWp.alt1 = lround(flightPlanXml.readElementText().simplified().toFloat());
             alt1Set = true;
         }
-        else if (flightPlanXml.name().toUtf8() == "Alt2FP")
+        else if (flightPlanXml.name() == QLatin1String("Alt2FP"))
         {
             newWp.alt2 = lround(flightPlanXml.readElementText().simplified().toFloat());
         }

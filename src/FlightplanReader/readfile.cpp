@@ -13,11 +13,11 @@ QList<FlightPlanWaypoint> FlightplanReader::readFile(QFile &file)
     {
         if (flightPlanXml.readNextStartElement())
         {
-            if (flightPlanXml.name().toUtf8() == "FlightPlan.FlightPlan")
+            if (flightPlanXml.name() == QLatin1String("FlightPlan.FlightPlan"))
             {
                 while (flightPlanXml.readNextStartElement())
                 {
-                    if (flightPlanXml.name().toUtf8() == "ATCWaypoint")
+                    if (flightPlanXml.name() == QLatin1String("ATCWaypoint"))
                         flightPlanList.append(readWaypoint());
                     else
                         flightPlanXml.skipCurrentElement();

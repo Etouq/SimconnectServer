@@ -8,19 +8,9 @@
 #include <QString>
 #include <QXmlStreamReader>
 #include <cstdint>
+#include "FlightPlanWaypoint.hpp"
 
 class QFile;
-
-struct FlightPlanWaypoint
-{
-    QGeoCoordinate position = QGeoCoordinate(0, 0);
-    int32_t alt1 = 0;
-    int32_t alt2 = 0;
-    QString ident = "";
-    int8_t wpType = 0;    // 0: airport, 1: intersection, 2: ndb, 3: user, 4: vor TODO: look into
-                          // more types such as vor-dme etc
-    int8_t altType = 0;   // -1: none/invalid, 0: at, 1: at or above, 2: at or below, 3: between
-};
 
 class FlightplanReader
 {
