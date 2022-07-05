@@ -1,9 +1,10 @@
 #ifndef __CONNECTIONHANDLER_HPP__
 #define __CONNECTIONHANDLER_HPP__
 
-#include "common/binaryconverter.hpp"
+#include "common/converters/basicConverters.hpp"
 #include "common/dataIdentifiers.hpp"
-#include "SimInterface/AircraftConfig.hpp"
+#include "common/appendData.hpp"
+#include "common/definitions/AircraftConfig.hpp"
 #include "SimInterface/SharedThreadData.hpp"
 
 #include <atomic>
@@ -84,8 +85,9 @@ private slots:
     // sim
     void simStartupFailed()
     {
-        SimconnectIds id = SimconnectIds::SIM_STARTUP_FAILED;
-        d_socket->write(reinterpret_cast<const char *>(&id), sizeof(id));
+        QByteArray dataToSend;
+        util::appendData(ServerMessageIdentifier::SIM_STARTUP_FAILED, dataToSend);
+        d_socket->write(dataToSend);
         emit simConnectionStateChanged(ConnectionState::DISCONNECTED);
     }
 
@@ -96,9 +98,8 @@ private slots:
 
     void receivedSimError(const QString &msg)
     {
-        SimconnectIds id = SimconnectIds::ERROR_STRING;
-        QByteArray dataToSend(reinterpret_cast<char *>(&id), sizeof(id));
-        dataToSend += BinaryConverter::convert(msg);
+        QByteArray dataToSend;
+        util::appendData(ServerMessageIdentifier::ERROR_MSG, msg.toUtf8(), dataToSend);
         d_socket->write(dataToSend);
     }
 
@@ -110,8 +111,9 @@ private slots:
 
         emit clienConnectionStateChanged(ConnectionState::DISCONNECTING);
 
-        SimconnectIds id = SimconnectIds::QUIT;
-        d_socket->write(reinterpret_cast<const char *>(&id), sizeof(id));
+        QByteArray dataToSend;
+        util::appendData(ServerMessageIdentifier::QUIT, dataToSend);
+        d_socket->write(dataToSend);
     }
 
 private:

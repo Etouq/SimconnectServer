@@ -1,7 +1,7 @@
 #include "ConnectionHandler.hpp"
 #include "SimInterface/SimInterface.hpp"
-#include "common/binaryconverter.hpp"
 #include "common/dataIdentifiers.hpp"
+#include "common/converters/listConverters.hpp"
 
 
 void ConnectionHandler::receivedClientData()
@@ -51,24 +51,14 @@ void ConnectionHandler::receivedClientData()
                 clientSentQuitSignal();
                 break;
             }
-            case ClientToServerIds::CHANGE_AIRCRAFT:
+            case ClientToServerIds::AIRCRAFT_LOADED:
             {
-                if (d_socket->bytesAvailable() < 135)
-                {
-                    d_socket->rollbackTransaction();
-                    return;
-                }
-
-                AircraftConfig config = BinaryConverter::convert<AircraftConfig>(*d_socket);
 
                 d_socket->commitTransaction();
 
 
                 QMutexLocker locker(&d_threadDataMutex);
-
-                d_threadData.aircraftConfig = config;
-                d_threadData.aircraftConfigChanged = true;
-
+                d_threadData.aircraftLoaded = true;
                 locker.unlock();
 
                 d_threadDataUpdated.store(true, std::memory_order_seq_cst);
@@ -82,7 +72,7 @@ void ConnectionHandler::receivedClientData()
                     return;
                 }
 
-                AircraftConfig config = BinaryConverter::convert<AircraftConfig>(*d_socket);
+                AircraftConfig config;// = Converters::convert<AircraftConfig>(*d_socket);
                 d_socket->commitTransaction();
 
                 if (d_sim == nullptr || !d_sim->isRunning())
@@ -101,7 +91,7 @@ void ConnectionHandler::receivedClientData()
                 }
                 break;
             }
-            case ClientToServerIds::SIM_COMMANDS:
+            case ClientToServerIds::COMMAND_STRING:
             {
                 uint8_t commandSize = 0;
                 if (d_socket->bytesAvailable() < sizeof(commandSize))
@@ -110,7 +100,7 @@ void ConnectionHandler::receivedClientData()
                     return;
                 }
 
-                BinaryConverter::convert(*d_socket, commandSize);
+                Converters::convert(*d_socket, commandSize);
                 if (d_socket->bytesAvailable() < commandSize)
                 {
                     d_socket->rollbackTransaction();

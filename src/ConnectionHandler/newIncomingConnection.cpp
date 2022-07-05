@@ -16,7 +16,5 @@ void ConnectionHandler::newIncomingConnection()
 
     emit clienConnectionStateChanged(ConnectionState::CONNECTED);
 
-    SharedServerIds id = SharedServerIds::SIMCONNECT_SERVER;
-    d_socket->write(reinterpret_cast<const char *>(&id), sizeof(id));
     d_socket->write(reinterpret_cast<const char *>(&c_communicationVersion), sizeof(c_communicationVersion));
 }
