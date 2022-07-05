@@ -2,7 +2,6 @@
 #include "SimInterface.hpp"
 #include "common/dataIdentifiers.hpp"
 
-
 void SimInterface::processDispatches()
 {
     SIMCONNECT_RECV *pData;
@@ -26,32 +25,58 @@ void SimInterface::processDispatches()
                 {
                     if (updateAircraft)
                     {
-                        emit sendData(d_aircraftHandler->reset());
+                        QByteArray dataToSend = d_engine1Handler.reset();
+                        dataToSend += d_engine2Handler.reset();
+                        dataToSend += d_engine3Handler.reset();
+                        dataToSend += d_engine4Handler.reset();
+                        dataToSend += d_aircraftHandler.reset();
+                        emit sendData(dataToSend);
 
-                        SimConnect_ClearDataDefinition(d_simConnectHandle, ENGINE_DEFINITION);
+                        SimConnect_ClearDataDefinition(d_simConnectHandle, ENGINE1_DEFINITION);
+                        SimConnect_ClearDataDefinition(d_simConnectHandle, ENGINE2_DEFINITION);
+                        SimConnect_ClearDataDefinition(d_simConnectHandle, ENGINE3_DEFINITION);
+                        SimConnect_ClearDataDefinition(d_simConnectHandle, ENGINE4_DEFINITION);
+                        SimConnect_ClearDataDefinition(d_simConnectHandle, AIRCRAFT_GENERAL_DEFINITION);
 
-                        if (d_aircraftHandler != nullptr)
-                            delete d_aircraftHandler;
-
-                        switch (d_aircraftConfig.type)
-                        {
-                            case AircraftType::JET:
-                                d_aircraftHandler = new JetHandler();
-                                break;
-                            case AircraftType::PROP:
-                                d_aircraftHandler = new PropHandler();
-                                break;
-                            case AircraftType::TURBOPROP:
-                                d_aircraftHandler = new TurbopropHandler();
-                                break;
-                        }
-
-                        d_aircraftHandler->setupData(d_simConnectHandle, d_aircraftConfig);
+                        d_aircraftHandler.setupData(d_simConnectHandle, d_aircraftConfig);
 
                         updateAircraft = false;
+
+                        switch (d_aircraftConfig.numEngines)
+                        {
+                            case 4:
+                                SimConnect_RequestDataOnSimObject(d_simConnectHandle,
+                                                                  ENGINE4_REQUEST,
+                                                                  ENGINE4_DEFINITION,
+                                                                  SIMCONNECT_OBJECT_ID_USER,
+                                                                  SIMCONNECT_PERIOD_SIM_FRAME,
+                                                                  SIMCONNECT_DATA_REQUEST_FLAG_CHANGED);
+                                SimConnect_RequestDataOnSimObject(d_simConnectHandle,
+                                                                  ENGINE3_REQUEST,
+                                                                  ENGINE3_DEFINITION,
+                                                                  SIMCONNECT_OBJECT_ID_USER,
+                                                                  SIMCONNECT_PERIOD_SIM_FRAME,
+                                                                  SIMCONNECT_DATA_REQUEST_FLAG_CHANGED);
+                            case 2:
+                                SimConnect_RequestDataOnSimObject(d_simConnectHandle,
+                                                                  ENGINE2_REQUEST,
+                                                                  ENGINE2_DEFINITION,
+                                                                  SIMCONNECT_OBJECT_ID_USER,
+                                                                  SIMCONNECT_PERIOD_SIM_FRAME,
+                                                                  SIMCONNECT_DATA_REQUEST_FLAG_CHANGED);
+                            case 1:
+                            default:
+                                SimConnect_RequestDataOnSimObject(d_simConnectHandle,
+                                                                  ENGINE1_REQUEST,
+                                                                  ENGINE1_DEFINITION,
+                                                                  SIMCONNECT_OBJECT_ID_USER,
+                                                                  SIMCONNECT_PERIOD_SIM_FRAME,
+                                                                  SIMCONNECT_DATA_REQUEST_FLAG_CHANGED);
+                        }
+
                         SimConnect_RequestDataOnSimObject(d_simConnectHandle,
-                                                          ENGINE_REQUEST,
-                                                          ENGINE_DEFINITION,
+                                                          AIRCRAFT_GENERAL_REQUEST,
+                                                          AIRCRAFT_GENERAL_DEFINITION,
                                                           SIMCONNECT_OBJECT_ID_USER,
                                                           SIMCONNECT_PERIOD_SIM_FRAME,
                                                           SIMCONNECT_DATA_REQUEST_FLAG_CHANGED);
@@ -70,13 +95,15 @@ void SimInterface::processDispatches()
                 }
                 else if (evt->uEventID == SIM_START_EVENT_ID)
                 {
-                    SimconnectIds id = SimconnectIds::SIM_START_EVENT;
-                    emit sendData(QByteArray(reinterpret_cast<char *>(&id), sizeof(id)));
+                    QByteArray dataToSend;
+                    util::appendData(ServerMessageIdentifier::SIM_START_EVENT, dataToSend);
+                    emit sendData(dataToSend);
                 }
                 else if (evt->uEventID == SIM_STOP_EVENT_ID)
                 {
-                    SimconnectIds id = SimconnectIds::SIM_STOP_EVENT;
-                    emit sendData(QByteArray(reinterpret_cast<char *>(&id), sizeof(id)));
+                    QByteArray dataToSend;
+                    util::appendData(ServerMessageIdentifier::SIM_STOP_EVENT, dataToSend);
+                    emit sendData(dataToSend);
                 }
                 else
                 {
@@ -143,15 +170,37 @@ void SimInterface::processDispatches()
                     {
                         QByteArray dataToSend = d_autopilotHandler.processData(&pObjData->dwData);
                         if (!dataToSend.isEmpty())
-                            emit sendData(dataToSend);
+                            emit sendData(d_autopilotHandler.processData(&pObjData->dwData));
 
                         break;
                     }
-                    case ENGINE_REQUEST:
+                    case ENGINE1_REQUEST:
                     {
-                        QByteArray dataToSend = d_aircraftHandler->processData(&pObjData->dwData);
-                        if (!dataToSend.isEmpty())
-                            emit sendData(dataToSend);
+                        emit sendData(d_engine1Handler.processData(&pObjData->dwData));
+
+                        break;
+                    }
+                    case ENGINE2_REQUEST:
+                    {
+                        emit sendData(d_engine2Handler.processData(&pObjData->dwData));
+
+                        break;
+                    }
+                    case ENGINE3_REQUEST:
+                    {
+                        emit sendData(d_engine3Handler.processData(&pObjData->dwData));
+
+                        break;
+                    }
+                    case ENGINE4_REQUEST:
+                    {
+                        emit sendData(d_engine4Handler.processData(&pObjData->dwData));
+
+                        break;
+                    }
+                    case AIRCRAFT_GENERAL_REQUEST:
+                    {
+                        emit sendData(d_aircraftHandler.processData(&pObjData->dwData));
 
                         break;
                     }

@@ -1,5 +1,13 @@
 set(PROJECT_SOURCES
         src/main.cpp
+        src/common/definitions/AircraftDefinition/fromBinary/fromBinaryV1.cpp
+        src/common/definitions/AircraftDefinition/fromBinary/fromBinaryV2.cpp
+        src/common/definitions/AircraftDefinition/fromBinary/fromBinaryV3.cpp
+        src/common/definitions/AircraftDefinition/toBinary.cpp
+        src/common/definitions/AircraftDefinition/toConfig.cpp
+        src/common/definitions/GaugeDefinition/fromBinary/fromBinaryV1.cpp
+        src/common/definitions/GaugeDefinition/getEpsilon.cpp
+        src/common/definitions/GaugeDefinition/toBinary.cpp
         src/ConnectionHandler/clientDisconnected.cpp
         src/ConnectionHandler/clientSentQuitSignal.cpp
         src/ConnectionHandler/closeNow.cpp
@@ -15,32 +23,9 @@ set(PROJECT_SOURCES
         src/mainwindow/mainwindow.cpp
         src/mainwindow/readflightplan.cpp
         src/mainwindow/readnewflightplan.cpp
-        src/SimInterface/parseCommandString.cpp
-        src/SimInterface/processDispatches.cpp
-        src/SimInterface/processException.cpp
-        src/SimInterface/processSharedData.cpp
-        src/SimInterface/setupData.cpp
-        src/SimInterface/setupEvents.cpp
-        src/SimInterface/SimInterface.cpp
-        src/SimInterface/tryconnecting.cpp
-        src/SimInterface/DataHandlers/AircraftHandlers/AircraftBase/processDataBase.cpp
-        src/SimInterface/DataHandlers/AircraftHandlers/AircraftBase/processEngine.cpp
-        src/SimInterface/DataHandlers/AircraftHandlers/AircraftBase/sendCurrentDataBase.cpp
-        src/SimInterface/DataHandlers/AircraftHandlers/AircraftBase/sendCurrentEngineData.cpp
-        src/SimInterface/DataHandlers/AircraftHandlers/AircraftBase/setupDataBase.cpp
-        src/SimInterface/DataHandlers/AircraftHandlers/AircraftBase/setupEngineCommon.cpp
-        src/SimInterface/DataHandlers/AircraftHandlers/JetHandler/processData.cpp
-        src/SimInterface/DataHandlers/AircraftHandlers/JetHandler/processEngine.cpp
-        src/SimInterface/DataHandlers/AircraftHandlers/JetHandler/sendCurrentData.cpp
-        src/SimInterface/DataHandlers/AircraftHandlers/JetHandler/setupData.cpp
-        src/SimInterface/DataHandlers/AircraftHandlers/PropHandler/processData.cpp
-        src/SimInterface/DataHandlers/AircraftHandlers/PropHandler/processEngine.cpp
-        src/SimInterface/DataHandlers/AircraftHandlers/PropHandler/sendCurrentData.cpp
-        src/SimInterface/DataHandlers/AircraftHandlers/PropHandler/setupData.cpp
-        src/SimInterface/DataHandlers/AircraftHandlers/TurbopropHandler/processData.cpp
-        src/SimInterface/DataHandlers/AircraftHandlers/TurbopropHandler/processEngine.cpp
-        src/SimInterface/DataHandlers/AircraftHandlers/TurbopropHandler/sendCurrentData.cpp
-        src/SimInterface/DataHandlers/AircraftHandlers/TurbopropHandler/setupData.cpp
+        src/SimInterface/DataHandlers/AircraftHandler/processData.cpp
+        src/SimInterface/DataHandlers/AircraftHandler/sendCurrentData.cpp
+        src/SimInterface/DataHandlers/AircraftHandler/setupData.cpp
         src/SimInterface/DataHandlers/AirspeedHandler/processData.cpp
         src/SimInterface/DataHandlers/AirspeedHandler/sendCurrentData.cpp
         src/SimInterface/DataHandlers/AirspeedHandler/setupData.cpp
@@ -59,6 +44,11 @@ set(PROJECT_SOURCES
         src/SimInterface/DataHandlers/BottombarHandler/processData.cpp
         src/SimInterface/DataHandlers/BottombarHandler/sendCurrentData.cpp
         src/SimInterface/DataHandlers/BottombarHandler/setupData.cpp
+        src/SimInterface/DataHandlers/EngineHandler/gaugeTypeToString.cpp
+        src/SimInterface/DataHandlers/EngineHandler/gaugeTypeToUnit.cpp
+        src/SimInterface/DataHandlers/EngineHandler/processData.cpp
+        src/SimInterface/DataHandlers/EngineHandler/sendCurrentData.cpp
+        src/SimInterface/DataHandlers/EngineHandler/setupData.cpp
         src/SimInterface/DataHandlers/HsiBrgHandler/processData.cpp
         src/SimInterface/DataHandlers/HsiBrgHandler/sendCurrentData.cpp
         src/SimInterface/DataHandlers/HsiBrgHandler/setupData.cpp
@@ -82,29 +72,37 @@ set(PROJECT_SOURCES
         src/SimInterface/DataHandlers/WindInfoHandler/processData.cpp
         src/SimInterface/DataHandlers/WindInfoHandler/sendCurrentData.cpp
         src/SimInterface/DataHandlers/WindInfoHandler/setupData.cpp
+        src/SimInterface/parseCommandString.cpp
+        src/SimInterface/processDispatches.cpp
+        src/SimInterface/processException.cpp
+        src/SimInterface/processSharedData.cpp
+        src/SimInterface/setupData.cpp
+        src/SimInterface/setupEvents.cpp
+        src/SimInterface/SimInterface.cpp
+        src/SimInterface/tryconnecting.cpp
 )
 
 
 set(PROJECT_HEADERS
-        src/common/binaryconverter.hpp
+        src/common/appendData.hpp
+        src/common/converters/basicConverters.hpp
+        src/common/converters/listConverters.hpp
+        src/common/converters/structConverters.hpp
         src/common/dataIdentifiers.hpp
+        src/common/definitions/AircraftConfig.hpp
+        src/common/definitions/AircraftDefinition/AircraftDefinition.hpp
+        src/common/definitions/BaseTypes.hpp
+        src/common/definitions/GaugeDefinition/GaugeDefinition.hpp
         src/common/simEnums.hpp
+        src/common/TypeEnums.hpp
+        src/common/UnitConverter/UnitConverter.hpp
+        src/common/Units.hpp
         src/ConnectionHandler/ConnectionHandler.hpp
         src/FlightplanReader/flightplanreader.hpp
+        src/FlightplanReader/FlightPlanWaypoint.hpp
         src/mainwindow/mainwindow.hpp
-        src/SimInterface/AircraftConfig.hpp
-        src/SimInterface/enums.hpp
-        src/SimInterface/SharedThreadData.hpp
-        src/SimInterface/SimInterface.hpp
-        src/SimInterface/DataHandlers/DataHandlers.hpp
-        src/SimInterface/DataHandlers/AircraftHandlers/AircraftBase/AircraftHandler.hpp
-        src/SimInterface/DataHandlers/AircraftHandlers/AircraftBase/DataStruct.hpp
-        src/SimInterface/DataHandlers/AircraftHandlers/JetHandler/DataStruct.hpp
-        src/SimInterface/DataHandlers/AircraftHandlers/JetHandler/JetHandler.hpp
-        src/SimInterface/DataHandlers/AircraftHandlers/PropHandler/DataStruct.hpp
-        src/SimInterface/DataHandlers/AircraftHandlers/PropHandler/PropHandler.hpp
-        src/SimInterface/DataHandlers/AircraftHandlers/TurbopropHandler/DataStruct.hpp
-        src/SimInterface/DataHandlers/AircraftHandlers/TurbopropHandler/TurbopropHandler.hpp
+        src/SimInterface/DataHandlers/AircraftHandler/AircraftHandler.hpp
+        src/SimInterface/DataHandlers/AircraftHandler/DataStruct.hpp
         src/SimInterface/DataHandlers/AirspeedHandler/AirspeedHandler.hpp
         src/SimInterface/DataHandlers/AirspeedHandler/DataStruct.hpp
         src/SimInterface/DataHandlers/AltitudeHandler/AltitudeHandler.hpp
@@ -115,6 +113,9 @@ set(PROJECT_HEADERS
         src/SimInterface/DataHandlers/AttitudeHandler/DataStruct.hpp
         src/SimInterface/DataHandlers/BottombarHandler/BottombarHandler.hpp
         src/SimInterface/DataHandlers/BottombarHandler/DataStruct.hpp
+        src/SimInterface/DataHandlers/DataHandlers.hpp
+        src/SimInterface/DataHandlers/EngineHandler/DataStruct.hpp
+        src/SimInterface/DataHandlers/EngineHandler/EngineHandler.hpp
         src/SimInterface/DataHandlers/HsiBrgHandler/DataStruct.hpp
         src/SimInterface/DataHandlers/HsiBrgHandler/HsiBrgHandler.hpp
         src/SimInterface/DataHandlers/HsiHandler/DataStruct.hpp
@@ -127,5 +128,8 @@ set(PROJECT_HEADERS
         src/SimInterface/DataHandlers/RadioHandler/RadioHandler.hpp
         src/SimInterface/DataHandlers/WindInfoHandler/DataStruct.hpp
         src/SimInterface/DataHandlers/WindInfoHandler/WindInfoHandler.hpp
+        src/SimInterface/enums.hpp
+        src/SimInterface/SharedThreadData.hpp
+        src/SimInterface/SimInterface.hpp
 )
 
