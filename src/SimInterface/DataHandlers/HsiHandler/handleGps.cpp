@@ -1,5 +1,5 @@
 #include "common/dataIdentifiers.hpp"
-#include "common/simEnums.hpp"
+#include "common/appendData.hpp"
 #include "HsiHandler.hpp"
 
 #include <cmath>
@@ -9,28 +9,20 @@ namespace hsi
 
 void HsiHandler::handleGps(QByteArray &dataToSend, const DataStruct &newData)
 {
-
-    SimconnectIds id = SimconnectIds::DISPLAY_DEVIATION;
-
     if (d_displayDeviation != d_nextGpsWpIdValid)
     {
         d_displayDeviation = d_nextGpsWpIdValid;
-        dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char *>(&d_displayDeviation), sizeof(d_displayDeviation));
+        util::appendData(PfdIdentifier::DISPLAY_DEVIATION, d_displayDeviation, dataToSend);
     }
 
     if (d_navSource != HsiNavSource::GPS)
     {
         d_navSource = HsiNavSource::GPS;
-        id = SimconnectIds::NAV_SOURCE;
-        dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id))
-          .append(reinterpret_cast<const char *>(&d_navSource), sizeof(d_navSource));
+        util::appendData(PfdIdentifier::NAV_SOURCE, d_navSource, dataToSend);
 
         // source changed so update to/from
-        id = SimconnectIds::TO_FROM;
         static const int32_t toFromValue = 1;
-        dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char *>(&toFromValue), sizeof(toFromValue));
+        util::appendData(PfdIdentifier::TO_FROM, toFromValue, dataToSend);
     }
 
     if (d_displayDeviation) [[likely]]
@@ -38,17 +30,13 @@ void HsiHandler::handleGps(QByteArray &dataToSend, const DataStruct &newData)
         if (std::abs(d_course - newData.gpsWpDesiredTrack) >= 0.0009)
         {
             d_course = newData.gpsWpDesiredTrack;
-            id = SimconnectIds::COURSE;
-            dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-            dataToSend.append(reinterpret_cast<const char *>(&d_course), sizeof(d_course));
+            util::appendData(PfdIdentifier::COURSE, d_course, dataToSend);
         }
 
         if (std::abs(d_courseDeviation - newData.gpsWpCrossTrack) >= 0.002)
         {
             d_courseDeviation = newData.gpsWpCrossTrack;
-            id = SimconnectIds::COURSE_DEVIATION;
-            dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-            dataToSend.append(reinterpret_cast<const char *>(&d_courseDeviation), sizeof(d_courseDeviation));
+            util::appendData(PfdIdentifier::COURSE_DEVIATION, d_courseDeviation, dataToSend);
         }
 
         return;
@@ -57,17 +45,13 @@ void HsiHandler::handleGps(QByteArray &dataToSend, const DataStruct &newData)
     if (std::abs(d_course) >= 0.0009)
     {
         d_course = 0.0;
-        id = SimconnectIds::COURSE;
-        dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char *>(&d_course), sizeof(d_course));
+        util::appendData(PfdIdentifier::COURSE, d_course, dataToSend);
     }
 
     if (std::abs(d_courseDeviation) >= 0.0009)
     {
         d_courseDeviation = 0.0;
-        id = SimconnectIds::COURSE_DEVIATION;
-        dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char *>(&d_courseDeviation), sizeof(d_courseDeviation));
+        util::appendData(PfdIdentifier::COURSE_DEVIATION, d_courseDeviation, dataToSend);
     }
 }
 

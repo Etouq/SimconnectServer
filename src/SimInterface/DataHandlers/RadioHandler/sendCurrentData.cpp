@@ -1,4 +1,6 @@
 #include "common/dataIdentifiers.hpp"
+#include "common/appendData.hpp"
+#include "common/TypeEnums.hpp"
 #include "RadioHandler.hpp"
 
 namespace radio
@@ -6,45 +8,28 @@ namespace radio
 
 QByteArray RadioHandler::sendCurrentData()
 {
-    SimconnectIds id = SimconnectIds::COM1_FREQ;
-    QByteArray dataToSend(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.com1Freq), sizeof(d_previous.com1Freq));
+    QByteArray dataToSend;
 
-    id = SimconnectIds::COM2_FREQ;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.com2Freq), sizeof(d_previous.com2Freq));
+    util::appendData(TscIdentifier::COM1_FREQ, d_previous.com1Freq, dataToSend);
+    util::appendData(TscIdentifier::COM2_FREQ, d_previous.com2Freq, dataToSend);
+    util::appendData(TscIdentifier::COM3_FREQ, d_previous.com3Freq, dataToSend);
 
-    id = SimconnectIds::NAV1_FREQ;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.nav1Freq), sizeof(d_previous.nav1Freq));
+    util::appendData(TscIdentifier::NAV1_FREQ, d_previous.nav1Freq, dataToSend);
 
-    id = SimconnectIds::NAV2_FREQ;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.nav2Freq), sizeof(d_previous.nav2Freq));
+    util::appendData(TscIdentifier::NAV2_FREQ, d_previous.nav2Freq, dataToSend);
 
-    id = SimconnectIds::COM1_STBY;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.com1Stby), sizeof(d_previous.com1Stby));
+    util::appendData(TscIdentifier::COM1_STBY_FREQ, d_previous.com1Stby, dataToSend);
 
-    id = SimconnectIds::COM2_STBY;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.com2Stby), sizeof(d_previous.com2Stby));
+    util::appendData(TscIdentifier::COM2_STBY_FREQ, d_previous.com2Stby, dataToSend);
+    util::appendData(TscIdentifier::COM3_STBY_FREQ, d_previous.com3Stby, dataToSend);
 
-    id = SimconnectIds::NAV1_STBY;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.nav1Stby), sizeof(d_previous.nav1Stby));
+    util::appendData(TscIdentifier::NAV1_STBY_FREQ, d_previous.nav1Stby, dataToSend);
 
-    id = SimconnectIds::NAV2_STBY;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.nav2Stby), sizeof(d_previous.nav2Stby));
+    util::appendData(TscIdentifier::NAV2_STBY_FREQ, d_previous.nav2Stby, dataToSend);
 
-    id = SimconnectIds::XPDR_CODE;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.xpdrCode), sizeof(d_previous.xpdrCode));
+    util::appendData(TscIdentifier::XPDR_CODE, d_previous.xpdrCode, dataToSend);
 
-    id = SimconnectIds::XPDR_STATE;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.xpdrState), sizeof(d_previous.xpdrState));
+    util::appendData(TscIdentifier::XPDR_STATE, static_cast<TransponderState>(d_previous.xpdrState), dataToSend);
 
 
     return dataToSend;

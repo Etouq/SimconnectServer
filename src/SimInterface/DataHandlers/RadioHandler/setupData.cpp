@@ -20,6 +20,12 @@ void RadioHandler::setupData(HANDLE simConnectHandle)
                                    "MHz",
                                    SIMCONNECT_DATATYPE_FLOAT32,
                                    0.0009);
+    SimConnect_AddToDataDefinition(simConnectHandle,
+                                   DATA_DEFINITION_IDS::RADIO_DEFINITION,
+                                   "COM ACTIVE FREQUENCY:3",
+                                   "MHz",
+                                   SIMCONNECT_DATATYPE_FLOAT32,
+                                   0.0009);
 
     SimConnect_AddToDataDefinition(simConnectHandle,
                                    DATA_DEFINITION_IDS::RADIO_DEFINITION,
@@ -43,6 +49,12 @@ void RadioHandler::setupData(HANDLE simConnectHandle)
     SimConnect_AddToDataDefinition(simConnectHandle,
                                    DATA_DEFINITION_IDS::RADIO_DEFINITION,
                                    "COM STANDBY FREQUENCY:2",
+                                   "MHz",
+                                   SIMCONNECT_DATATYPE_FLOAT32,
+                                   0.0009);
+    SimConnect_AddToDataDefinition(simConnectHandle,
+                                   DATA_DEFINITION_IDS::RADIO_DEFINITION,
+                                   "COM STANDBY FREQUENCY:3",
                                    "MHz",
                                    SIMCONNECT_DATATYPE_FLOAT32,
                                    0.0009);

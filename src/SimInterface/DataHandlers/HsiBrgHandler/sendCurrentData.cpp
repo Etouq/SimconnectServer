@@ -1,5 +1,6 @@
 #include "common/dataIdentifiers.hpp"
 #include "HsiBrgHandler.hpp"
+#include "common/appendData.hpp"
 
 
 namespace hsibrg
@@ -7,69 +8,39 @@ namespace hsibrg
 
 QByteArray HsiBrgHandler::sendCurrentData()
 {
-    SimconnectIds id = SimconnectIds::NAV1_DME;
-    QByteArray dataToSend(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.nav1Dme), sizeof(d_previous.nav1Dme));
+    QByteArray dataToSend;
+    util::appendData(PfdIdentifier::NAV1_DME, d_previous.nav1Dme, dataToSend);
 
-    id = SimconnectIds::NAV1_BEARING;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.nav1Radial), sizeof(d_previous.nav1Radial));
+    util::appendData(PfdIdentifier::NAV1_BEARING, d_previous.nav1Radial, dataToSend);
 
-    id = SimconnectIds::NAV1_HAS_NAV;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.nav1HasNav), sizeof(d_previous.nav1HasNav));
+    util::appendData(PfdIdentifier::NAV1_HAS_NAV, d_previous.nav1HasNav, dataToSend);
 
-    id = SimconnectIds::NAV1_HAS_SIGNAL;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.nav1HasSignal), sizeof(d_previous.nav1HasSignal));
+    util::appendData(PfdIdentifier::NAV1_HAS_SIGNAL, d_previous.nav1HasSignal, dataToSend);
 
-    id = SimconnectIds::NAV1_HAS_DME;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.nav1HasDme), sizeof(d_previous.nav1HasDme));
+    util::appendData(PfdIdentifier::NAV1_HAS_DME, d_previous.nav1HasDme, dataToSend);
 
 
-    id = SimconnectIds::NAV2_DME;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.nav2Dme), sizeof(d_previous.nav2Dme));
+    util::appendData(PfdIdentifier::NAV2_DME, d_previous.nav2Dme, dataToSend);
 
-    id = SimconnectIds::NAV2_BEARING;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.nav2Radial), sizeof(d_previous.nav2Radial));
+    util::appendData(PfdIdentifier::NAV2_BEARING, d_previous.nav2Radial, dataToSend);
 
-    id = SimconnectIds::NAV2_HAS_NAV;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.nav2HasNav), sizeof(d_previous.nav2HasNav));
+    util::appendData(PfdIdentifier::NAV2_HAS_NAV, d_previous.nav2HasNav, dataToSend);
 
-    id = SimconnectIds::NAV2_HAS_SIGNAL;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.nav2HasSignal), sizeof(d_previous.nav2HasSignal));
+    util::appendData(PfdIdentifier::NAV2_HAS_SIGNAL, d_previous.nav2HasSignal, dataToSend);
 
-    id = SimconnectIds::NAV2_HAS_DME;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.nav2HasDme), sizeof(d_previous.nav2HasDme));
+    util::appendData(PfdIdentifier::NAV2_HAS_DME, d_previous.nav2HasDme, dataToSend);
 
 
-    id = SimconnectIds::GPS_DISTANCE;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.gpsNextWpDist), sizeof(d_previous.gpsNextWpDist));
+    util::appendData(PfdIdentifier::GPS_DISTANCE, d_previous.gpsNextWpDist, dataToSend);
 
-    id = SimconnectIds::GPS_BEARING;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.gpsNextWpBearing),
-                      sizeof(d_previous.gpsNextWpBearing));
+    util::appendData(PfdIdentifier::GPS_BEARING, d_previous.gpsNextWpBearing, dataToSend);
 
 
-    id = SimconnectIds::ADF_HAS_SIGNAL;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.adfHasSignal), sizeof(d_previous.adfHasSignal));
+    util::appendData(PfdIdentifier::ADF_HAS_SIGNAL, d_previous.adfHasSignal, dataToSend);
 
-    id = SimconnectIds::ADF_FREQ;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.adfActiveFreq), sizeof(d_previous.adfActiveFreq));
+    util::appendData(PfdIdentifier::ADF_FREQ, d_previous.adfActiveFreq, dataToSend);
 
-    id = SimconnectIds::ADF_RADIAL;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.adfRadial), sizeof(d_previous.adfRadial));
+    util::appendData(PfdIdentifier::ADF_RADIAL, d_previous.adfRadial, dataToSend);
 
 
     return dataToSend;

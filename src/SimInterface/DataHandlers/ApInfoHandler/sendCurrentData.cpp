@@ -1,56 +1,32 @@
 #include "ApInfoHandler.hpp"
 #include "common/dataIdentifiers.hpp"
+#include "common/appendData.hpp"
 
 namespace apinfo
 {
 
 QByteArray ApInfoHandler::sendCurrentData()
 {
-    SimconnectIds id = SimconnectIds::AP_STATUS;
-    QByteArray dataToSend(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_apMaster), sizeof(d_apMaster));
+    QByteArray dataToSend;
+    util::appendData(PfdIdentifier::AP_STATUS, d_apMaster, dataToSend);
 
-    id = SimconnectIds::AP_YD_STATUS;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_yawDamper), sizeof(d_yawDamper));
+    util::appendData(PfdIdentifier::AP_YD_STATUS, d_yawDamper, dataToSend);
 
-    uint8_t size = d_verticalActive.size();
-    id = SimconnectIds::AP_VERTICAL_ACTIVE;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&size), sizeof(size));
-    dataToSend.append(d_verticalActive.constData(), size);
+    util::appendData(PfdIdentifier::AP_FLC, d_flc, dataToSend);
 
-    size = d_modeReference.size();
-    id = SimconnectIds::AP_MODE_REFERENCE;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&size), sizeof(size));
-    dataToSend.append(d_modeReference.constData(), size);
+    util::appendData(PfdIdentifier::AP_VERTICAL_ACTIVE, d_verticalActive, dataToSend);
+
+    util::appendData(PfdIdentifier::AP_MODE_REFERENCE, d_modeReference, dataToSend);
 
 
-    size = d_armed.size();
-    id = SimconnectIds::AP_ARMED;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&size), sizeof(size));
-    dataToSend.append(d_armed.constData(), size);
+    util::appendData(PfdIdentifier::AP_ARMED, d_armed, dataToSend);
 
-    size = d_armedReference.size();
-    id = SimconnectIds::AP_ARMED_REFERENCE;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&size), sizeof(size));
-    dataToSend.append(d_armedReference.constData(), size);
+    util::appendData(PfdIdentifier::AP_ARMED_REFERENCE, d_armedReference, dataToSend);
 
 
-    size = d_lateralActive.size();
-    id = SimconnectIds::AP_LATERAL_ACTIVE;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&size), sizeof(size));
-    dataToSend.append(d_lateralActive.constData(), size);
+    util::appendData(PfdIdentifier::AP_LATERAL_ACTIVE, d_lateralActive, dataToSend);
 
-    size = d_lateralArmed.size();
-    id = SimconnectIds::AP_LATERAL_ARMED;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&size), sizeof(size));
-    dataToSend.append(d_lateralArmed.constData(), size);
+    util::appendData(PfdIdentifier::AP_LATERAL_ARMED, d_lateralArmed, dataToSend);
 
 
     return dataToSend;

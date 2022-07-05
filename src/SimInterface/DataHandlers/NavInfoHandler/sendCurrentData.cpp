@@ -1,4 +1,5 @@
 #include "common/dataIdentifiers.hpp"
+#include "common/appendData.hpp"
 #include "NavInfoHandler.hpp"
 
 
@@ -7,22 +8,14 @@ namespace navinfo
 
 QByteArray NavInfoHandler::sendCurrentData()
 {
-    SimconnectIds id = SimconnectIds::GPS_IS_ACTIVE_FLIGHTPLAN;
-    QByteArray dataToSend(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.gpsIsActiveFlightplan),
-                      sizeof(d_previous.gpsIsActiveFlightplan));
+    QByteArray dataToSend;
+    util::appendData(PfdIdentifier::GPS_IS_ACTIVE_FLIGHTPLAN, d_previous.gpsIsActiveFlightplan, dataToSend);
 
-    id = SimconnectIds::LEG_IS_DIRECT_TO;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.gpsIsDirectTo), sizeof(d_previous.gpsIsDirectTo));
+    util::appendData(PfdIdentifier::LEG_IS_DIRECT_TO, d_previous.gpsIsDirectTo, dataToSend);
 
-    id = SimconnectIds::GPS_WP_ETE;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.gpsWpEte), sizeof(d_previous.gpsWpEte));
+    util::appendData(MfdIdentifier::GPS_WP_ETE, d_previous.gpsWpEte, dataToSend);
 
-    id = SimconnectIds::GPS_ETE;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.gpsEte), sizeof(d_previous.gpsEte));
+    util::appendData(MfdIdentifier::GPS_DEST_ETE, d_previous.gpsEte, dataToSend);
 
 
     return dataToSend;

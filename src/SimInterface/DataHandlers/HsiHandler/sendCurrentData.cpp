@@ -1,4 +1,5 @@
 #include "common/dataIdentifiers.hpp"
+#include "common/appendData.hpp"
 #include "HsiHandler.hpp"
 
 namespace hsi
@@ -6,85 +7,59 @@ namespace hsi
 
 QByteArray HsiHandler::sendCurrentData()
 {
-    SimconnectIds id = SimconnectIds::ROTATION;
-    QByteArray dataToSend(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.rotation), sizeof(d_previous.rotation));
+    QByteArray dataToSend;
+    util::appendData(PfdIdentifier::ROTATION, d_previous.rotation, dataToSend);
 
-    id = SimconnectIds::HEADING;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id))
-      .append(reinterpret_cast<const char *>(&d_previous.heading), sizeof(d_previous.heading));
+    util::appendData(PfdIdentifier::HEADING, d_previous.heading, dataToSend);
 
-    id = SimconnectIds::TURN_RATE;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id))
-      .append(reinterpret_cast<const char *>(&d_previous.turnRate), sizeof(d_previous.turnRate));
+    util::appendData(PfdIdentifier::TURN_RATE, d_previous.turnRate, dataToSend);
 
 
-    id = SimconnectIds::CURRENT_TRACK;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id))
-      .append(reinterpret_cast<const char *>(&d_previous.currentTrack), sizeof(d_previous.currentTrack));
+    util::appendData(PfdIdentifier::CURRENT_TRACK, d_previous.currentTrack, dataToSend);
 
-    id = SimconnectIds::GPS_WP_DTK;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id))
-      .append(reinterpret_cast<const char *>(&d_previous.gpsWpDesiredTrack), sizeof(d_previous.gpsWpDesiredTrack));
+    util::appendData(MfdIdentifier::GPS_WP_DTK, d_previous.gpsWpDesiredTrack, dataToSend);
 
 
-    id = SimconnectIds::COORDINATES;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.currLat), sizeof(d_previous.currLat));
+    util::appendData(MfdIdentifier::COORDINATES, d_previous.currLat, dataToSend);
     dataToSend.append(reinterpret_cast<const char *>(&d_previous.currLon), sizeof(d_previous.currLon));
 
-    id = SimconnectIds::TRUE_HEADING;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.trueHeading), sizeof(d_previous.trueHeading));
+    util::appendData(MfdIdentifier::TRUE_HEADING, d_previous.trueHeading, dataToSend);
 
-    id = SimconnectIds::DISPLAY_DEVIATION;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_displayDeviation), sizeof(d_displayDeviation));
+    util::appendData(PfdIdentifier::DISPLAY_DEVIATION, d_displayDeviation, dataToSend);
 
-    id = SimconnectIds::NAV_SOURCE;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_navSource), sizeof(d_navSource));
+    util::appendData(PfdIdentifier::NAV_SOURCE, d_navSource, dataToSend);
 
-    id = SimconnectIds::COURSE;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_course), sizeof(d_course));
+    util::appendData(PfdIdentifier::COURSE, d_course, dataToSend);
 
-    id = SimconnectIds::COURSE_DEVIATION;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_courseDeviation), sizeof(d_courseDeviation));
+    util::appendData(PfdIdentifier::COURSE_DEVIATION, d_courseDeviation, dataToSend);
 
-
-    id = SimconnectIds::TO_FROM;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
     switch (d_navSource)
     {
         case HsiNavSource::LOC1:
         case HsiNavSource::VOR1:
-            dataToSend.append(reinterpret_cast<const char *>(&d_previous.nav1ToFrom), sizeof(d_previous.nav1ToFrom));
+            util::appendData(PfdIdentifier::TO_FROM, d_previous.nav1ToFrom, dataToSend);
             break;
         case HsiNavSource::LOC2:
         case HsiNavSource::VOR2:
-            dataToSend.append(reinterpret_cast<const char *>(&d_previous.nav2ToFrom), sizeof(d_previous.nav2ToFrom));
+            util::appendData(PfdIdentifier::TO_FROM, d_previous.nav2ToFrom, dataToSend);
             break;
         case HsiNavSource::TCN1:
-            dataToSend.append(reinterpret_cast<const char *>(&d_previous.nav1TacanToFrom),
-                              sizeof(d_previous.nav1TacanToFrom));
+            util::appendData(PfdIdentifier::TO_FROM, d_previous.nav1TacanToFrom, dataToSend);
             break;
         case HsiNavSource::TCN2:
-            dataToSend.append(reinterpret_cast<const char *>(&d_previous.nav2TacanToFrom),
-                              sizeof(d_previous.nav2TacanToFrom));
+            util::appendData(PfdIdentifier::TO_FROM, d_previous.nav2TacanToFrom, dataToSend);
             break;
         case HsiNavSource::GPS:
         {
             constexpr int32_t gpsToFromValue = 1;
-            dataToSend.append(reinterpret_cast<const char *>(&gpsToFromValue), sizeof(gpsToFromValue));
+            util::appendData(PfdIdentifier::TO_FROM, gpsToFromValue, dataToSend);
             break;
 
         }
         case HsiNavSource::NONE:
         {
             constexpr int32_t emptyToFromValue = 0;
-            dataToSend.append(reinterpret_cast<const char *>(&emptyToFromValue), sizeof(emptyToFromValue));
+            util::appendData(PfdIdentifier::TO_FROM, emptyToFromValue, dataToSend);
             break;
 
         }

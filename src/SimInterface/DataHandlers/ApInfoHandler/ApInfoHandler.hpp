@@ -14,6 +14,7 @@ class ApInfoHandler
 {
     bool d_apMaster = false;
     bool d_yawDamper = false;
+    bool d_flc = false;
 
     QByteArray d_verticalActive = "";
     QByteArray d_modeReference = "";

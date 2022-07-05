@@ -1,4 +1,5 @@
 #include "common/dataIdentifiers.hpp"
+#include "common/appendData.hpp"
 #include "common/simEnums.hpp"
 #include "HsiHandler.hpp"
 
@@ -11,50 +12,37 @@ QByteArray HsiHandler::processData(unsigned long *raw)
 {
     DataStruct newData(reinterpret_cast<RawStruct *>(raw));
 
-    SimconnectIds id = SimconnectIds::ROTATION;
     QByteArray dataToSend;
 
 
     if (std::abs(d_previous.rotation - newData.rotation) >= 0.0009)
     {
         d_previous.rotation = newData.rotation;
-        dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char *>(&newData.rotation), sizeof(newData.rotation));
+        util::appendData(PfdIdentifier::ROTATION, newData.rotation, dataToSend);
     }
     if (std::abs(d_previous.heading - newData.heading) >= 0.0009)
     {
         d_previous.heading = newData.heading;
-        id = SimconnectIds::HEADING;
-        dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char *>(&newData.heading), sizeof(newData.heading));
+        util::appendData(PfdIdentifier::HEADING, newData.heading, dataToSend);
     }
     if (std::abs(d_previous.turnRate - newData.turnRate) >= 0.0009)
     {
         d_previous.turnRate = newData.turnRate;
-        id = SimconnectIds::TURN_RATE;
-        dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char *>(&newData.turnRate), sizeof(newData.turnRate));
+        util::appendData(PfdIdentifier::TURN_RATE, newData.turnRate, dataToSend);
     }
     if (std::abs(d_previous.currentTrack - newData.currentTrack) >= 0.0009)
     {
         d_previous.currentTrack = newData.currentTrack;
-        id = SimconnectIds::CURRENT_TRACK;
-        dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char *>(&newData.currentTrack), sizeof(newData.currentTrack));
+        util::appendData(PfdIdentifier::CURRENT_TRACK, newData.currentTrack, dataToSend);
     }
 
     if (std::abs(d_previous.gpsWpDesiredTrack - newData.gpsWpDesiredTrack) >= 0.009)
     {
         d_previous.gpsWpDesiredTrack = newData.gpsWpDesiredTrack;
-        id = SimconnectIds::GPS_WP_DTK;
-        dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char *>(&newData.gpsWpDesiredTrack),
-                          sizeof(newData.gpsWpDesiredTrack));
+        util::appendData(MfdIdentifier::GPS_WP_DTK, newData.gpsWpDesiredTrack, dataToSend);
     }
 
-    id = SimconnectIds::COORDINATES;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&newData.currLat), sizeof(newData.currLat));
+    util::appendData(MfdIdentifier::COORDINATES, newData.currLat, dataToSend);
     dataToSend.append(reinterpret_cast<const char *>(&newData.currLon), sizeof(newData.currLon));
 
     d_previous.currLat = newData.currLat;
@@ -63,15 +51,13 @@ QByteArray HsiHandler::processData(unsigned long *raw)
     if (std::abs(d_previous.trueHeading - newData.trueHeading) >= 0.0009)
     {
         d_previous.trueHeading = newData.trueHeading;
-        id = SimconnectIds::TRUE_HEADING;
-        dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char *>(&newData.trueHeading), sizeof(newData.trueHeading));
+        util::appendData(MfdIdentifier::TRUE_HEADING, newData.trueHeading, dataToSend);
     }
 
 
     // gps
     if (newData.gpsDrivesNav1
-          && (!newData.autopilotApproachHold || newData.gpsApproachApproachType == ApproachType::RNAV)
+          && (!newData.autopilotApproachHold || newData.gpsApproachApproachType == simenums::ApproachType::RNAV)
         || newData.autopilotNavSelected == 0) [[likely]]
     {
         handleGps(dataToSend, newData);

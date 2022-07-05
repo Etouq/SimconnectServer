@@ -1,4 +1,5 @@
 #include "common/dataIdentifiers.hpp"
+#include "common/appendData.hpp"
 #include "HsiHandler.hpp"
 
 #include <cmath>
@@ -9,36 +10,24 @@ namespace hsi
 void HsiHandler::handleNav2Tacan(QByteArray &dataToSend, const DataStruct &newData)
 {
 
-    SimconnectIds id = SimconnectIds::NAV_SOURCE;
-
-
     if (d_navSource != HsiNavSource::TCN2)
     {
         d_navSource = HsiNavSource::TCN2;
-        dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char *>(&d_navSource), sizeof(d_navSource));
+        util::appendData(PfdIdentifier::NAV_SOURCE, d_navSource, dataToSend);
 
         // nav source changed so we need to update everything
         d_displayDeviation = newData.tacanDrivesNav1;
-        id = SimconnectIds::DISPLAY_DEVIATION;
-        dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char *>(&d_displayDeviation), sizeof(d_displayDeviation));
+        util::appendData(PfdIdentifier::DISPLAY_DEVIATION, d_displayDeviation, dataToSend);
 
         d_course = newData.nav2TacanObs;
-        id = SimconnectIds::COURSE;
-        dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char *>(&d_course), sizeof(d_course));
+        util::appendData(PfdIdentifier::COURSE, d_course, dataToSend);
 
         d_previous.nav2TacanCdi = newData.nav2TacanCdi;
         d_courseDeviation = newData.nav2TacanCdi / 127.0;
-        id = SimconnectIds::COURSE_DEVIATION;
-        dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char *>(&d_courseDeviation), sizeof(d_courseDeviation));
+        util::appendData(PfdIdentifier::COURSE_DEVIATION, d_courseDeviation, dataToSend);
 
         d_previous.nav2TacanToFrom = newData.nav2TacanToFrom;
-        id = SimconnectIds::TO_FROM;
-        dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char *>(&newData.nav2TacanToFrom), sizeof(newData.nav2TacanToFrom));
+        util::appendData(PfdIdentifier::TO_FROM, newData.nav2TacanToFrom, dataToSend);
 
         return;
     }
@@ -46,34 +35,26 @@ void HsiHandler::handleNav2Tacan(QByteArray &dataToSend, const DataStruct &newDa
     if (d_displayDeviation != newData.tacanDrivesNav1)
     {
         d_displayDeviation = newData.tacanDrivesNav1;
-        id = SimconnectIds::DISPLAY_DEVIATION;
-        dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char *>(&d_displayDeviation), sizeof(d_displayDeviation));
+        util::appendData(PfdIdentifier::DISPLAY_DEVIATION, d_displayDeviation, dataToSend);
     }
 
     if (std::abs(d_course - newData.nav2TacanObs) >= 0.0009)
     {
         d_course = newData.nav2TacanObs;
-        id = SimconnectIds::COURSE;
-        dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char *>(&d_course), sizeof(d_course));
+        util::appendData(PfdIdentifier::COURSE, d_course, dataToSend);
     }
 
     if (std::abs(d_previous.nav2TacanCdi - newData.nav2TacanCdi) >= 0.3)
     {
         d_previous.nav2TacanCdi = newData.nav2TacanCdi;
         d_courseDeviation = newData.nav2TacanCdi / 127.0;
-        id = SimconnectIds::COURSE_DEVIATION;
-        dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char *>(&d_courseDeviation), sizeof(d_courseDeviation));
+        util::appendData(PfdIdentifier::COURSE_DEVIATION, d_courseDeviation, dataToSend);
     }
 
     if (d_previous.nav2TacanToFrom != newData.nav2TacanToFrom)
     {
         d_previous.nav2TacanToFrom = newData.nav2TacanToFrom;
-        id = SimconnectIds::TO_FROM;
-        dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char *>(&newData.nav2ToFrom), sizeof(newData.nav2ToFrom));
+        util::appendData(PfdIdentifier::TO_FROM, newData.nav2ToFrom, dataToSend);
     }
 }
 

@@ -3,6 +3,7 @@
 
 #include "common/dataIdentifiers.hpp"
 #include "DataStruct.hpp"
+#include "common/TypeEnums.hpp"
 
 #include <QByteArray>
 #include <string>
@@ -38,6 +39,16 @@ public:
         }
 
         return ret;
+    }
+
+    bool gpsDrivesNav1() const
+    {
+        return d_previous.gpsDrivesNav1;
+    }
+
+    int autopilotNavSelected() const
+    {
+        return d_previous.autopilotNavSelected;
     }
 
     void setupData(HANDLE simConnectHandle);

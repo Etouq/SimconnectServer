@@ -12,9 +12,8 @@
 #include "NavInfoHandler/NavInfoHandler.hpp"
 #include "RadioHandler/RadioHandler.hpp"
 #include "WindInfoHandler/WindInfoHandler.hpp"
-#include "AircraftHandlers/JetHandler/JetHandler.hpp"
-#include "AircraftHandlers/PropHandler/PropHandler.hpp"
-#include "AircraftHandlers/TurbopropHandler/TurbopropHandler.hpp"
+#include "AircraftHandler/AircraftHandler.hpp"
+#include "EngineHandler/EngineHandler.hpp"
 
 
 using airspeed::AirspeedHandler;
@@ -29,9 +28,7 @@ using navinfo::NavInfoHandler;
 using radio::RadioHandler;
 using windinfo::WindInfoHandler;
 
-using aircraft::base::AircraftHandler;
-using aircraft::jet::JetHandler;
-using aircraft::prop::PropHandler;
-using aircraft::turboprop::TurbopropHandler;
+using handler::aircraft::AircraftHandler;
+using handler::engine::EngineHandler;
 
 #endif  // __DATA_HANDLERS_HPP__

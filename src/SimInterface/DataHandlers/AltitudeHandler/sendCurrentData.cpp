@@ -1,45 +1,27 @@
 #include "AltitudeHandler.hpp"
 #include "common/dataIdentifiers.hpp"
+#include "common/appendData.hpp"
 
 namespace altitude
 {
 
 QByteArray AltitudeHandler::sendCurrentData()
 {
-    SimconnectIds id = SimconnectIds::ALTITUDE;
-    QByteArray dataToSend(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.altitude), sizeof(d_previous.altitude));
-
-    id = SimconnectIds::RADAR_ALTITUDE;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.radarAltitude), sizeof(d_previous.radarAltitude));
-
-    id = SimconnectIds::REF_ALTITUDE;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.refAltitude), sizeof(d_previous.refAltitude));
+    QByteArray dataToSend;
+    util::appendData(PfdIdentifier::ALTITUDE, d_previous.altitude, dataToSend);
+    util::appendData(PfdIdentifier::RADAR_ALTITUDE, d_previous.radarAltitude, dataToSend);
+    util::appendData(PfdIdentifier::REF_ALTITUDE, d_previous.refAltitude, dataToSend);
 
     d_previous.pressure = d_previous.pressure;
-    id = SimconnectIds::PRESSURE;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.pressure), sizeof(d_previous.pressure));
+    util::appendData(PfdIdentifier::PRESSURE, d_previous.pressure, dataToSend);
 
-    id = SimconnectIds::VSPEED;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.vspeed), sizeof(d_previous.vspeed));
+    util::appendData(PfdIdentifier::VSPEED, d_previous.vspeed, dataToSend);
 
     d_previous.refVspeed = d_previous.refVspeed;
-    id = SimconnectIds::REF_VSPEED;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.refVspeed), sizeof(d_previous.refVspeed));
+    util::appendData(PfdIdentifier::REF_VSPEED, d_previous.refVspeed, dataToSend);
 
-    id = SimconnectIds::VERT_DEV_MODE;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_vertDevMode), sizeof(d_vertDevMode));
-
-    id = SimconnectIds::VERT_DEV_VALUE;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_deviation), sizeof(d_deviation));
-
+    util::appendData(PfdIdentifier::VERT_DEV_MODE, d_vertDevMode, dataToSend);
+    util::appendData(PfdIdentifier::VERT_DEV_VALUE, d_deviation, dataToSend);
 
     return dataToSend;
 }

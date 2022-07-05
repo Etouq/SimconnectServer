@@ -1,5 +1,6 @@
 #include "ApInfoHandler.hpp"
 #include "common/dataIdentifiers.hpp"
+#include "common/appendData.hpp"
 
 #include <cmath>
 
@@ -9,21 +10,23 @@ namespace apinfo
 QByteArray ApInfoHandler::processData(unsigned long *raw)
 {
     DataStruct newData(*reinterpret_cast<DataStruct *>(raw));
-    SimconnectIds id = SimconnectIds::AP_STATUS;
+
     QByteArray dataToSend;
 
     if (d_apMaster != newData.apMaster)
     {
         d_apMaster = newData.apMaster;
-        dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char *>(&newData.apMaster), sizeof(newData.apMaster));
+        util::appendData(PfdIdentifier::AP_STATUS, newData.apMaster, dataToSend);
     }
     if (d_yawDamper != newData.apYawDamper)
     {
         d_yawDamper = newData.apYawDamper;
-        id = SimconnectIds::AP_YD_STATUS;
-        dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char *>(&newData.apYawDamper), sizeof(newData.apYawDamper));
+        util::appendData(PfdIdentifier::AP_YD_STATUS, newData.apYawDamper, dataToSend);
+    }
+    if (d_flc != newData.apFlc)
+    {
+        d_flc = newData.apFlc;
+        util::appendData(PfdIdentifier::AP_FLC, newData.apFlc, dataToSend);
     }
 
     QByteArray AP_VerticalActive = "";
@@ -32,8 +35,6 @@ QByteArray ApInfoHandler::processData(unsigned long *raw)
     QByteArray AP_ArmedReference = "";
     QByteArray AP_LateralActive = "";
     QByteArray AP_LateralArmed = "";
-
-    uint8_t size = 0;
 
 
     // vertical active and modereference
@@ -86,20 +87,12 @@ QByteArray ApInfoHandler::processData(unsigned long *raw)
     if (d_verticalActive != AP_VerticalActive)
     {
         d_verticalActive = AP_VerticalActive;
-        size = AP_VerticalActive.size();
-        id = SimconnectIds::AP_VERTICAL_ACTIVE;
-        dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char *>(&size), sizeof(size));
-        dataToSend.append(AP_VerticalActive.constData(), size);
+        util::appendData(PfdIdentifier::AP_VERTICAL_ACTIVE, AP_VerticalActive, dataToSend);
     }
     if (d_modeReference != AP_ModeReference)
     {
         d_modeReference = AP_ModeReference;
-        size = AP_ModeReference.size();
-        id = SimconnectIds::AP_MODE_REFERENCE;
-        dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char *>(&size), sizeof(size));
-        dataToSend.append(AP_ModeReference.constData(), size);
+        util::appendData(PfdIdentifier::AP_MODE_REFERENCE, AP_ModeReference, dataToSend);
     }
 
 
@@ -122,20 +115,12 @@ QByteArray ApInfoHandler::processData(unsigned long *raw)
     if (d_armed != AP_Armed)
     {
         d_armed = AP_Armed;
-        size = AP_Armed.size();
-        id = SimconnectIds::AP_ARMED;
-        dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char *>(&size), sizeof(size));
-        dataToSend.append(AP_Armed.constData(), size);
+        util::appendData(PfdIdentifier::AP_ARMED, AP_Armed, dataToSend);
     }
     if (d_armedReference != AP_ArmedReference)
     {
         d_armedReference = AP_ArmedReference;
-        size = AP_ArmedReference.size();
-        id = SimconnectIds::AP_ARMED_REFERENCE;
-        dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char *>(&size), sizeof(size));
-        dataToSend.append(AP_ArmedReference.constData(), size);
+        util::appendData(PfdIdentifier::AP_ARMED_REFERENCE, AP_ArmedReference, dataToSend);
     }
 
 
@@ -178,11 +163,7 @@ QByteArray ApInfoHandler::processData(unsigned long *raw)
     if (d_lateralActive != AP_LateralActive)
     {
         d_lateralActive = AP_LateralActive;
-        size = AP_LateralActive.size();
-        id = SimconnectIds::AP_LATERAL_ACTIVE;
-        dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char *>(&size), sizeof(size));
-        dataToSend.append(AP_LateralActive.constData(), size);
+        util::appendData(PfdIdentifier::AP_LATERAL_ACTIVE, AP_LateralActive, dataToSend);
     }
 
 
@@ -222,11 +203,7 @@ QByteArray ApInfoHandler::processData(unsigned long *raw)
     if (d_lateralArmed != AP_LateralArmed)
     {
         d_lateralArmed = AP_LateralArmed;
-        size = AP_LateralArmed.size();
-        id = SimconnectIds::AP_LATERAL_ARMED;
-        dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char *>(&size), sizeof(size));
-        dataToSend.append(AP_LateralArmed.constData(), size);
+        util::appendData(PfdIdentifier::AP_LATERAL_ARMED, AP_LateralActive, dataToSend);
     }
 
     return dataToSend;

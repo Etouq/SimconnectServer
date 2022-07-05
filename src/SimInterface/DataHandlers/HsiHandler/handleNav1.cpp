@@ -1,4 +1,5 @@
 #include "common/dataIdentifiers.hpp"
+#include "common/appendData.hpp"
 #include "HsiHandler.hpp"
 
 #include <cmath>
@@ -9,13 +10,10 @@ namespace hsi
 void HsiHandler::handleNav1(QByteArray &dataToSend, const DataStruct &newData)
 {
 
-    SimconnectIds id = SimconnectIds::DISPLAY_DEVIATION;
-
     if (d_displayDeviation != newData.nav1HasNav)
     {
         d_displayDeviation = newData.nav1HasNav;
-        dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char *>(&d_displayDeviation), sizeof(d_displayDeviation));
+        util::appendData(PfdIdentifier::DISPLAY_DEVIATION, d_displayDeviation, dataToSend);
     }
 
     if (newData.nav1HasLoc)
@@ -23,27 +21,19 @@ void HsiHandler::handleNav1(QByteArray &dataToSend, const DataStruct &newData)
         if (d_navSource != HsiNavSource::LOC1)
         {
             d_navSource = HsiNavSource::LOC1;
-            id = SimconnectIds::NAV_SOURCE;
-            dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-            dataToSend.append(reinterpret_cast<const char *>(&d_navSource), sizeof(d_navSource));
+            util::appendData(PfdIdentifier::NAV_SOURCE, d_navSource, dataToSend);
 
             // nav source changed so update course
             d_course = newData.nav1Loc;
-            id = SimconnectIds::COURSE;
-            dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-            dataToSend.append(reinterpret_cast<const char *>(&d_course), sizeof(d_course));
+            util::appendData(PfdIdentifier::COURSE, d_course, dataToSend);
 
             // update cdi and toFrom as well
             d_previous.nav1Cdi = newData.nav1Cdi;
             d_courseDeviation = newData.nav1Cdi / 127.0;
-            id = SimconnectIds::COURSE_DEVIATION;
-            dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-            dataToSend.append(reinterpret_cast<const char *>(&d_courseDeviation), sizeof(d_courseDeviation));
+            util::appendData(PfdIdentifier::COURSE_DEVIATION, d_courseDeviation, dataToSend);
 
             d_previous.nav1ToFrom = newData.nav1ToFrom;
-            id = SimconnectIds::TO_FROM;
-            dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-            dataToSend.append(reinterpret_cast<const char *>(&newData.nav1ToFrom), sizeof(newData.nav1ToFrom));
+            util::appendData(PfdIdentifier::TO_FROM, newData.nav1ToFrom, dataToSend);
 
             return;
         }
@@ -51,9 +41,7 @@ void HsiHandler::handleNav1(QByteArray &dataToSend, const DataStruct &newData)
         if (std::abs(d_course - newData.nav1Loc) >= 0.0009)
         {
             d_course = newData.nav1Loc;
-            id = SimconnectIds::COURSE;
-            dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-            dataToSend.append(reinterpret_cast<const char *>(&d_course), sizeof(d_course));
+            util::appendData(PfdIdentifier::COURSE, d_course, dataToSend);
         }
     }
     else
@@ -61,27 +49,19 @@ void HsiHandler::handleNav1(QByteArray &dataToSend, const DataStruct &newData)
         if (d_navSource != HsiNavSource::VOR1)
         {
             d_navSource = HsiNavSource::VOR1;
-            id = SimconnectIds::NAV_SOURCE;
-            dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-            dataToSend.append(reinterpret_cast<const char *>(&d_navSource), sizeof(d_navSource));
+            util::appendData(PfdIdentifier::NAV_SOURCE, d_navSource, dataToSend);
 
             // nav source changed so update course
             d_course = newData.nav1Obs;
-            id = SimconnectIds::COURSE;
-            dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-            dataToSend.append(reinterpret_cast<const char *>(&d_course), sizeof(d_course));
+            util::appendData(PfdIdentifier::COURSE, d_course, dataToSend);
 
             // update cdi and toFrom as well
             d_previous.nav1Cdi = newData.nav1Cdi;
             d_courseDeviation = newData.nav1Cdi / 127.0;
-            id = SimconnectIds::COURSE_DEVIATION;
-            dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-            dataToSend.append(reinterpret_cast<const char *>(&d_courseDeviation), sizeof(d_courseDeviation));
+            util::appendData(PfdIdentifier::COURSE_DEVIATION, d_courseDeviation, dataToSend);
 
             d_previous.nav1ToFrom = newData.nav1ToFrom;
-            id = SimconnectIds::TO_FROM;
-            dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-            dataToSend.append(reinterpret_cast<const char *>(&newData.nav1ToFrom), sizeof(newData.nav1ToFrom));
+            util::appendData(PfdIdentifier::TO_FROM, newData.nav1ToFrom, dataToSend);
 
             return;
         }
@@ -89,9 +69,7 @@ void HsiHandler::handleNav1(QByteArray &dataToSend, const DataStruct &newData)
         if (std::abs(d_course - newData.nav1Obs) >= 0.0009)
         {
             d_course = newData.nav1Obs;
-            id = SimconnectIds::COURSE;
-            dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-            dataToSend.append(reinterpret_cast<const char *>(&d_course), sizeof(d_course));
+            util::appendData(PfdIdentifier::COURSE, d_course, dataToSend);
         }
     }
 
@@ -99,17 +77,13 @@ void HsiHandler::handleNav1(QByteArray &dataToSend, const DataStruct &newData)
     {
         d_previous.nav1Cdi = newData.nav1Cdi;
         d_courseDeviation = newData.nav1Cdi / 127.0;
-        id = SimconnectIds::COURSE_DEVIATION;
-        dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char *>(&d_courseDeviation), sizeof(d_courseDeviation));
+        util::appendData(PfdIdentifier::COURSE_DEVIATION, d_courseDeviation, dataToSend);
     }
 
     if (d_previous.nav1ToFrom != newData.nav1ToFrom)
     {
         d_previous.nav1ToFrom = newData.nav1ToFrom;
-        id = SimconnectIds::TO_FROM;
-        dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char *>(&newData.nav1ToFrom), sizeof(newData.nav1ToFrom));
+        util::appendData(PfdIdentifier::TO_FROM, newData.nav1ToFrom, dataToSend);
     }
 }
 

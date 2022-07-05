@@ -2,6 +2,7 @@
 #define __HSI_DATASTRUCT_HPP__
 
 #include <cstdint>
+#include "common/simEnums.hpp"
 
 namespace hsi
 {
@@ -33,7 +34,7 @@ struct RawStruct
     double nav2TacanCdi = 0;
 
     uint32_t autopilotNavSelected = 0;
-    uint32_t gpsApproachApproachType = 0;
+    simenums::ApproachType gpsApproachApproachType = simenums::ApproachType::NONE;
     uint32_t gpsDrivesNav1 = 0;
     uint32_t autopilotApproachHold = 0;
 
@@ -67,7 +68,7 @@ struct DataStruct  // also handles position
     double trueHeading = 0;
 
     uint32_t autopilotNavSelected = 0;
-    uint32_t gpsApproachApproachType = 0;
+    simenums::ApproachType gpsApproachApproachType = simenums::ApproachType::NONE;
     bool gpsDrivesNav1 = false;
     bool autopilotApproachHold = false;
 

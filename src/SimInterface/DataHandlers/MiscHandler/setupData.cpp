@@ -79,12 +79,22 @@ void MiscHandler::setupData(HANDLE simConnectHandle)
                                    SIMCONNECT_DATATYPE_INT32);
     SimConnect_AddToDataDefinition(simConnectHandle,
                                    DATA_DEFINITION_IDS::MISC_DEFINITION,
+                                   "COM AVAILABLE:3",
+                                   "Bool",
+                                   SIMCONNECT_DATATYPE_INT32);
+    SimConnect_AddToDataDefinition(simConnectHandle,
+                                   DATA_DEFINITION_IDS::MISC_DEFINITION,
                                    "NAV AVAILABLE:1",
                                    "Bool",
                                    SIMCONNECT_DATATYPE_INT32);
     SimConnect_AddToDataDefinition(simConnectHandle,
                                    DATA_DEFINITION_IDS::MISC_DEFINITION,
                                    "NAV AVAILABLE:2",
+                                   "Bool",
+                                   SIMCONNECT_DATATYPE_INT32);
+    SimConnect_AddToDataDefinition(simConnectHandle,
+                                   DATA_DEFINITION_IDS::MISC_DEFINITION,
+                                   "TRANSPONDER AVAILABLE",
                                    "Bool",
                                    SIMCONNECT_DATATYPE_INT32);
 }

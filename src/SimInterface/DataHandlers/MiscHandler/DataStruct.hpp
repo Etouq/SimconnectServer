@@ -23,10 +23,12 @@ struct RawStruct
     char gpsPrevWpId[64];
 
     uint32_t hasAp = 1;
-    uint32_t hasCom1 = 1;
-    uint32_t hasCom2 = 1;
-    uint32_t hasNav1 = 1;
-    uint32_t hasNav2 = 1;
+    uint32_t com1Avail = 1;
+    uint32_t com2Avail = 1;
+    uint32_t com3Avail = 1;
+    uint32_t nav1Avail = 1;
+    uint32_t nav2Avail = 1;
+    uint32_t xpdrAvail = 1;
 };
 
 struct DataStruct
@@ -35,10 +37,12 @@ struct DataStruct
     float totalFuelFlow = 0;
     float groundSpeed = 0;
     bool hasAp = true;
-    bool hasCom1 = true;
-    bool hasCom2 = true;
-    bool hasNav1 = true;
-    bool hasNav2 = true;
+    bool com1Avail = true;
+    bool com2Avail = true;
+    bool com3Avail = true;
+    bool nav1Avail = true;
+    bool nav2Avail = true;
+    bool xpdrAvail = true;
 
     QByteArray gpsNextWpId;
     QByteArray nav1Ident;
@@ -52,10 +56,12 @@ struct DataStruct
 
         groundSpeed(data->groundSpeed),
         hasAp(data->hasAp != 0),
-        hasCom1(data->hasCom1 != 0),
-        hasCom2(data->hasCom2 != 0),
-        hasNav1(data->hasNav1 != 0),
-        hasNav2(data->hasNav2 != 0),
+        com1Avail(data->com1Avail != 0),
+        com2Avail(data->com2Avail != 0),
+        com3Avail(data->com3Avail != 0),
+        nav1Avail(data->nav1Avail != 0),
+        nav2Avail(data->nav2Avail != 0),
+        xpdrAvail(data->xpdrAvail != 0),
 
         gpsNextWpId(data->gpsNextWpId, 64),
         nav1Ident(data->nav1Ident, 64),

@@ -1,34 +1,24 @@
 #include "BottombarHandler.hpp"
 #include "common/dataIdentifiers.hpp"
+#include "common/appendData.hpp"
 
 namespace bottombar
 {
 
 QByteArray BottombarHandler::sendCurrentData()
 {
-    SimconnectIds id = SimconnectIds::ZULU_SECONDS;
-    QByteArray dataToSend(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.zuluSeconds), sizeof(d_previous.zuluSeconds));
+    QByteArray dataToSend;
+    util::appendData(PfdIdentifier::ZULU_SECONDS, d_previous.zuluSeconds, dataToSend);
 
-    id = SimconnectIds::LOCAL_SECONDS;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.localSeconds), sizeof(d_previous.localSeconds));
+    util::appendData(PfdIdentifier::LOCAL_SECONDS, d_previous.localSeconds, dataToSend);
 
-    id = SimconnectIds::GROUND_SPEED;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.groundSpeed), sizeof(d_previous.groundSpeed));
+    util::appendData(PfdIdentifier::GROUND_SPEED, d_previous.groundSpeed, dataToSend);
 
-    id = SimconnectIds::TOTAL_AIR_TEMP;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.totalAirTemp), sizeof(d_previous.totalAirTemp));
+    util::appendData(PfdIdentifier::TOTAL_AIR_TEMP, d_previous.totalAirTemp, dataToSend);
 
-    id = SimconnectIds::OUTSIDE_AIR_TEMP;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.outsideAirTemp), sizeof(d_previous.outsideAirTemp));
+    util::appendData(PfdIdentifier::OUTSIDE_AIR_TEMP, d_previous.outsideAirTemp, dataToSend);
 
-    id = SimconnectIds::ISA_AIR_TEMP;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.isaAirTemp), sizeof(d_previous.isaAirTemp));
+    util::appendData(PfdIdentifier::ISA_AIR_TEMP, d_previous.isaAirTemp, dataToSend);
 
     return dataToSend;
 }

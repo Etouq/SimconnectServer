@@ -1,23 +1,18 @@
 #include "WindInfoHandler.hpp"
 #include "common/dataIdentifiers.hpp"
+#include "common/appendData.hpp"
 
 namespace windinfo
 {
 
 QByteArray WindInfoHandler::sendCurrentData()
 {
-    SimconnectIds id = SimconnectIds::WIND_STRENGTH;
-    QByteArray dataToSend(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.windVelocity), sizeof(d_previous.windVelocity));
+    QByteArray dataToSend;
+    util::appendData(PfdIdentifier::WIND_STRENGTH, d_previous.windVelocity, dataToSend);
 
-    id = SimconnectIds::WIND_TRUE_DIRECTION;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.windTrueDirection),
-                      sizeof(d_previous.windTrueDirection));
+    util::appendData(PfdIdentifier::WIND_TRUE_DIRECTION, d_previous.windTrueDirection, dataToSend);
 
-    id = SimconnectIds::WIND_DIRECTION;
-    dataToSend.append(reinterpret_cast<const char *>(&id), sizeof(id));
-    dataToSend.append(reinterpret_cast<const char *>(&d_previous.windDirection), sizeof(d_previous.windDirection));
+    util::appendData(PfdIdentifier::WIND_DIRECTION, d_previous.windDirection, dataToSend);
 
     return dataToSend;
 }
