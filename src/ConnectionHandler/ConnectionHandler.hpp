@@ -9,15 +9,14 @@
 
 #include <atomic>
 #include <cstdint>
-#include <qglobal.h>
-#include <qhostaddress.h>
+
 #include <QMutex>
 #include <QObject>
 #include <QTcpServer>
 #include <QTcpSocket>
+#include <QUdpSocket>
+#include <QTimer>
 
-
-class QTcpSocket;
 
 class SimInterface;
 
@@ -40,6 +39,8 @@ class ConnectionHandler : public QObject
     QTcpServer d_server;
     QTcpSocket *d_socket = new QTcpSocket();
 
+    QUdpSocket d_broadcastSocket;
+    QTimer d_broadcastTimer;
 
 public:
 
@@ -75,6 +76,10 @@ signals:
 
 
 private slots:
+
+    void broadcastToNetwork();
+
+
     void newIncomingConnection();
 
     // client
