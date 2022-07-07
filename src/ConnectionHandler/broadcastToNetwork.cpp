@@ -11,5 +11,9 @@ void ConnectionHandler::broadcastToNetwork()
 
     QByteArray datagramData = QJsonDocument::fromVariant(datagramBody).toJson();
 
-    d_broadcastSocket.writeDatagram(datagramData, QHostAddress::Broadcast, 12000);
+    if (d_broadcastSocket.writeDatagram(datagramData, QHostAddress::Broadcast, 11999) == -1)
+    {
+        qDebug() << "failed to write datagram on address:" << QHostAddress(QHostAddress::Broadcast) << "and port: 11999\nwith error:" << d_broadcastSocket.errorString();
+        emit openMessageBox("Simconnect Server", "failed to write datagram on address: " + QHostAddress(QHostAddress::Broadcast).toString() + " and port: 11999\nwith error: " + d_broadcastSocket.errorString());
+    }
 }

@@ -11,7 +11,7 @@ ConnectionHandler::ConnectionHandler(QObject *parent)
 {
     connect(&d_server, &QTcpServer::newConnection, this, &ConnectionHandler::newIncomingConnection);
 
-    d_broadcastTimer.setInterval(1000);
+    d_broadcastTimer.setInterval(500);
     connect(&d_broadcastTimer, &QTimer::timeout, this, &ConnectionHandler::broadcastToNetwork);
     d_broadcastTimer.start();
 

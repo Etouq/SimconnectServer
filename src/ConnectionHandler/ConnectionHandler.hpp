@@ -99,9 +99,7 @@ private slots:
     // sim
     void simStartupFailed()
     {
-        QByteArray dataToSend;
-        util::appendData(ServerMessageIdentifier::SIM_STARTUP_FAILED, dataToSend);
-        writeToConnectedSockets(dataToSend);
+        writeToConnectedSockets(util::createMessage(ServerMessageIdentifier::SIM_STARTUP_FAILED));
 
         emit simConnectionStateChanged(ConnectionState::DISCONNECTED);
 
@@ -122,9 +120,7 @@ private slots:
 
         emit clienConnectionStateChanged(ConnectionState::DISCONNECTING);
 
-        QByteArray dataToSend;
-        util::appendData(ServerMessageIdentifier::QUIT, dataToSend);
-        writeToConnectedSockets(dataToSend);
+        writeToConnectedSockets(util::createMessage(ServerMessageIdentifier::QUIT));
     }
 
 private:

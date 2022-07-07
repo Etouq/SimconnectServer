@@ -11,7 +11,7 @@ void ConnectionHandler::newIncomingConnection()
     d_connectedSockets[newSocket->id()] = newSocket;
 
     // restart the sim if it isn't already running
-    if (!d_sim.isRunning())
-        startSim();
+    // if (!d_sim.isRunning())
+    //     startSim();
 
 }

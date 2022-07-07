@@ -2,6 +2,7 @@
 #include "common/dataIdentifiers.hpp"
 #include "SimInterface/SharedThreadData.hpp"
 #include "common/converters/basicConverters.hpp"
+#include <QHostAddress>
 
 
 void FdcSocket::receivedClientData()
@@ -14,22 +15,37 @@ void FdcSocket::receivedClientData()
 
         switch (identifier)
         {
-            case ClientToServerIds::CLIENT_NETWORK_VERSION:
+            case ClientToServerIds::HANDSHAKE:
             {
-                if (d_socket->bytesAvailable() < sizeof(c_communicationVersion))
+                uint8_t messageSize = 0;
+                if (d_socket->bytesAvailable() < sizeof(messageSize))
                 {
                     d_socket->rollbackTransaction();
                     return;
                 }
 
+                d_socket->read(reinterpret_cast<char *>(&messageSize), sizeof(messageSize));
+                if (d_socket->bytesAvailable() < messageSize)
+                {
+                    d_socket->rollbackTransaction();
+                    return;
+                }
+
+                d_socket->commitTransaction();
+
                 uint8_t clientVersion = 0;
                 d_socket->read(reinterpret_cast<char *>(&clientVersion), sizeof(clientVersion));
-                d_socket->commitTransaction();
+                QByteArray modelName = d_socket->read(messageSize - sizeof(clientVersion));
 
                 if (clientVersion != c_communicationVersion)
                 {
                     d_socket->disconnectFromHost();
                     emit handshakeError(clientVersion < c_communicationVersion);
+                }
+                else
+                {
+                    d_endpointName = modelName + " @ " + d_socket->peerAddress().toString();
+                    emit handshakeSuccess(d_endpointName);
                 }
 
                 break;

@@ -10,18 +10,23 @@ void ConnectionHandler::initializeServer()
     bool found = false;
     QStringList errors;
 
+
     for (const QHostAddress &address : addresses)
     {
-        if (!address.isLoopback() && address.protocol() == QAbstractSocket::IPv4Protocol)
+
+        if (!address.isLoopback() && (address.protocol() == QAbstractSocket::IPv4Protocol || address.protocol() == QAbstractSocket::IPv6Protocol))
         {
-            if (d_server.listen(address))
+            quint16 tcpPort = 12000;
+            while (!d_server.listen(address, tcpPort) && tcpPort <= 12100)
+            {
+                errors.append(address.toString() + " - " + QString::number(tcpPort) + ": " + d_server.errorString());
+                ++tcpPort;
+            }
+
+            if (tcpPort <= 12100)
             {
                 found = true;
                 break;
-            }
-            else
-            {
-                errors.append(address.toString() + ": " + d_server.errorString());
             }
         }
     }

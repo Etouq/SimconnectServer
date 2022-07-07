@@ -39,6 +39,11 @@ public:
         return d_id;
     }
 
+    const QString &endpointName() const
+    {
+        return d_endpointName;
+    }
+
     void writeToSocket(const QByteArray &data)
     {
         d_socket->write(data);
@@ -48,6 +53,7 @@ signals:
 
     void socketClosed(uint64_t id);
     void handshakeError(bool clientTooOld);
+    void handshakeSuccess(const QString &name);
 
 private slots:
 
@@ -56,9 +62,7 @@ private slots:
 
     void receivedSimError(const QString &msg)
     {
-        QByteArray dataToSend;
-        util::appendData(ServerMessageIdentifier::ERROR_MSG, msg.toUtf8(), dataToSend);
-        d_socket->write(dataToSend);
+        d_socket->write(util::createMessage(ServerMessageIdentifier::ERROR_MSG, msg.toUtf8()));
     }
 
 private:
@@ -68,6 +72,8 @@ private:
     const uint64_t d_id;
 
     QTcpSocket *d_socket;
+
+    QString d_endpointName = "";
 
     std::atomic_bool &d_sharedDataUpdated;
     std::shared_mutex &d_sharedDataMutex;

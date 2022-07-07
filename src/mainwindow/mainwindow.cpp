@@ -1,6 +1,8 @@
 #include "mainwindow.hpp"
 
 #include <QCloseEvent>
+#include <QSysInfo>
+#include <QHostInfo>
 
 #include "ui_mainwindow.h"
 
@@ -31,6 +33,12 @@ MainWindow::MainWindow(QWidget *parent)
     d_connectionHandler.init();
 
     adjustSize();
+
+    qDebug() << "machine host name:" << QSysInfo::machineHostName();
+    qDebug() << "machine unique id:" << QSysInfo::machineUniqueId();
+    qDebug() << "pretty product name:" << QSysInfo::prettyProductName();
+    qDebug() << "local domain name:" << QHostInfo::localDomainName();
+    qDebug() << "local host name:" << QHostInfo::localHostName();
 }
 
 MainWindow::~MainWindow()

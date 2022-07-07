@@ -20,6 +20,9 @@ FdcSocket::FdcSocket(QTcpSocket *socket,
     d_socket = socket;
     d_socket->setSocketOption(QAbstractSocket::LowDelayOption, 1);
 
+
+    qDebug() << "started socket with id:" << QString::number(d_id);
+
     connect(&sim,
             &SimInterface::sendData,
             d_socket,
@@ -30,6 +33,7 @@ FdcSocket::FdcSocket(QTcpSocket *socket,
     connect(d_socket, &QTcpSocket::disconnected, this, &FdcSocket::clientDisconnected, Qt::UniqueConnection);
     connect(d_socket, &QTcpSocket::readyRead, this, &FdcSocket::receivedClientData, Qt::UniqueConnection);
 
+
     d_socket->write(reinterpret_cast<const char *>(&c_communicationVersion), sizeof(c_communicationVersion));
 }
 
@@ -39,9 +43,7 @@ FdcSocket::~FdcSocket()
 
     if (d_socket->state() == QTcpSocket::ConnectedState)
     {
-        QByteArray dataToSend;
-        util::appendData(ServerMessageIdentifier::QUIT, dataToSend);
-        d_socket->write(dataToSend);
+        d_socket->write(util::createMessage(ServerMessageIdentifier::QUIT));
         d_socket->flush();
         d_socket->disconnectFromHost();
     }

@@ -3,6 +3,7 @@
 
 void FdcSocket::clientDisconnected()
 {
+    qDebug() << "socket with id:" << d_id << "closed";
     disconnect(&d_sim,
             &SimInterface::sendData,
             d_socket,

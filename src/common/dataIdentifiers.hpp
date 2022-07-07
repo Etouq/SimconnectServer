@@ -160,7 +160,7 @@ enum class ServerMessageIdentifier : uint8_t
 
 enum class ClientToServerIds : uint8_t
 {
-    CLIENT_NETWORK_VERSION,
+    HANDSHAKE,
     QUIT,
     AIRCRAFT_LOADED,
     START,
