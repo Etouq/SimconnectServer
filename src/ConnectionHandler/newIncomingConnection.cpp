@@ -1,20 +1,17 @@
 #include "ConnectionHandler.hpp"
+#include <random>
 
 void ConnectionHandler::newIncomingConnection()
 {
-    d_socket->abort();
+    std::random_device rd;
+    std::mt19937_64 gen(rd());
 
-    d_socket->setSocketOption(QAbstractSocket::KeepAliveOption, 1);
-    d_socket->setSocketOption(QAbstractSocket::LowDelayOption, 1);
-    d_socket = d_server.nextPendingConnection();
-    d_socket->setSocketOption(QAbstractSocket::LowDelayOption, 1);
+    FdcSocket *newSocket = new FdcSocket(d_server.nextPendingConnection(), gen(), d_sharedDataUpdated, d_sharedDataMutex, d_sharedData, d_sim, this);
 
-    d_server.pauseAccepting();
+    d_connectedSockets[newSocket->id()] = newSocket;
 
-    connect(d_socket, &QTcpSocket::disconnected, this, &ConnectionHandler::clientDisconnected, Qt::UniqueConnection);
-    connect(d_socket, &QTcpSocket::readyRead, this, &ConnectionHandler::receivedClientData, Qt::UniqueConnection);
+    // restart the sim if it isn't already running
+    if (!d_sim.isRunning())
+        startSim();
 
-    emit clienConnectionStateChanged(ConnectionState::CONNECTED);
-
-    d_socket->write(reinterpret_cast<const char *>(&c_communicationVersion), sizeof(c_communicationVersion));
 }

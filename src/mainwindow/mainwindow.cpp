@@ -6,7 +6,8 @@
 
 MainWindow::MainWindow(QWidget *parent)
   : QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    d_connectionHandler(this)
 {
     ui->setupUi(this);
 
@@ -35,13 +36,6 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
-}
-
-void MainWindow::closeEvent(QCloseEvent *event)
-{
-    d_connectionHandler.closeNow();
-
-    event->accept();
 }
 
 void MainWindow::updateNetworkData(const QHostAddress &address, quint16 port)

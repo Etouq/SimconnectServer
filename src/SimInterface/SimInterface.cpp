@@ -5,7 +5,7 @@ SimInterface::SimInterface(std::atomic_bool *sharedAtomic,
                            SharedThreadData *sharedData,
                            const AircraftConfig &airplaneStartConfig,
                            QObject *parent)
-  : QThread{ parent },
+  : QThread(parent),
     d_sharedDataUpdated(sharedAtomic),
     d_sharedDataMutex(sharedMutex),
     d_sharedData(sharedData),

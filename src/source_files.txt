@@ -11,15 +11,14 @@ set(PROJECT_SOURCES
         src/common/definitions/GaugeDefinition/toBinary.cpp
 
         src/ConnectionHandler/clientDisconnected.cpp
-        src/ConnectionHandler/clientSentQuitSignal.cpp
-        src/ConnectionHandler/closeNow.cpp
-        src/ConnectionHandler/closeSim.cpp
         src/ConnectionHandler/ConnectionHandler.cpp
         src/ConnectionHandler/broadcastToNetwork.cpp
         src/ConnectionHandler/initializeServer.cpp
         src/ConnectionHandler/newIncomingConnection.cpp
-        src/ConnectionHandler/receivedClientData.cpp
         src/ConnectionHandler/startSim.cpp
+        src/ConnectionHandler/FdcSocket/FdcSocket.cpp
+        src/ConnectionHandler/FdcSocket/receivedClientData.cpp
+        src/ConnectionHandler/FdcSocket/clientDisconnected.cpp
 
         src/FlightplanReader/readfile.cpp
         src/FlightplanReader/readwaypoint.cpp
@@ -118,6 +117,7 @@ set(PROJECT_HEADERS
         src/common/Units.hpp
 
         src/ConnectionHandler/ConnectionHandler.hpp
+        src/ConnectionHandler/FdcSocket/FdcSocket.hpp
 
         src/FlightplanReader/flightplanreader.hpp
         src/FlightplanReader/FlightPlanWaypoint.hpp

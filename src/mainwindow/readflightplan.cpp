@@ -21,6 +21,6 @@ void MainWindow::readFlightplan(const QString &fileName)
         constexpr DataGroupIdentifier groupId = DataGroupIdentifier::MFD_DATA;
         dataToSend.prepend(reinterpret_cast<const char *>(&groupId), sizeof(groupId));
 
-        d_connectionHandler.sendDataToClient(dataToSend);
+        d_connectionHandler.sendDataToClients(dataToSend);
     }
 }

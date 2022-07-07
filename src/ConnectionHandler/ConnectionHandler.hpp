@@ -1,24 +1,26 @@
 #ifndef __CONNECTIONHANDLER_HPP__
 #define __CONNECTIONHANDLER_HPP__
 
-#include "common/converters/basicConverters.hpp"
-#include "common/dataIdentifiers.hpp"
 #include "common/appendData.hpp"
-#include "common/definitions/AircraftConfig.hpp"
+#include "common/dataIdentifiers.hpp"
+#include "FdcSocket/FdcSocket.hpp"
 #include "SimInterface/SharedThreadData.hpp"
 
 #include <atomic>
 #include <cstdint>
-
+#include <mutex>
 #include <QMutex>
 #include <QObject>
 #include <QTcpServer>
 #include <QTcpSocket>
-#include <QUdpSocket>
 #include <QTimer>
+#include <QUdpSocket>
+
+#include <shared_mutex>
+#include <unordered_map>
 
 
-class SimInterface;
+#include "SimInterface/SimInterface.hpp"
 
 class ConnectionHandler : public QObject
 {
@@ -26,18 +28,17 @@ class ConnectionHandler : public QObject
 
 
     // thread data and communication
-    // this is used to signal the simconnect thread that the shared data has been updated
+    // used to signal the simconnect thread that the shared data has been updated
     std::atomic_bool d_threadDataUpdated;
     QMutex d_threadDataMutex;
     SharedThreadData d_threadData;
 
-    SimInterface *d_sim = nullptr;
+    SimInterface d_sim;
 
     // network
-    const uint8_t c_communicationVersion = 3;
+    static constexpr uint8_t c_communicationVersion = 3;
 
     QTcpServer d_server;
-    QTcpSocket *d_socket = new QTcpSocket();
 
     QUdpSocket d_broadcastSocket;
     QTimer d_broadcastTimer;
@@ -60,11 +61,9 @@ public:
         initializeServer();
     }
 
-    void closeNow();
-
-    void sendDataToClient(const QByteArray &data)
+    void sendDataToClients(const QByteArray &data)
     {
-        d_socket->write(data);
+        writeToConnectedSockets(data);
     }
 
 signals:
@@ -77,35 +76,42 @@ signals:
 
 private slots:
 
+    void handshakeError(bool clientTooOld)
+    {
+        emit openMessageBox(
+          "Error",
+          clientTooOld
+            ? "The network data transfer version of the Flight Display Companion is older than the one used by "
+              "this application. Please update the Flight Display Companion."
+            : "The network data transfer version of the Flight Display Companion is newer "
+              "than the one used by this application. Please update this application.");
+    }
+
     void broadcastToNetwork();
 
 
     void newIncomingConnection();
 
     // client
-    void clientDisconnected();
+    void clientDisconnected(uint64_t id);
 
-    void receivedClientData();
 
     // sim
     void simStartupFailed()
     {
         QByteArray dataToSend;
         util::appendData(ServerMessageIdentifier::SIM_STARTUP_FAILED, dataToSend);
-        d_socket->write(dataToSend);
+        writeToConnectedSockets(dataToSend);
+
         emit simConnectionStateChanged(ConnectionState::DISCONNECTED);
+
+        // try again in 10 seconds
+        d_trySimStartTimer.start();
     }
 
     void simConnected()
     {
         emit simConnectionStateChanged(ConnectionState::CONNECTED);
-    }
-
-    void receivedSimError(const QString &msg)
-    {
-        QByteArray dataToSend;
-        util::appendData(ServerMessageIdentifier::ERROR_MSG, msg.toUtf8(), dataToSend);
-        d_socket->write(dataToSend);
     }
 
     void simClosed()
@@ -118,19 +124,34 @@ private slots:
 
         QByteArray dataToSend;
         util::appendData(ServerMessageIdentifier::QUIT, dataToSend);
-        d_socket->write(dataToSend);
+        writeToConnectedSockets(dataToSend);
     }
 
 private:
 
+    void writeToConnectedSockets(const QByteArray &data)
+    {
+        for (auto socket : d_connectedSockets)
+        {
+            socket.second->writeToSocket(data);
+        }
+    }
+
     void initializeServer();
 
-    // client
-    void clientSentQuitSignal();
 
     // sim
-    void startSim(const AircraftConfig &config);
-    void closeSim();
+    void startSim();
+
+
+    std::unordered_map<uint64_t, FdcSocket *> d_connectedSockets;
+
+    std::atomic_bool d_sharedDataUpdated;
+    std::shared_mutex d_sharedDataMutex;
+    SharedThreadData d_sharedData;
+
+
+    QTimer d_trySimStartTimer;
 };
 
 

@@ -35,9 +35,6 @@ private slots:
 
     void updateNetworkData(const QHostAddress &address, quint16 port);
 
-protected:
-    void closeEvent(QCloseEvent *event) override;
-
 private:
 
     void readFlightplan(const QString &fileName);
