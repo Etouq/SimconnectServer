@@ -8,6 +8,10 @@ void ConnectionHandler::newIncomingConnection()
 
     FdcSocket *newSocket = new FdcSocket(d_server.nextPendingConnection(), gen(), d_sharedDataUpdated, d_sharedDataMutex, d_sharedData, d_sim, this);
 
+    connect(newSocket, &FdcSocket::handshakeSuccess, this, &ConnectionHandler::clientHandshakeSuccess);
+    connect(newSocket, &FdcSocket::socketClosed, this, &ConnectionHandler::clientDisconnected);
+    qDebug() << "handshake connected";
+
     d_connectedSockets[newSocket->id()] = newSocket;
 
     // restart the sim if it isn't already running

@@ -1,14 +1,12 @@
 #ifndef __CONNECTIONHANDLER_HPP__
 #define __CONNECTIONHANDLER_HPP__
 
-#include "common/appendData.hpp"
 #include "common/dataIdentifiers.hpp"
 #include "FdcSocket/FdcSocket.hpp"
 #include "SimInterface/SharedThreadData.hpp"
 
 #include <atomic>
 #include <cstdint>
-#include <mutex>
 #include <QMutex>
 #include <QObject>
 #include <QTcpServer>
@@ -26,12 +24,6 @@ class ConnectionHandler : public QObject
 {
     Q_OBJECT
 
-
-    // thread data and communication
-    // used to signal the simconnect thread that the shared data has been updated
-    std::atomic_bool d_threadDataUpdated;
-    QMutex d_threadDataMutex;
-    SharedThreadData d_threadData;
 
     SimInterface d_sim;
 
@@ -66,12 +58,19 @@ public:
         writeToConnectedSockets(data);
     }
 
+    Q_INVOKABLE QString getClientName(int idx)
+    {
+        return d_clientNames.at(idx);
+    }
+
 signals:
     void networkChanged(const QHostAddress &address, quint16 port);
     void openMessageBox(const QString &title, const QString &text);
 
     void simConnectionStateChanged(ConnectionState state);
     void clienConnectionStateChanged(ConnectionState state);
+
+    void clientsChanged(int numClients);
 
 
 private slots:
@@ -87,6 +86,15 @@ private slots:
               "than the one used by this application. Please update this application.");
     }
 
+    void clientHandshakeSuccess()
+    {
+        d_clientNames.clear();
+        for (auto socket : d_connectedSockets)
+            d_clientNames.append(socket.second->endpointName());
+
+        emit clientsChanged(d_clientNames.size());
+    }
+
     void broadcastToNetwork();
 
 
@@ -99,7 +107,8 @@ private slots:
     // sim
     void simStartupFailed()
     {
-        writeToConnectedSockets(util::createMessage(ServerMessageIdentifier::SIM_STARTUP_FAILED));
+        writeToConnectedSockets(QByteArray::fromStdString({ static_cast<char>(DataGroupIdentifier::SERVER_DATA),
+                                                  static_cast<char>(ServerMessageIdentifier::SIM_STARTUP_FAILED) }));
 
         emit simConnectionStateChanged(ConnectionState::DISCONNECTED);
 
@@ -120,7 +129,8 @@ private slots:
 
         emit clienConnectionStateChanged(ConnectionState::DISCONNECTING);
 
-        writeToConnectedSockets(util::createMessage(ServerMessageIdentifier::QUIT));
+        writeToConnectedSockets(QByteArray::fromStdString({ static_cast<char>(DataGroupIdentifier::SERVER_DATA),
+                                                  static_cast<char>(ServerMessageIdentifier::QUIT) }));
     }
 
 private:
@@ -142,6 +152,10 @@ private:
 
     std::unordered_map<uint64_t, FdcSocket *> d_connectedSockets;
 
+    QStringList d_clientNames;
+
+    // thread data and communication
+    // used to signal the simconnect thread that the shared data has been updated
     std::atomic_bool d_sharedDataUpdated;
     std::shared_mutex d_sharedDataMutex;
     SharedThreadData d_sharedData;

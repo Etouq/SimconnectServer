@@ -1,7 +1,6 @@
 #ifndef __HSIHANDLER_HPP__
 #define __HSIHANDLER_HPP__
 
-#include "common/dataIdentifiers.hpp"
 #include "DataStruct.hpp"
 #include "common/TypeEnums.hpp"
 
@@ -28,9 +27,9 @@ public:
 
     HsiHandler() = default;
 
-    QByteArray gpsWpNextIdValid(bool valid)
+    std::string gpsWpNextIdValid(bool valid)
     {
-        QByteArray ret;
+        std::string ret;
         if (d_nextGpsWpIdValid != valid)
         {
             d_nextGpsWpIdValid = valid;
@@ -53,9 +52,9 @@ public:
 
     void setupData(HANDLE simConnectHandle);
 
-    [[nodiscard]] QByteArray processData(unsigned long *raw);
+    [[nodiscard]] std::string processData(unsigned long *raw);
 
-    QByteArray reset()
+    std::string reset()
     {
         d_previous = DataStruct();
 
@@ -68,17 +67,17 @@ public:
         return sendCurrentData();
     }
 
-    [[nodiscard]] QByteArray sendCurrentData();
+    [[nodiscard]] std::string sendCurrentData();
 
 private:
 
-    void handleNav1Tacan(QByteArray &dataToSend, const DataStruct &newData);
-    void handleNav2Tacan(QByteArray &dataToSend, const DataStruct &newData);
+    void handleNav1Tacan(std::string &dataToSend, const DataStruct &newData);
+    void handleNav2Tacan(std::string &dataToSend, const DataStruct &newData);
 
-    void handleNav1(QByteArray &dataToSend, const DataStruct &newData);
-    void handleNav2(QByteArray &dataToSend, const DataStruct &newData);
+    void handleNav1(std::string &dataToSend, const DataStruct &newData);
+    void handleNav2(std::string &dataToSend, const DataStruct &newData);
 
-    void handleGps(QByteArray &dataToSend, const DataStruct &newData);
+    void handleGps(std::string &dataToSend, const DataStruct &newData);
 };
 
 }  // namespace hsi

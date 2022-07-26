@@ -1,18 +1,20 @@
 #include "WindInfoHandler.hpp"
 #include "common/dataIdentifiers.hpp"
-#include "common/appendData.hpp"
 
 namespace windinfo
 {
 
-QByteArray WindInfoHandler::sendCurrentData()
+std::string WindInfoHandler::sendCurrentData()
 {
-    QByteArray dataToSend;
-    util::appendData(PfdIdentifier::WIND_STRENGTH, d_previous.windVelocity, dataToSend);
+    std::string dataToSend;
+    dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::WIND_STRENGTH) });
+    dataToSend.append(reinterpret_cast<const char*>(&d_previous.windVelocity), sizeof(d_previous.windVelocity));
 
-    util::appendData(PfdIdentifier::WIND_TRUE_DIRECTION, d_previous.windTrueDirection, dataToSend);
+    dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::WIND_TRUE_DIRECTION) });
+    dataToSend.append(reinterpret_cast<const char*>(&d_previous.windTrueDirection), sizeof(d_previous.windTrueDirection));
 
-    util::appendData(PfdIdentifier::WIND_DIRECTION, d_previous.windDirection, dataToSend);
+    dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::WIND_DIRECTION) });
+    dataToSend.append(reinterpret_cast<const char*>(&d_previous.windDirection), sizeof(d_previous.windDirection));
 
     return dataToSend;
 }

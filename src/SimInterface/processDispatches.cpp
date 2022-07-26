@@ -25,12 +25,9 @@ void SimInterface::processDispatches()
                 {
                     if (updateAircraft)
                     {
-                        QByteArray dataToSend = d_engine1Handler.reset();
-                        dataToSend += d_engine2Handler.reset();
-                        dataToSend += d_engine3Handler.reset();
-                        dataToSend += d_engine4Handler.reset();
-                        dataToSend += d_aircraftHandler.reset();
-                        emit sendData(dataToSend);
+                        emit sendData(QByteArray::fromStdString(d_engine1Handler.reset() + d_engine2Handler.reset()
+                                                                + d_engine3Handler.reset() + d_engine4Handler.reset()
+                                                                + d_aircraftHandler.reset()));
 
                         SimConnect_ClearDataDefinition(d_simConnectHandle, ENGINE1_DEFINITION);
                         SimConnect_ClearDataDefinition(d_simConnectHandle, ENGINE2_DEFINITION);
@@ -83,9 +80,9 @@ void SimInterface::processDispatches()
                     }
 
 
-                    if (d_sharedDataUpdated->load(std::memory_order_seq_cst))
+                    if (d_sharedDataUpdated.load(std::memory_order_seq_cst))
                     {
-                        d_sharedDataUpdated->store(false, std::memory_order_seq_cst);
+                        d_sharedDataUpdated.store(false, std::memory_order_seq_cst);
                         processSharedData();
 
 
@@ -95,15 +92,15 @@ void SimInterface::processDispatches()
                 }
                 else if (evt->uEventID == SIM_START_EVENT_ID)
                 {
-                    QByteArray dataToSend;
-                    util::appendData(ServerMessageIdentifier::SIM_START_EVENT, dataToSend);
-                    emit sendData(dataToSend);
+                    emit sendData(
+                      QByteArray::fromStdString({ static_cast<char>(DataGroupIdentifier::SERVER_DATA),
+                                                  static_cast<char>(ServerMessageIdentifier::SIM_START_EVENT) }));
                 }
                 else if (evt->uEventID == SIM_STOP_EVENT_ID)
                 {
-                    QByteArray dataToSend;
-                    util::appendData(ServerMessageIdentifier::SIM_STOP_EVENT, dataToSend);
-                    emit sendData(dataToSend);
+                    emit sendData(
+                      QByteArray::fromStdString({ static_cast<char>(DataGroupIdentifier::SERVER_DATA),
+                                                  static_cast<char>(ServerMessageIdentifier::SIM_STOP_EVENT) }));
                 }
                 else
                 {
@@ -120,100 +117,100 @@ void SimInterface::processDispatches()
                 {
                     case AIRSPEED_REQUEST:
                     {
-                        emit sendData(d_airspeedHandler.processData(&pObjData->dwData));
+                        emit sendData(QByteArray::fromStdString(d_airspeedHandler.processData(&pObjData->dwData)));
                         break;
                     }
                     case ALTIMETER_REQUEST:
                     {
-                        emit sendData(d_altitudeHandler.processData(&pObjData->dwData));
+                        emit sendData(QByteArray::fromStdString(d_altitudeHandler.processData(&pObjData->dwData)));
                         break;
                     }
                     case ATTITUDE_REQUEST:
                     {
-                        emit sendData(d_attitudeHandler.processData(&pObjData->dwData));
+                        emit sendData(QByteArray::fromStdString(d_attitudeHandler.processData(&pObjData->dwData)));
                         break;
                     }
                     case BOTTOMBAR_REQUEST:
                     {
-                        QByteArray dataToSend = d_bottombarHandler.processData(&pObjData->dwData);
-                        if (!dataToSend.isEmpty())
-                            emit sendData(dataToSend);
+                        std::string dataToSend = d_bottombarHandler.processData(&pObjData->dwData);
+                        if (!dataToSend.empty())
+                            emit sendData(QByteArray::fromStdString(dataToSend));
 
                         break;
                     }
                     case HSI_REQUEST:
                     {
-                        emit sendData(d_hsiHandler.processData(&pObjData->dwData));
+                        emit sendData(QByteArray::fromStdString(d_hsiHandler.processData(&pObjData->dwData)));
                         break;
                     }
                     case HSI_BRG_REQUEST:
                     {
-                        emit sendData(d_bearingHandler.processData(&pObjData->dwData));
+                        emit sendData(QByteArray::fromStdString(d_bearingHandler.processData(&pObjData->dwData)));
                         break;
                     }
                     case RADIO_REQUEST:
                     {
-                        emit sendData(d_radioHandler.processData(&pObjData->dwData));
+                        emit sendData(QByteArray::fromStdString(d_radioHandler.processData(&pObjData->dwData)));
                         break;
                     }
                     case NAV_INFO_REQUEST:
                     {
-                        emit sendData(d_navInfoHandler.processData(&pObjData->dwData));
+                        emit sendData(QByteArray::fromStdString(d_navInfoHandler.processData(&pObjData->dwData)));
                         break;
                     }
                     case WIND_REQUEST:
                     {
-                        emit sendData(d_windHandler.processData(&pObjData->dwData));
+                        emit sendData(QByteArray::fromStdString(d_windHandler.processData(&pObjData->dwData)));
                         break;
                     }
                     case AP_INFO_REQUEST:
                     {
-                        QByteArray dataToSend = d_autopilotHandler.processData(&pObjData->dwData);
-                        if (!dataToSend.isEmpty())
-                            emit sendData(d_autopilotHandler.processData(&pObjData->dwData));
+                        std::string dataToSend = d_autopilotHandler.processData(&pObjData->dwData);
+                        if (!dataToSend.empty())
+                            emit sendData(QByteArray::fromStdString(dataToSend));
 
                         break;
                     }
                     case ENGINE1_REQUEST:
                     {
-                        emit sendData(d_engine1Handler.processData(&pObjData->dwData));
+                        emit sendData(QByteArray::fromStdString(d_engine1Handler.processData(&pObjData->dwData)));
 
                         break;
                     }
                     case ENGINE2_REQUEST:
                     {
-                        emit sendData(d_engine2Handler.processData(&pObjData->dwData));
+                        emit sendData(QByteArray::fromStdString(d_engine2Handler.processData(&pObjData->dwData)));
 
                         break;
                     }
                     case ENGINE3_REQUEST:
                     {
-                        emit sendData(d_engine3Handler.processData(&pObjData->dwData));
+                        emit sendData(QByteArray::fromStdString(d_engine3Handler.processData(&pObjData->dwData)));
 
                         break;
                     }
                     case ENGINE4_REQUEST:
                     {
-                        emit sendData(d_engine4Handler.processData(&pObjData->dwData));
+                        emit sendData(QByteArray::fromStdString(d_engine4Handler.processData(&pObjData->dwData)));
 
                         break;
                     }
                     case AIRCRAFT_GENERAL_REQUEST:
                     {
-                        emit sendData(d_aircraftHandler.processData(&pObjData->dwData));
+                        emit sendData(QByteArray::fromStdString(d_aircraftHandler.processData(&pObjData->dwData)));
 
                         break;
                     }
                     case MISC_REQUEST:
                     {
                         bool wpIdValid = false;
-                        QByteArray dataToSend = d_miscHandler.processData(&pObjData->dwData, &wpIdValid);
-                        if (!dataToSend.isEmpty())
-                            emit sendData(dataToSend);
+                        std::string dataToSend = d_miscHandler.processData(&pObjData->dwData, &wpIdValid);
+                        if (!dataToSend.empty())
+                            emit sendData(QByteArray::fromStdString(dataToSend));
 
                         dataToSend = d_hsiHandler.gpsWpNextIdValid(wpIdValid);
-                        if (!dataToSend.isEmpty())
-                            emit sendData(dataToSend);
+                        if (!dataToSend.empty())
+                            emit sendData(QByteArray::fromStdString(dataToSend));
 
                         break;
                     }

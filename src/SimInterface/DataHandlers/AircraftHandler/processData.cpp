@@ -1,14 +1,13 @@
 #include "AircraftHandler.hpp"
-#include "common/appendData.hpp"
 #include "common/dataIdentifiers.hpp"
 
 namespace handler::aircraft
 {
 
-QByteArray AircraftHandler::processData(const unsigned long *raw)
+std::string AircraftHandler::processData(const unsigned long *raw)
 {
     DataStruct newData(*reinterpret_cast<const DataStruct *>(raw));
-    QByteArray dataToSend;
+    std::string dataToSend;
 
     d_previous.fuelDensity = newData.fuelDensity;
 
@@ -17,7 +16,8 @@ QByteArray AircraftHandler::processData(const unsigned long *raw)
         d_previous.fuelLeftQty = newData.fuelLeftQty;
         if (d_fuelQtyByWeight)
             newData.fuelLeftQty *= newData.fuelDensity;
-        util::appendData(MfdIdentifier::FUEL_LEFT_QTY, newData.fuelLeftQty, dataToSend);
+        dataToSend.append({ static_cast<char>(DataGroupIdentifier::MFD_DATA), static_cast<char>(MfdIdentifier::FUEL_LEFT_QTY) });
+        dataToSend.append(reinterpret_cast<const char*>(&newData.fuelLeftQty), sizeof(newData.fuelLeftQty));
     }
 
     if (!d_singleTank && std::abs(d_previous.fuelRightQty - newData.fuelRightQty) >= d_fuelQtyEps)
@@ -25,7 +25,8 @@ QByteArray AircraftHandler::processData(const unsigned long *raw)
         d_previous.fuelRightQty = newData.fuelRightQty;
         if (d_fuelQtyByWeight)
             newData.fuelRightQty *= newData.fuelDensity;
-        util::appendData(MfdIdentifier::FUEL_RIGHT_QTY, newData.fuelRightQty, dataToSend);
+        dataToSend.append({ static_cast<char>(DataGroupIdentifier::MFD_DATA), static_cast<char>(MfdIdentifier::FUEL_RIGHT_QTY) });
+        dataToSend.append(reinterpret_cast<const char*>(&newData.fuelRightQty), sizeof(newData.fuelRightQty));
     }
 
     if (d_checkFlaps) [[likely]]
@@ -34,7 +35,8 @@ QByteArray AircraftHandler::processData(const unsigned long *raw)
             std::abs(avgAngle - d_flapsAngle) >= 1.0) [[unlikely]]
         {
             d_flapsAngle = avgAngle;
-            util::appendData(MfdIdentifier::FLAPS_ANGLE, d_flapsAngle, dataToSend);
+            dataToSend.append({ static_cast<char>(DataGroupIdentifier::MFD_DATA), static_cast<char>(MfdIdentifier::FLAPS_ANGLE) });
+            dataToSend.append(reinterpret_cast<const char*>(&d_flapsAngle), sizeof(d_flapsAngle));
         }
 
         if (d_checkSpoilers) [[unlikely]]
@@ -43,7 +45,8 @@ QByteArray AircraftHandler::processData(const unsigned long *raw)
                 std::abs(avgPct - d_spoilersPct) >= 1.0) [[unlikely]]
             {
                 d_spoilersPct = avgPct;
-                util::appendData(MfdIdentifier::SPOILERS_PCT, d_spoilersPct, dataToSend);
+                dataToSend.append({ static_cast<char>(DataGroupIdentifier::MFD_DATA), static_cast<char>(MfdIdentifier::SPOILERS_PCT) });
+                dataToSend.append(reinterpret_cast<const char*>(&d_spoilersPct), sizeof(d_spoilersPct));
             }
         }
     }
@@ -52,7 +55,8 @@ QByteArray AircraftHandler::processData(const unsigned long *raw)
     {
         d_previous.elevTrimPct = newData.elevTrimPct;
         d_previous.elevTrimAngle = newData.elevTrimAngle;
-        util::appendData(MfdIdentifier::ELEV_TRIM_POSITION, newData.elevTrimPct, dataToSend);
+        dataToSend.append({ static_cast<char>(DataGroupIdentifier::MFD_DATA), static_cast<char>(MfdIdentifier::ELEV_TRIM_POSITION) });
+        dataToSend.append(reinterpret_cast<const char*>(&newData.elevTrimPct), sizeof(newData.elevTrimPct));
         dataToSend.append(reinterpret_cast<const char *>(&newData.elevTrimAngle), sizeof(newData.elevTrimAngle));
     }
 
@@ -60,7 +64,8 @@ QByteArray AircraftHandler::processData(const unsigned long *raw)
     {
         d_previous.ailTrimPct = newData.ailTrimPct;
         d_previous.ailTrimAngle = newData.ailTrimAngle;
-        util::appendData(MfdIdentifier::AIL_TRIM_POSITION, newData.ailTrimPct, dataToSend);
+        dataToSend.append({ static_cast<char>(DataGroupIdentifier::MFD_DATA), static_cast<char>(MfdIdentifier::AIL_TRIM_POSITION) });
+        dataToSend.append(reinterpret_cast<const char*>(&newData.ailTrimPct), sizeof(newData.ailTrimPct));
         dataToSend.append(reinterpret_cast<const char *>(&newData.ailTrimAngle), sizeof(newData.ailTrimAngle));
     }
 
@@ -68,14 +73,16 @@ QByteArray AircraftHandler::processData(const unsigned long *raw)
     {
         d_previous.ruddTrimPct = newData.ruddTrimPct;
         d_previous.ruddTrimAngle = newData.ruddTrimAngle;
-        util::appendData(MfdIdentifier::RUDD_TRIM_POSITION, newData.ruddTrimPct, dataToSend);
+        dataToSend.append({ static_cast<char>(DataGroupIdentifier::MFD_DATA), static_cast<char>(MfdIdentifier::RUDD_TRIM_POSITION) });
+        dataToSend.append(reinterpret_cast<const char*>(&newData.ruddTrimPct), sizeof(newData.ruddTrimPct));
         dataToSend.append(reinterpret_cast<const char *>(&newData.ruddTrimAngle), sizeof(newData.ruddTrimAngle));
     }
 
     if (d_checkApu && std::abs(d_previous.apuN1 - newData.apuN1) >= 0.4) [[unlikely]]
     {
         d_previous.apuN1 = newData.apuN1;
-        util::appendData(MfdIdentifier::APU_N1, newData.apuN1, dataToSend);
+        dataToSend.append({ static_cast<char>(DataGroupIdentifier::MFD_DATA), static_cast<char>(MfdIdentifier::APU_N1) });
+        dataToSend.append(reinterpret_cast<const char*>(&newData.apuN1), sizeof(newData.apuN1));
     }
 
     return dataToSend;

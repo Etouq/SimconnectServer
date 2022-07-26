@@ -1,0 +1,20 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>Homepage.qml</file>
+        <file>AircraftSelectionPopup/AircraftSelectionPopup.qml</file>
+        <file>AircraftSelectionPopup/AircraftSelectionPage.qml</file>
+        <file>AircraftSelectionPopup/AircraftSelectionItem.qml</file>
+        <file>CustomControls/GradientButton.qml</file>
+        <file>CustomControls/LoadSpinner.qml</file>
+        <file>CustomControls/StyledComboBox.qml</file>
+        <file>CustomControls/StyledTextInput.qml</file>
+        <file>FlightplanPage/FlightplanPage.qml</file>
+        <file>FlightplanPage/WaypointInput.qml</file>
+        <file>FlightplanPage/FlightplanFileDialog.qml</file>
+        <file>FlightplanPage/FlightplanTable/FlightplanTable.qml</file>
+        <file>FlightplanPage/FlightplanTable/FlightplanTableElement.qml</file>
+        <file>FlightplanPage/FlightplanTable/private/TableCell.qml</file>
+        <file>FlightplanPage/FlightplanTable/private/TableRow.qml</file>
+    </qresource>
+</RCC>

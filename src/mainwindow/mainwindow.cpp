@@ -9,7 +9,8 @@
 MainWindow::MainWindow(QWidget *parent)
   : QMainWindow(parent),
     ui(new Ui::MainWindow),
-    d_connectionHandler(this)
+    d_connectionHandler(this)//,
+    //d_flightplanManager(this)
 {
     ui->setupUi(this);
 
@@ -34,11 +35,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     adjustSize();
 
-    qDebug() << "machine host name:" << QSysInfo::machineHostName();
-    qDebug() << "machine unique id:" << QSysInfo::machineUniqueId();
-    qDebug() << "pretty product name:" << QSysInfo::prettyProductName();
-    qDebug() << "local domain name:" << QHostInfo::localDomainName();
-    qDebug() << "local host name:" << QHostInfo::localHostName();
+    ui->simConnectionState->setStyleSheet(
+              "color: white;border-radius: 11;background-color: qlineargradient(spread:pad, "
+              "x1:0.145, y1:0.16, x2:1, y2:1, "
+              "stop:0 rgba(20, 252, 7, 255), stop:1 rgba(25, 134, 5, 255));");
 }
 
 MainWindow::~MainWindow()

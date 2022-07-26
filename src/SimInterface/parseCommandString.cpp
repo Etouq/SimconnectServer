@@ -3,7 +3,7 @@
 #include "common/dataIdentifiers.hpp"
 
 #include <QBuffer>
-#include <stdint.h>
+#include <cstdint>
 
 
 void SimInterface::parseCommandString(const QByteArray &data)

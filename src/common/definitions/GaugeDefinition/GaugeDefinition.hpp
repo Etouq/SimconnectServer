@@ -7,6 +7,7 @@
 #include <cstdint>
 #include <QColor>
 #include <QString>
+#include <string>
 #include <QList>
 
 class QIODevice;
@@ -18,6 +19,7 @@ namespace definitions
 // definition used to display a gauge
 struct GaugeDefinition
 {
+
     QString title = "";
     QString unitString = "";
 
@@ -43,7 +45,7 @@ struct GaugeDefinition
 
     Units unit = Units::NONE;
 
-    QByteArray toBinary() const;
+    std::string toBinary() const;
 
     static GaugeDefinition fromBinary(QIODevice &data, FileVersion version)
     {
@@ -51,8 +53,10 @@ struct GaugeDefinition
         {
             case FileVersion::V1:
             case FileVersion::V2:
-            case FileVersion::V3:
                 return fromBinaryV1(data);
+                break;
+            case FileVersion::V3:
+                return fromBinaryV3(data);
                 break;
         }
     }
@@ -62,6 +66,7 @@ struct GaugeDefinition
 private:
 
     static GaugeDefinition fromBinaryV1(QIODevice &data);
+    static GaugeDefinition fromBinaryV3(QIODevice &data);
 };
 
 }  // namespace definitions

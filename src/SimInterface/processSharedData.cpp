@@ -2,17 +2,18 @@
 #include "SimInterface.hpp"
 #include "SimInterface/SharedThreadData.hpp"
 
-#include <QMutexLocker>
-
+#include <mutex>
 
 void SimInterface::processSharedData()
 {
-    QMutexLocker locker(d_sharedDataMutex);
-    SharedThreadData temp = *d_sharedData;
-    d_sharedData->commandString = "";
-    d_sharedData->aircraftConfigChanged = false;
-    d_sharedData->aircraftLoaded = false;
-    locker.unlock();
+    SharedThreadData temp;
+    {
+        std::shared_lock<std::shared_mutex> lock(d_sharedDataMutex);
+        temp = d_sharedData;
+        d_sharedData.commandString.clear();
+        d_sharedData.aircraftConfigChanged = false;
+        d_sharedData.aircraftLoaded = false;
+    }
 
     if (temp.quit)
     {
@@ -25,12 +26,10 @@ void SimInterface::processSharedData()
 
     if (temp.aircraftLoaded)
     {
-        QByteArray dataToSend = d_aircraftHandler.sendCurrentData();
-        dataToSend += d_engine1Handler.sendCurrentData();
-        dataToSend += d_engine2Handler.sendCurrentData();
-        dataToSend += d_engine3Handler.sendCurrentData();
-        dataToSend += d_engine4Handler.sendCurrentData();
-        dataToSend += d_miscHandler.sendCurrentData();
+
+        emit sendData(QByteArray::fromStdString(
+          d_aircraftHandler.sendCurrentData() + d_engine1Handler.sendCurrentData() + d_engine2Handler.sendCurrentData()
+          + d_engine3Handler.sendCurrentData() + d_engine4Handler.sendCurrentData() + d_miscHandler.sendCurrentData()));
     }
 
     if (temp.aircraftConfigChanged)

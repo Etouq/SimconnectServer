@@ -2,7 +2,6 @@
 #define __FDC_SOCKET_HPP__
 
 
-#include "common/appendData.hpp"
 #include "common/dataIdentifiers.hpp"
 
 #include <atomic>
@@ -53,7 +52,7 @@ signals:
 
     void socketClosed(uint64_t id);
     void handshakeError(bool clientTooOld);
-    void handshakeSuccess(const QString &name);
+    void handshakeSuccess();
 
 private slots:
 
@@ -62,7 +61,8 @@ private slots:
 
     void receivedSimError(const QString &msg)
     {
-        d_socket->write(util::createMessage(ServerMessageIdentifier::ERROR_MSG, msg.toUtf8()));
+        d_socket->write(QByteArray::fromStdString({ static_cast<char>(DataGroupIdentifier::SERVER_DATA),
+                                                  static_cast<char>(ServerMessageIdentifier::ERROR_MSG) }) + msg.toUtf8());
     }
 
 private:

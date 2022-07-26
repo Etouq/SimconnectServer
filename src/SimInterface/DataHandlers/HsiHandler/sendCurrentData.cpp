@@ -1,65 +1,81 @@
 #include "common/dataIdentifiers.hpp"
-#include "common/appendData.hpp"
 #include "HsiHandler.hpp"
 
 namespace hsi
 {
 
-QByteArray HsiHandler::sendCurrentData()
+std::string HsiHandler::sendCurrentData()
 {
-    QByteArray dataToSend;
-    util::appendData(PfdIdentifier::ROTATION, d_previous.rotation, dataToSend);
+    std::string dataToSend;
+    dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::ROTATION) });
+    dataToSend.append(reinterpret_cast<const char*>(&d_previous.rotation), sizeof(d_previous.rotation));
 
-    util::appendData(PfdIdentifier::HEADING, d_previous.heading, dataToSend);
+    dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::HEADING) });
+    dataToSend.append(reinterpret_cast<const char*>(&d_previous.heading), sizeof(d_previous.heading));
 
-    util::appendData(PfdIdentifier::TURN_RATE, d_previous.turnRate, dataToSend);
-
-
-    util::appendData(PfdIdentifier::CURRENT_TRACK, d_previous.currentTrack, dataToSend);
-
-    util::appendData(MfdIdentifier::GPS_WP_DTK, d_previous.gpsWpDesiredTrack, dataToSend);
+    dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::TURN_RATE) });
+    dataToSend.append(reinterpret_cast<const char*>(&d_previous.turnRate), sizeof(d_previous.turnRate));
 
 
-    util::appendData(MfdIdentifier::COORDINATES, d_previous.currLat, dataToSend);
+    dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::CURRENT_TRACK) });
+    dataToSend.append(reinterpret_cast<const char*>(&d_previous.currentTrack), sizeof(d_previous.currentTrack));
+
+    dataToSend.append({ static_cast<char>(DataGroupIdentifier::MFD_DATA), static_cast<char>(MfdIdentifier::GPS_WP_DTK) });
+    dataToSend.append(reinterpret_cast<const char*>(&d_previous.gpsWpDesiredTrack), sizeof(d_previous.gpsWpDesiredTrack));
+
+
+    dataToSend.append({ static_cast<char>(DataGroupIdentifier::MFD_DATA), static_cast<char>(MfdIdentifier::COORDINATES) });
+    dataToSend.append(reinterpret_cast<const char*>(&d_previous.currLat), sizeof(d_previous.currLat));
     dataToSend.append(reinterpret_cast<const char *>(&d_previous.currLon), sizeof(d_previous.currLon));
 
-    util::appendData(MfdIdentifier::TRUE_HEADING, d_previous.trueHeading, dataToSend);
+    dataToSend.append({ static_cast<char>(DataGroupIdentifier::MFD_DATA), static_cast<char>(MfdIdentifier::TRUE_HEADING) });
+    dataToSend.append(reinterpret_cast<const char*>(&d_previous.trueHeading), sizeof(d_previous.trueHeading));
 
-    util::appendData(PfdIdentifier::DISPLAY_DEVIATION, d_displayDeviation, dataToSend);
+    dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::DISPLAY_DEVIATION) });
+    dataToSend.append(reinterpret_cast<const char*>(&d_displayDeviation), sizeof(d_displayDeviation));
 
-    util::appendData(PfdIdentifier::NAV_SOURCE, d_navSource, dataToSend);
+    dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::NAV_SOURCE) });
+    dataToSend.append(reinterpret_cast<const char*>(&d_navSource), sizeof(d_navSource));
 
-    util::appendData(PfdIdentifier::COURSE, d_course, dataToSend);
+    dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::COURSE) });
+    dataToSend.append(reinterpret_cast<const char*>(&d_course), sizeof(d_course));
 
-    util::appendData(PfdIdentifier::COURSE_DEVIATION, d_courseDeviation, dataToSend);
+    dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::COURSE_DEVIATION) });
+    dataToSend.append(reinterpret_cast<const char*>(&d_courseDeviation), sizeof(d_courseDeviation));
 
     switch (d_navSource)
     {
         case HsiNavSource::LOC1:
         case HsiNavSource::VOR1:
-            util::appendData(PfdIdentifier::TO_FROM, d_previous.nav1ToFrom, dataToSend);
+            dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::TO_FROM) });
+            dataToSend.append(reinterpret_cast<const char*>(&d_previous.nav1ToFrom), sizeof(d_previous.nav1ToFrom));
             break;
         case HsiNavSource::LOC2:
         case HsiNavSource::VOR2:
-            util::appendData(PfdIdentifier::TO_FROM, d_previous.nav2ToFrom, dataToSend);
+            dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::TO_FROM) });
+            dataToSend.append(reinterpret_cast<const char*>(&d_previous.nav2ToFrom), sizeof(d_previous.nav2ToFrom));
             break;
         case HsiNavSource::TCN1:
-            util::appendData(PfdIdentifier::TO_FROM, d_previous.nav1TacanToFrom, dataToSend);
+            dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::TO_FROM) });
+            dataToSend.append(reinterpret_cast<const char*>(&d_previous.nav1TacanToFrom), sizeof(d_previous.nav1TacanToFrom));
             break;
         case HsiNavSource::TCN2:
-            util::appendData(PfdIdentifier::TO_FROM, d_previous.nav2TacanToFrom, dataToSend);
+            dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::TO_FROM) });
+            dataToSend.append(reinterpret_cast<const char*>(&d_previous.nav2TacanToFrom), sizeof(d_previous.nav2TacanToFrom));
             break;
         case HsiNavSource::GPS:
         {
             constexpr int32_t gpsToFromValue = 1;
-            util::appendData(PfdIdentifier::TO_FROM, gpsToFromValue, dataToSend);
+            dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::TO_FROM) });
+            dataToSend.append(reinterpret_cast<const char*>(&gpsToFromValue), sizeof(gpsToFromValue));
             break;
 
         }
         case HsiNavSource::NONE:
         {
             constexpr int32_t emptyToFromValue = 0;
-            util::appendData(PfdIdentifier::TO_FROM, emptyToFromValue, dataToSend);
+            dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::TO_FROM) });
+            dataToSend.append(reinterpret_cast<const char*>(&emptyToFromValue), sizeof(emptyToFromValue));
             break;
 
         }

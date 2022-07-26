@@ -1,5 +1,5 @@
 #include "../AircraftDefinition.hpp"
-#include "common/converters/listConverters.hpp"
+#include <QIODevice>
 
 namespace definitions
 {
@@ -8,9 +8,13 @@ AircraftDefinition AircraftDefinition::fromBinaryV3(QIODevice &data, FileVersion
 {
     AircraftDefinition ret;
 
-    Converters::convert(data, ret.type);
+    data.read(reinterpret_cast<char *>(&ret.type), sizeof(ret.type));
 
-    Converters::convertString(data, ret.name);
+    uint8_t stringSize = 0;
+    data.read(reinterpret_cast<char *>(&stringSize), sizeof(stringSize));
+
+    ret.name = QString::fromUtf8(data.read(stringSize));
+
 
     ret.firstGauge = GaugeDefinition::fromBinary(data, version);
     ret.secondGauge = GaugeDefinition::fromBinary(data, version);
@@ -23,47 +27,60 @@ AircraftDefinition AircraftDefinition::fromBinaryV3(QIODevice &data, FileVersion
     ret.secondaryTempGauge = GaugeDefinition::fromBinary(data, version);
     ret.oilPressGauge = GaugeDefinition::fromBinary(data, version);
 
-    Converters::convert(data, ret.gauge1Type);
-    Converters::convert(data, ret.gauge2Type);
-    Converters::convert(data, ret.gauge3Type);
-    Converters::convert(data, ret.gauge4Type);
+    data.read(reinterpret_cast<char *>(&ret.gauge1Type), sizeof(ret.gauge1Type));
+    data.read(reinterpret_cast<char *>(&ret.gauge2Type), sizeof(ret.gauge2Type));
+    data.read(reinterpret_cast<char *>(&ret.gauge3Type), sizeof(ret.gauge3Type));
+    data.read(reinterpret_cast<char *>(&ret.gauge4Type), sizeof(ret.gauge4Type));
 
-    Converters::convert(data, ret.engineTempType);
+    data.read(reinterpret_cast<char *>(&ret.engineTempType), sizeof(ret.engineTempType));
 
-    Converters::convert(data, ret.maxPower);
+    data.read(reinterpret_cast<char *>(&ret.maxPower), sizeof(ret.maxPower));
 
-    Converters::convert(data, ret.hasApu);
+    data.read(reinterpret_cast<char *>(&ret.hasApu), sizeof(ret.hasApu));
 
-    Converters::convert(data, ret.hasFlaps);
-    Converters::convert(data, ret.hasSpoilers);
+    data.read(reinterpret_cast<char *>(&ret.hasFlaps), sizeof(ret.hasFlaps));
+    data.read(reinterpret_cast<char *>(&ret.hasSpoilers), sizeof(ret.hasSpoilers));
 
-    Converters::convert(data, ret.hasElevatorTrim);
-    Converters::convert(data, ret.hasRudderTrim);
-    Converters::convert(data, ret.hasAileronTrim);
+    data.read(reinterpret_cast<char *>(&ret.hasElevatorTrim), sizeof(ret.hasElevatorTrim));
+    data.read(reinterpret_cast<char *>(&ret.hasRudderTrim), sizeof(ret.hasRudderTrim));
+    data.read(reinterpret_cast<char *>(&ret.hasAileronTrim), sizeof(ret.hasAileronTrim));
 
-    Converters::convert(data, ret.fuelQtyByWeight);
-    Converters::convert(data, ret.fuelFlowByWeight);
+    data.read(reinterpret_cast<char *>(&ret.fuelQtyByWeight), sizeof(ret.fuelQtyByWeight));
+    data.read(reinterpret_cast<char *>(&ret.fuelFlowByWeight), sizeof(ret.fuelFlowByWeight));
 
-    Converters::convert(data, ret.hasSecondaryTempGauge);
-    Converters::convert(data, ret.secondaryTempType);
+    data.read(reinterpret_cast<char *>(&ret.hasSecondaryTempGauge), sizeof(ret.hasSecondaryTempGauge));
+    data.read(reinterpret_cast<char *>(&ret.secondaryTempType), sizeof(ret.secondaryTempType));
 
-    Converters::convert(data, ret.numEngines);
-    Converters::convert(data, ret.singleTank);
+    data.read(reinterpret_cast<char *>(&ret.numEngines), sizeof(ret.numEngines));
+    data.read(reinterpret_cast<char *>(&ret.singleTank), sizeof(ret.singleTank));
 
-    Converters::convert(data, ret.lowLimit);
-    Converters::convert(data, ret.flapsBegin);
-    Converters::convert(data, ret.flapsEnd);
-    Converters::convert(data, ret.greenBegin);
-    Converters::convert(data, ret.greenEnd);
-    Converters::convert(data, ret.yellowBegin);
-    Converters::convert(data, ret.yellowEnd);
-    Converters::convert(data, ret.redBegin);
-    Converters::convert(data, ret.redEnd);
-    Converters::convert(data, ret.highLimit);
-    Converters::convert(data, ret.noColors);
-    Converters::convert(data, ret.dynamicBarberpole);
+    data.read(reinterpret_cast<char *>(&ret.lowLimit), sizeof(ret.lowLimit));
+    data.read(reinterpret_cast<char *>(&ret.flapsBegin), sizeof(ret.flapsBegin));
+    data.read(reinterpret_cast<char *>(&ret.flapsEnd), sizeof(ret.flapsEnd));
+    data.read(reinterpret_cast<char *>(&ret.greenBegin), sizeof(ret.greenBegin));
+    data.read(reinterpret_cast<char *>(&ret.greenEnd), sizeof(ret.greenEnd));
+    data.read(reinterpret_cast<char *>(&ret.yellowBegin), sizeof(ret.yellowBegin));
+    data.read(reinterpret_cast<char *>(&ret.yellowEnd), sizeof(ret.yellowEnd));
+    data.read(reinterpret_cast<char *>(&ret.redBegin), sizeof(ret.redBegin));
+    data.read(reinterpret_cast<char *>(&ret.redEnd), sizeof(ret.redEnd));
+    data.read(reinterpret_cast<char *>(&ret.highLimit), sizeof(ret.highLimit));
+    data.read(reinterpret_cast<char *>(&ret.noColors), sizeof(ret.noColors));
+    data.read(reinterpret_cast<char *>(&ret.dynamicBarberpole), sizeof(ret.dynamicBarberpole));
 
-    Converters::convertList(data, ret.refSpeedDefaults);
+    uint16_t listSize = 0;
+    data.read(reinterpret_cast<char *>(&listSize), sizeof(listSize));
+
+    ret.refSpeedDefaults.clear();
+
+    uint16_t bugSetting = 0;
+
+    while (listSize--)
+    {
+        data.read(reinterpret_cast<char *>(&bugSetting), sizeof(bugSetting));
+        data.read(reinterpret_cast<char *>(&stringSize), sizeof(stringSize));
+        ret.refSpeedDefaults.push_back({ bugSetting, QString::fromUtf8(data.read(stringSize)) });
+    }
+
 
     return ret;
 }

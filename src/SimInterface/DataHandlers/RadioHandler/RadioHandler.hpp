@@ -3,7 +3,7 @@
 
 #include "DataStruct.hpp"
 
-#include <QByteArray>
+#include <string>
 
 typedef void *HANDLE;
 
@@ -21,16 +21,16 @@ public:
 
     void setupData(HANDLE simConnectHandle);
 
-    [[nodiscard]] QByteArray processData(unsigned long *raw);
+    [[nodiscard]] std::string processData(unsigned long *raw);
 
-    QByteArray reset()
+    std::string reset()
     {
         d_previous = DataStruct();
 
         return sendCurrentData();
     }
 
-    [[nodiscard]] QByteArray sendCurrentData();
+    [[nodiscard]] std::string sendCurrentData();
 };
 
 }  // namespace radio

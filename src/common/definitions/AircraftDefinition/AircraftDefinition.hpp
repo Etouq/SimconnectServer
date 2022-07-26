@@ -5,6 +5,7 @@
 #include "common/TypeEnums.hpp"
 
 #include <QList>
+#include <QDebug>
 
 
 struct AircraftConfig;

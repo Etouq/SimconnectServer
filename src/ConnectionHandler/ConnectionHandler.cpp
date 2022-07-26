@@ -3,11 +3,13 @@
 
 #include <QTcpServer>
 #include <QTcpSocket>
+#include <QQmlEngine>
 
+#include <mutex>
 
 ConnectionHandler::ConnectionHandler(QObject *parent)
   : QObject(parent),
-    d_sim(&d_threadDataUpdated, &d_threadDataMutex, &d_threadData, AircraftConfig())
+    d_sim(d_sharedDataUpdated, d_sharedDataMutex, d_sharedData, AircraftConfig())
 {
     connect(&d_server, &QTcpServer::newConnection, this, &ConnectionHandler::newIncomingConnection);
 
@@ -18,6 +20,8 @@ ConnectionHandler::ConnectionHandler(QObject *parent)
     d_trySimStartTimer.setInterval(10000);
     d_trySimStartTimer.setSingleShot(true);
     connect(&d_trySimStartTimer, &QTimer::timeout, this, &ConnectionHandler::startSim);
+
+    qmlRegisterSingletonInstance("SimconnectServer", 1, 0, "ConnectionHandler", this);
 }
 
 ConnectionHandler::~ConnectionHandler()
@@ -28,11 +32,10 @@ ConnectionHandler::~ConnectionHandler()
 
     // tell the sim to close
     {
-        QMutexLocker locker(&d_threadDataMutex);
-        d_threadData.quit = true;
-        locker.unlock();
+        std::unique_lock<std::shared_mutex> lock(d_sharedDataMutex);
+        d_sharedData.quit = true;
     }
-    d_threadDataUpdated.store(true, std::memory_order_seq_cst);
+    d_sharedDataUpdated.store(true, std::memory_order_seq_cst);
 
     // wait for the sim to be closed
     if (!d_sim.wait(1000))

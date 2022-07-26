@@ -1,4 +1,4 @@
-set(PROJECT_SOURCES
+set(CPP_FILES
         src/main.cpp
 
         src/common/definitions/AircraftDefinition/fromBinary/fromBinaryV1.cpp
@@ -7,6 +7,7 @@ set(PROJECT_SOURCES
         src/common/definitions/AircraftDefinition/toBinary.cpp
         src/common/definitions/AircraftDefinition/toConfig.cpp
         src/common/definitions/GaugeDefinition/fromBinary/fromBinaryV1.cpp
+        src/common/definitions/GaugeDefinition/fromBinary/fromBinaryV3.cpp
         src/common/definitions/GaugeDefinition/getEpsilon.cpp
         src/common/definitions/GaugeDefinition/toBinary.cpp
 
@@ -20,8 +21,10 @@ set(PROJECT_SOURCES
         src/ConnectionHandler/FdcSocket/receivedClientData.cpp
         src/ConnectionHandler/FdcSocket/clientDisconnected.cpp
 
-        src/FlightplanReader/readfile.cpp
-        src/FlightplanReader/readwaypoint.cpp
+        src/FlightplanManager/readFromFile.cpp
+        src/FlightplanManager/readNextWaypoint.cpp
+        src/FlightplanManager/parsePosition.cpp
+        src/FlightplanManager/getFileBasePath.cpp
 
         src/mainwindow/clearflightplan.cpp
         src/mainwindow/mainwindow.cpp
@@ -98,14 +101,13 @@ set(PROJECT_SOURCES
         src/SimInterface/setupEvents.cpp
         src/SimInterface/SimInterface.cpp
         src/SimInterface/tryconnecting.cpp
+
+        src/AircraftManager/AircraftManager.cpp
+        src/AircraftManager/loadDefinitions.cpp
 )
 
 
-set(PROJECT_HEADERS
-        src/common/appendData.hpp
-        src/common/converters/basicConverters.hpp
-        src/common/converters/listConverters.hpp
-        src/common/converters/structConverters.hpp
+set(HPP_FILES
         src/common/dataIdentifiers.hpp
         src/common/definitions/AircraftConfig.hpp
         src/common/definitions/AircraftDefinition/AircraftDefinition.hpp
@@ -113,14 +115,16 @@ set(PROJECT_HEADERS
         src/common/definitions/GaugeDefinition/GaugeDefinition.hpp
         src/common/simEnums.hpp
         src/common/TypeEnums.hpp
+        src/common/QmlEnums.hpp
         src/common/UnitConverter/UnitConverter.hpp
         src/common/Units.hpp
 
         src/ConnectionHandler/ConnectionHandler.hpp
         src/ConnectionHandler/FdcSocket/FdcSocket.hpp
 
-        src/FlightplanReader/flightplanreader.hpp
-        src/FlightplanReader/FlightPlanWaypoint.hpp
+        src/FlightplanManager/FlightplanManager.hpp
+        src/FlightplanManager/FlightPlanWaypoint.hpp
+        src/FlightplanManager/QmlWaypoint.hpp
 
         src/mainwindow/mainwindow.hpp
 
@@ -155,5 +159,7 @@ set(PROJECT_HEADERS
         src/SimInterface/enums.hpp
         src/SimInterface/SharedThreadData.hpp
         src/SimInterface/SimInterface.hpp
+
+        src/AircraftManager/AircraftManager.hpp
 )
 

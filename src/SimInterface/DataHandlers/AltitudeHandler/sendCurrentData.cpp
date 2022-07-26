@@ -1,27 +1,36 @@
 #include "AltitudeHandler.hpp"
 #include "common/dataIdentifiers.hpp"
-#include "common/appendData.hpp"
 
 namespace altitude
 {
 
-QByteArray AltitudeHandler::sendCurrentData()
+std::string AltitudeHandler::sendCurrentData()
 {
-    QByteArray dataToSend;
-    util::appendData(PfdIdentifier::ALTITUDE, d_previous.altitude, dataToSend);
-    util::appendData(PfdIdentifier::RADAR_ALTITUDE, d_previous.radarAltitude, dataToSend);
-    util::appendData(PfdIdentifier::REF_ALTITUDE, d_previous.refAltitude, dataToSend);
+    std::string dataToSend;
+    dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::ALTITUDE) });
+    dataToSend.append(reinterpret_cast<const char*>(&d_previous.altitude), sizeof(d_previous.altitude));
+
+    dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::RADAR_ALTITUDE) });
+    dataToSend.append(reinterpret_cast<const char*>(&d_previous.radarAltitude), sizeof(d_previous.radarAltitude));
+
+    dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::REF_ALTITUDE) });
+    dataToSend.append(reinterpret_cast<const char*>(&d_previous.refAltitude), sizeof(d_previous.refAltitude));
 
     d_previous.pressure = d_previous.pressure;
-    util::appendData(PfdIdentifier::PRESSURE, d_previous.pressure, dataToSend);
+    dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::PRESSURE) });
+    dataToSend.append(reinterpret_cast<const char*>(&d_previous.pressure), sizeof(d_previous.pressure));
 
-    util::appendData(PfdIdentifier::VSPEED, d_previous.vspeed, dataToSend);
+    dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::VSPEED) });
+    dataToSend.append(reinterpret_cast<const char*>(&d_previous.vspeed), sizeof(d_previous.vspeed));
 
     d_previous.refVspeed = d_previous.refVspeed;
-    util::appendData(PfdIdentifier::REF_VSPEED, d_previous.refVspeed, dataToSend);
+    dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::REF_VSPEED) });
+    dataToSend.append(reinterpret_cast<const char*>(&d_previous.refVspeed), sizeof(d_previous.refVspeed));
 
-    util::appendData(PfdIdentifier::VERT_DEV_MODE, d_vertDevMode, dataToSend);
-    util::appendData(PfdIdentifier::VERT_DEV_VALUE, d_deviation, dataToSend);
+    dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::VERT_DEV_MODE) });
+    dataToSend.append(reinterpret_cast<const char*>(&d_vertDevMode), sizeof(d_vertDevMode));
+    dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::VERT_DEV_VALUE) });
+    dataToSend.append(reinterpret_cast<const char*>(&d_deviation), sizeof(d_deviation));
 
     return dataToSend;
 }

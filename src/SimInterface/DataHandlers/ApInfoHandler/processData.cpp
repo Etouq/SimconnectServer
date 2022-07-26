@@ -1,40 +1,44 @@
 #include "ApInfoHandler.hpp"
 #include "common/dataIdentifiers.hpp"
-#include "common/appendData.hpp"
+#include "DataStruct.hpp"
 
+#include <fmt/core.h>
 #include <cmath>
 
 namespace apinfo
 {
 
-QByteArray ApInfoHandler::processData(unsigned long *raw)
+std::string ApInfoHandler::processData(unsigned long *raw)
 {
     DataStruct newData(*reinterpret_cast<DataStruct *>(raw));
 
-    QByteArray dataToSend;
+    std::string dataToSend;
 
     if (d_apMaster != newData.apMaster)
     {
         d_apMaster = newData.apMaster;
-        util::appendData(PfdIdentifier::AP_STATUS, newData.apMaster, dataToSend);
+        dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::AP_STATUS) });
+        dataToSend.append(reinterpret_cast<const char*>(&newData.apMaster), sizeof(newData.apMaster));
     }
     if (d_yawDamper != newData.apYawDamper)
     {
         d_yawDamper = newData.apYawDamper;
-        util::appendData(PfdIdentifier::AP_YD_STATUS, newData.apYawDamper, dataToSend);
+        dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::AP_YD_STATUS) });
+        dataToSend.append(reinterpret_cast<const char*>(&newData.apYawDamper), sizeof(newData.apYawDamper));
     }
     if (d_flc != newData.apFlc)
     {
         d_flc = newData.apFlc;
-        util::appendData(PfdIdentifier::AP_FLC, newData.apFlc, dataToSend);
+        dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::AP_FLC) });
+        dataToSend.append(reinterpret_cast<const char*>(&newData.apFlc), sizeof(newData.apFlc));
     }
 
-    QByteArray AP_VerticalActive = "";
-    QByteArray AP_ModeReference = "";
-    QByteArray AP_Armed = "";
-    QByteArray AP_ArmedReference = "";
-    QByteArray AP_LateralActive = "";
-    QByteArray AP_LateralArmed = "";
+    std::string AP_VerticalActive = "";
+    std::string AP_ModeReference = "";
+    std::string AP_Armed = "";
+    std::string AP_ArmedReference = "";
+    std::string AP_LateralActive = "";
+    std::string AP_LateralArmed = "";
 
 
     // vertical active and modereference
@@ -47,16 +51,16 @@ QByteArray ApInfoHandler::processData(unsigned long *raw)
         {
             if (newData.refMach < 1.0) [[unlikely]]
             {
-                AP_ModeReference = "." + QByteArray::number(static_cast<int>(newData.refMach * 1000 + 0.5));
+                AP_ModeReference = fmt::format(".{0:03d}", std::lround(newData.refMach * 1000));
             }
             else [[likely]]
             {
-                AP_ModeReference = QByteArray::number(newData.refMach, 'f', 3);
+                AP_ModeReference = fmt::format("{0:.3f}", newData.refMach);
             }
         }
         else [[likely]]
         {
-            AP_ModeReference = QByteArray::number(newData.refSpeed) + "KT";
+            AP_ModeReference = fmt::format("{0:d}KT", newData.refSpeed);
         }
     }
     else if (newData.apMachHold) [[unlikely]]
@@ -64,22 +68,22 @@ QByteArray ApInfoHandler::processData(unsigned long *raw)
         AP_VerticalActive = "FLC";
         if (newData.refMach < 1.0) [[unlikely]]
         {
-            AP_ModeReference = "." + QByteArray::number(static_cast<int>(newData.refMach * 1000 + 0.5));
+            AP_ModeReference = fmt::format(".{0:03d}", std::lround(newData.refMach * 1000));
         }
         else [[likely]]
         {
-            AP_ModeReference = QByteArray::number(newData.refMach, 'f', 3);
+            AP_ModeReference = fmt::format("{0:.3f}", newData.refMach);
         }
     }
     else if (newData.apAltitudeLock) [[likely]]
     {
         AP_VerticalActive = newData.apAltitudeArm ? "ALTS" : "ALT";
-        AP_ModeReference = QByteArray::number(newData.refAltitude) + "FT";
+        AP_ModeReference = fmt::format("{0:d}FT", newData.refAltitude);
     }
     else if (newData.apVerticalHold) [[likely]]
     {
         AP_VerticalActive = "VS";
-        AP_ModeReference = QByteArray::number(newData.refVspeed) + "FPM";
+        AP_ModeReference = fmt::format("{0:d}FPM", newData.refVspeed);
     }
     else if (newData.apGlideslopeActive)
         AP_VerticalActive = newData.gpsDrivesNav1 ? "GP" : "GS";
@@ -87,12 +91,16 @@ QByteArray ApInfoHandler::processData(unsigned long *raw)
     if (d_verticalActive != AP_VerticalActive)
     {
         d_verticalActive = AP_VerticalActive;
-        util::appendData(PfdIdentifier::AP_VERTICAL_ACTIVE, AP_VerticalActive, dataToSend);
+        dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::AP_VERTICAL_ACTIVE) });
+        dataToSend.push_back(static_cast<char>(static_cast<uint8_t>(AP_VerticalActive.size())));
+        dataToSend += AP_VerticalActive;
     }
     if (d_modeReference != AP_ModeReference)
     {
         d_modeReference = AP_ModeReference;
-        util::appendData(PfdIdentifier::AP_MODE_REFERENCE, AP_ModeReference, dataToSend);
+        dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::AP_MODE_REFERENCE) });
+        dataToSend.push_back(static_cast<char>(static_cast<uint8_t>(AP_ModeReference.size())));
+        dataToSend += AP_ModeReference;
     }
 
 
@@ -101,7 +109,7 @@ QByteArray ApInfoHandler::processData(unsigned long *raw)
         AP_Armed = "ALT";
     else if (newData.apGlideslopeArm)
     {
-        if (d_previous.gpsDrivesNav1)
+        if (newData.gpsDrivesNav1)
         {
             AP_Armed = "V ALT";
             AP_ArmedReference = "GP";
@@ -115,12 +123,16 @@ QByteArray ApInfoHandler::processData(unsigned long *raw)
     if (d_armed != AP_Armed)
     {
         d_armed = AP_Armed;
-        util::appendData(PfdIdentifier::AP_ARMED, AP_Armed, dataToSend);
+        dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::AP_ARMED) });
+        dataToSend.push_back(static_cast<char>(static_cast<uint8_t>(AP_Armed.size())));
+        dataToSend += AP_Armed;
     }
     if (d_armedReference != AP_ArmedReference)
     {
         d_armedReference = AP_ArmedReference;
-        util::appendData(PfdIdentifier::AP_ARMED_REFERENCE, AP_ArmedReference, dataToSend);
+        dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::AP_ARMED_REFERENCE) });
+        dataToSend.push_back(static_cast<char>(static_cast<uint8_t>(AP_ArmedReference.size())));
+        dataToSend += AP_ArmedReference;
     }
 
 
@@ -163,7 +175,9 @@ QByteArray ApInfoHandler::processData(unsigned long *raw)
     if (d_lateralActive != AP_LateralActive)
     {
         d_lateralActive = AP_LateralActive;
-        util::appendData(PfdIdentifier::AP_LATERAL_ACTIVE, AP_LateralActive, dataToSend);
+        dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::AP_LATERAL_ACTIVE) });
+        dataToSend.push_back(static_cast<char>(static_cast<uint8_t>(AP_LateralActive.size())));
+        dataToSend += AP_LateralActive;
     }
 
 
@@ -203,7 +217,9 @@ QByteArray ApInfoHandler::processData(unsigned long *raw)
     if (d_lateralArmed != AP_LateralArmed)
     {
         d_lateralArmed = AP_LateralArmed;
-        util::appendData(PfdIdentifier::AP_LATERAL_ARMED, AP_LateralActive, dataToSend);
+        dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::AP_LATERAL_ARMED) });
+        dataToSend.push_back(static_cast<char>(static_cast<uint8_t>(AP_LateralArmed.size())));
+        dataToSend += AP_LateralArmed;
     }
 
     return dataToSend;

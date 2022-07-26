@@ -8,5 +8,6 @@ void ConnectionHandler::startSim()
 
     emit simConnectionStateChanged(ConnectionState::CONNECTING);
 
+    d_sim.updateConfig(d_sharedData.aircraftConfig);
     d_sim.start();
 }

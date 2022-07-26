@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include "ConnectionHandler/ConnectionHandler.hpp"
+// #include "FlightplanManager/FlightplanManager.hpp"
 
 #include <QMainWindow>
 #include <QString>
@@ -18,9 +19,6 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
-    Ui::MainWindow *ui;
-
-    ConnectionHandler d_connectionHandler;
 
 public:
     MainWindow(QWidget *parent = nullptr);
@@ -40,6 +38,10 @@ private:
     void readFlightplan(const QString &fileName);
 
 
+    Ui::MainWindow *ui;
+
+    ConnectionHandler d_connectionHandler;
+    // FlightplanManager d_flightplanManager;
 
 };
 #endif   // MAINWINDOW_H

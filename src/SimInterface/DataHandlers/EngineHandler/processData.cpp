@@ -1,14 +1,13 @@
 #include "EngineHandler.hpp"
-#include "common/appendData.hpp"
 #include "common/dataIdentifiers.hpp"
 
 namespace handler::engine
 {
 
-QByteArray EngineHandler::processData(const unsigned long *raw)
+std::string EngineHandler::processData(const unsigned long *raw)
 {
     DataStruct newData(*reinterpret_cast<const DataStruct *>(raw));
-    QByteArray dataToSend;
+    std::string dataToSend;
 
     switch (d_numGauges)
     {
@@ -20,7 +19,8 @@ QByteArray EngineHandler::processData(const unsigned long *raw)
                 if (d_gauge4IsPowerPct)
                     newData.fourthGauge /= d_maxPower;
 
-                util::appendData(MfdIdentifier::ENGINE_FOURTH_GAUGE, d_engineIdx, newData.fourthGauge, dataToSend);
+                dataToSend.append({ static_cast<char>(DataGroupIdentifier::MFD_DATA), static_cast<char>(MfdIdentifier::ENGINE_FOURTH_GAUGE), static_cast<char>(d_engineIdx) });
+                dataToSend.append(reinterpret_cast<const char*>(&newData.fourthGauge), sizeof(newData.fourthGauge));
             }
 
             [[fallthrough]];
@@ -33,7 +33,8 @@ QByteArray EngineHandler::processData(const unsigned long *raw)
                 if (d_gauge3IsPowerPct)
                     newData.thirdGauge /= d_maxPower;
 
-                util::appendData(MfdIdentifier::ENGINE_THIRD_GAUGE, d_engineIdx, newData.thirdGauge, dataToSend);
+                dataToSend.append({ static_cast<char>(DataGroupIdentifier::MFD_DATA), static_cast<char>(MfdIdentifier::ENGINE_THIRD_GAUGE), static_cast<char>(d_engineIdx) });
+                dataToSend.append(reinterpret_cast<const char*>(&newData.thirdGauge), sizeof(newData.thirdGauge));
             }
 
             [[fallthrough]];
@@ -46,7 +47,8 @@ QByteArray EngineHandler::processData(const unsigned long *raw)
                 if (d_gauge1IsPowerPct)
                     newData.firstGauge /= d_maxPower;
 
-                util::appendData(MfdIdentifier::ENGINE_FIRST_GAUGE, d_engineIdx, newData.firstGauge, dataToSend);
+                dataToSend.append({ static_cast<char>(DataGroupIdentifier::MFD_DATA), static_cast<char>(MfdIdentifier::ENGINE_FIRST_GAUGE), static_cast<char>(d_engineIdx) });
+                dataToSend.append(reinterpret_cast<const char*>(&newData.firstGauge), sizeof(newData.firstGauge));
             }
 
             if (std::abs(d_previous.secondGauge - newData.secondGauge) >= d_secondGaugeEpsilon)
@@ -55,7 +57,8 @@ QByteArray EngineHandler::processData(const unsigned long *raw)
                 if (d_gauge2IsPowerPct)
                     newData.secondGauge /= d_maxPower;
 
-                util::appendData(MfdIdentifier::ENGINE_SECOND_GAUGE, d_engineIdx, newData.secondGauge, dataToSend);
+                dataToSend.append({ static_cast<char>(DataGroupIdentifier::MFD_DATA), static_cast<char>(MfdIdentifier::ENGINE_SECOND_GAUGE), static_cast<char>(d_engineIdx) });
+                dataToSend.append(reinterpret_cast<const char*>(&newData.secondGauge), sizeof(newData.secondGauge));
             }
         }
     }
@@ -65,25 +68,29 @@ QByteArray EngineHandler::processData(const unsigned long *raw)
     {
         d_previous.fuelFlow = newData.fuelFlow;
         newData.fuelFlow *= d_fuelFlowByWeight ? 3600.0 : 3.785411784;
-        util::appendData(MfdIdentifier::ENGINE_FUEL_FLOW, d_engineIdx, newData.fuelFlow, dataToSend);
+        dataToSend.append({ static_cast<char>(DataGroupIdentifier::MFD_DATA), static_cast<char>(MfdIdentifier::ENGINE_FUEL_FLOW), static_cast<char>(d_engineIdx) });
+        dataToSend.append(reinterpret_cast<const char*>(&newData.fuelFlow), sizeof(newData.fuelFlow));
     }
 
     if (std::abs(d_previous.oilTemp - newData.oilTemp) >= d_oilTempEpsilon)
     {
         d_previous.oilTemp = newData.oilTemp;
-        util::appendData(MfdIdentifier::ENGINE_OIL_TEMP, d_engineIdx, newData.oilTemp, dataToSend);
+        dataToSend.append({ static_cast<char>(DataGroupIdentifier::MFD_DATA), static_cast<char>(MfdIdentifier::ENGINE_OIL_TEMP), static_cast<char>(d_engineIdx) });
+        dataToSend.append(reinterpret_cast<const char*>(&newData.oilTemp), sizeof(newData.oilTemp));
     }
 
     if (d_hasSecondaryTempGauge && std::abs(d_previous.secondaryEngineTemp - newData.secondaryEngineTemp) >= d_secondaryTempEpsilon)
     {
         d_previous.secondaryEngineTemp = newData.secondaryEngineTemp;
-        util::appendData(MfdIdentifier::ENGINE_SECONDARY_TEMP, d_engineIdx, newData.secondaryEngineTemp, dataToSend);
+        dataToSend.append({ static_cast<char>(DataGroupIdentifier::MFD_DATA), static_cast<char>(MfdIdentifier::ENGINE_SECONDARY_TEMP), static_cast<char>(d_engineIdx) });
+        dataToSend.append(reinterpret_cast<const char*>(&newData.secondaryEngineTemp), sizeof(newData.secondaryEngineTemp));
     }
 
     if (std::abs(d_previous.oilPress - newData.oilPress) >= d_oilPressEpsilon)
     {
         d_previous.oilPress = newData.oilPress;
-        util::appendData(MfdIdentifier::ENGINE_OIL_PRESS, d_engineIdx, newData.oilPress, dataToSend);
+        dataToSend.append({ static_cast<char>(DataGroupIdentifier::MFD_DATA), static_cast<char>(MfdIdentifier::ENGINE_OIL_PRESS), static_cast<char>(d_engineIdx) });
+        dataToSend.append(reinterpret_cast<const char*>(&newData.oilPress), sizeof(newData.oilPress));
     }
 
     return dataToSend;

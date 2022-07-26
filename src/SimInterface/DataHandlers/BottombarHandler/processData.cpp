@@ -1,48 +1,53 @@
 #include "BottombarHandler.hpp"
 #include "common/dataIdentifiers.hpp"
-#include "common/appendData.hpp"
 
 #include <cmath>
 
 namespace bottombar
 {
 
-QByteArray BottombarHandler::processData(unsigned long *raw)
+std::string BottombarHandler::processData(unsigned long *raw)
 {
     DataStruct newData(reinterpret_cast<RawStruct *>(raw));
 
-    QByteArray dataToSend;
+    std::string dataToSend;
 
     if (d_previous.zuluSeconds != newData.zuluSeconds)
     {
         d_previous.zuluSeconds = newData.zuluSeconds;
-        util::appendData(PfdIdentifier::ZULU_SECONDS, newData.zuluSeconds, dataToSend);
+        dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::ZULU_SECONDS) });
+        dataToSend.append(reinterpret_cast<const char*>(&newData.zuluSeconds), sizeof(newData.zuluSeconds));
     }
     if (d_previous.localSeconds != newData.localSeconds)
     {
         d_previous.localSeconds = newData.localSeconds;
-        util::appendData(PfdIdentifier::LOCAL_SECONDS, newData.localSeconds, dataToSend);
+        dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::LOCAL_SECONDS) });
+        dataToSend.append(reinterpret_cast<const char*>(&newData.localSeconds), sizeof(newData.localSeconds));
     }
 
     if (d_previous.groundSpeed != newData.groundSpeed)
     {
         d_previous.groundSpeed = newData.groundSpeed;
-        util::appendData(PfdIdentifier::GROUND_SPEED, newData.groundSpeed, dataToSend);
+        dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::GROUND_SPEED) });
+        dataToSend.append(reinterpret_cast<const char*>(&newData.groundSpeed), sizeof(newData.groundSpeed));
     }
     if (std::abs(d_previous.totalAirTemp - newData.totalAirTemp) >= 0.25)
     {
         d_previous.totalAirTemp = newData.totalAirTemp;
-        util::appendData(PfdIdentifier::TOTAL_AIR_TEMP, newData.totalAirTemp, dataToSend);
+        dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::TOTAL_AIR_TEMP) });
+        dataToSend.append(reinterpret_cast<const char*>(&newData.totalAirTemp), sizeof(newData.totalAirTemp));
     }
     if (std::abs(d_previous.outsideAirTemp - newData.outsideAirTemp) >= 0.25)
     {
         d_previous.outsideAirTemp = newData.outsideAirTemp;
-        util::appendData(PfdIdentifier::OUTSIDE_AIR_TEMP, newData.outsideAirTemp, dataToSend);
+        dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::OUTSIDE_AIR_TEMP) });
+        dataToSend.append(reinterpret_cast<const char*>(&newData.outsideAirTemp), sizeof(newData.outsideAirTemp));
     }
     if (std::abs(d_previous.isaAirTemp - newData.isaAirTemp) >= 0.25)
     {
         d_previous.isaAirTemp = newData.isaAirTemp;
-        util::appendData(PfdIdentifier::ISA_AIR_TEMP, newData.isaAirTemp, dataToSend);
+        dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::ISA_AIR_TEMP) });
+        dataToSend.append(reinterpret_cast<const char*>(&newData.isaAirTemp), sizeof(newData.isaAirTemp));
     }
 
     return dataToSend;

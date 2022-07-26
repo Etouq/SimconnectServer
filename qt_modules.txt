@@ -4,4 +4,7 @@ set(QT_MODULES
     Gui
     Network
     Positioning
+    Qml
+    Quick
+    QuickControls2
 )

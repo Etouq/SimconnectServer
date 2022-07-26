@@ -6,12 +6,11 @@
 #include "windows.h"
 #include "common/dataIdentifiers.hpp"
 #include "DataHandlers/DataHandlers.hpp"
-#include "common/appendData.hpp"
 
 #include <atomic>
-#include <QMutex>
 #include <QObject>
 #include <QThread>
+#include <shared_mutex>
 
 #include "C:/MSFS SDK/SimConnect SDK/include/SimConnect.h"
 
@@ -20,9 +19,9 @@ class SimInterface : public QThread
     Q_OBJECT
 
     // inter-thread communication
-    std::atomic_bool *d_sharedDataUpdated;
-    QMutex *d_sharedDataMutex;
-    SharedThreadData *d_sharedData;
+    std::atomic_bool &d_sharedDataUpdated;
+    std::shared_mutex &d_sharedDataMutex;
+    SharedThreadData &d_sharedData;
 
     // data handlers
     AirspeedHandler d_airspeedHandler;
@@ -56,11 +55,16 @@ class SimInterface : public QThread
 
 public:
 
-    explicit SimInterface(std::atomic_bool *sharedAtomic,
-                              QMutex *sharedMutex,
-                              SharedThreadData *sharedData,
+    explicit SimInterface(std::atomic_bool &sharedAtomic,
+                              std::shared_mutex &sharedMutex,
+                              SharedThreadData &sharedData,
                               const AircraftConfig &airplaneStartConfig,
                               QObject *parent = nullptr);
+
+    void updateConfig(const AircraftConfig &airplaneStartConfig)
+    {
+        d_aircraftConfig = airplaneStartConfig;
+    }
 
     void run() override
     {
@@ -70,8 +74,10 @@ public:
             setupData();
 
             QByteArray dataToSend;
-            util::appendData(ServerMessageIdentifier::SIM_START_EVENT, dataToSend);
-            emit sendData(dataToSend);
+
+            emit sendData(
+                      QByteArray::fromStdString({ static_cast<char>(DataGroupIdentifier::SERVER_DATA),
+                                                  static_cast<char>(ServerMessageIdentifier::SIM_START_EVENT) }));
 
             while (!quit)
             {

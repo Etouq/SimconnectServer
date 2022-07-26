@@ -1,36 +1,39 @@
 #include "AirspeedHandler.hpp"
 #include "common/dataIdentifiers.hpp"
-#include "common/appendData.hpp"
 
 #include <cmath>
 
 namespace airspeed
 {
 
-QByteArray AirspeedHandler::processData(unsigned long *raw)
+std::string AirspeedHandler::processData(unsigned long *raw)
 {
     DataStruct newData(*reinterpret_cast<DataStruct *>(raw));
-    QByteArray dataToSend;
+    std::string dataToSend;
 
     d_previous.airspeed = newData.airspeed;
-    util::appendData(PfdIdentifier::AIRSPEED, newData.airspeed, dataToSend);
+    dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::AIRSPEED) });
+    dataToSend.append(reinterpret_cast<const char*>(&newData.airspeed), sizeof(newData.airspeed));
 
     if (std::abs(d_previous.maxSpeed - newData.maxSpeed) >= 0.09)
     {
         d_previous.maxSpeed = newData.maxSpeed;
-        util::appendData(PfdIdentifier::MAX_SPEED, newData.maxSpeed, dataToSend);
+        dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::MAX_SPEED) });
+        dataToSend.append(reinterpret_cast<const char*>(&newData.maxSpeed), sizeof(newData.maxSpeed));
     }
 
     if (d_previous.trueAirspeed != newData.trueAirspeed)
     {
         d_previous.trueAirspeed = newData.trueAirspeed;
-        util::appendData(PfdIdentifier::TRUE_AIRSPEED, newData.maxSpeed, dataToSend);
+        dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::TRUE_AIRSPEED) });
+        dataToSend.append(reinterpret_cast<const char*>(&newData.maxSpeed), sizeof(newData.maxSpeed));
     }
 
     if (d_previous.refSpeed != newData.refSpeed)
     {
         d_previous.refSpeed = newData.refSpeed;
-        util::appendData(PfdIdentifier::REF_SPEED, newData.maxSpeed, dataToSend);
+        dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::REF_SPEED) });
+        dataToSend.append(reinterpret_cast<const char*>(&newData.maxSpeed), sizeof(newData.maxSpeed));
     }
 
     return dataToSend;

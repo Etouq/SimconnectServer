@@ -1,8 +1,8 @@
 #include "SimInterface.hpp"
 
-SimInterface::SimInterface(std::atomic_bool *sharedAtomic,
-                           QMutex *sharedMutex,
-                           SharedThreadData *sharedData,
+SimInterface::SimInterface(std::atomic_bool &sharedAtomic,
+                           std::shared_mutex &sharedMutex,
+                           SharedThreadData &sharedData,
                            const AircraftConfig &airplaneStartConfig,
                            QObject *parent)
   : QThread(parent),

@@ -1,32 +1,53 @@
 #include "ApInfoHandler.hpp"
 #include "common/dataIdentifiers.hpp"
-#include "common/appendData.hpp"
 
 namespace apinfo
 {
 
-QByteArray ApInfoHandler::sendCurrentData()
+std::string ApInfoHandler::sendCurrentData()
 {
-    QByteArray dataToSend;
-    util::appendData(PfdIdentifier::AP_STATUS, d_apMaster, dataToSend);
+    std::string dataToSend;
+    dataToSend.append(
+      { static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::AP_STATUS) });
+    dataToSend.append(reinterpret_cast<const char *>(&d_apMaster), sizeof(d_apMaster));
 
-    util::appendData(PfdIdentifier::AP_YD_STATUS, d_yawDamper, dataToSend);
+    dataToSend.append(
+      { static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::AP_YD_STATUS) });
+    dataToSend.append(reinterpret_cast<const char *>(&d_yawDamper), sizeof(d_yawDamper));
 
-    util::appendData(PfdIdentifier::AP_FLC, d_flc, dataToSend);
+    dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::AP_FLC) });
+    dataToSend.append(reinterpret_cast<const char *>(&d_flc), sizeof(d_flc));
 
-    util::appendData(PfdIdentifier::AP_VERTICAL_ACTIVE, d_verticalActive, dataToSend);
+    dataToSend.append(
+      { static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::AP_VERTICAL_ACTIVE) });
+    dataToSend.push_back(static_cast<char>(static_cast<uint8_t>(d_verticalActive.size())));
+    dataToSend += d_verticalActive;
 
-    util::appendData(PfdIdentifier::AP_MODE_REFERENCE, d_modeReference, dataToSend);
+    dataToSend.append(
+      { static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::AP_MODE_REFERENCE) });
+    dataToSend.push_back(static_cast<char>(static_cast<uint8_t>(d_modeReference.size())));
+    dataToSend += d_modeReference;
 
 
-    util::appendData(PfdIdentifier::AP_ARMED, d_armed, dataToSend);
+    dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::AP_ARMED) });
+    dataToSend.push_back(static_cast<char>(static_cast<uint8_t>(d_armed.size())));
+    dataToSend += d_armed;
 
-    util::appendData(PfdIdentifier::AP_ARMED_REFERENCE, d_armedReference, dataToSend);
+    dataToSend.append(
+      { static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::AP_ARMED_REFERENCE) });
+    dataToSend.push_back(static_cast<char>(static_cast<uint8_t>(d_armedReference.size())));
+    dataToSend += d_armedReference;
 
 
-    util::appendData(PfdIdentifier::AP_LATERAL_ACTIVE, d_lateralActive, dataToSend);
+    dataToSend.append(
+      { static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::AP_LATERAL_ACTIVE) });
+    dataToSend.push_back(static_cast<char>(static_cast<uint8_t>(d_lateralActive.size())));
+    dataToSend += d_lateralActive;
 
-    util::appendData(PfdIdentifier::AP_LATERAL_ARMED, d_lateralArmed, dataToSend);
+    dataToSend.append(
+      { static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::AP_LATERAL_ARMED) });
+    dataToSend.push_back(static_cast<char>(static_cast<uint8_t>(d_lateralArmed.size())));
+    dataToSend += d_lateralArmed;
 
 
     return dataToSend;

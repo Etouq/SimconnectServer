@@ -1,44 +1,69 @@
 #include "AircraftHandler.hpp"
-#include "common/appendData.hpp"
 #include "common/dataIdentifiers.hpp"
 
 namespace handler::aircraft
 {
 
-QByteArray AircraftHandler::sendCurrentData()
+std::string AircraftHandler::sendCurrentData()
 {
-    QByteArray dataToSend;
+    std::string dataToSend;
 
     if (d_fuelQtyByWeight)
     {
-        util::appendData(MfdIdentifier::FUEL_LEFT_QTY, d_previous.fuelLeftQty * d_previous.fuelDensity, dataToSend);
+        double gaugeData = d_previous.fuelLeftQty * d_previous.fuelDensity;
+        dataToSend.append(
+          { static_cast<char>(DataGroupIdentifier::MFD_DATA), static_cast<char>(MfdIdentifier::FUEL_LEFT_QTY) });
+        dataToSend.append(reinterpret_cast<const char *>(&gaugeData), sizeof(gaugeData));
 
         if (!d_singleTank)
-            util::appendData(MfdIdentifier::FUEL_RIGHT_QTY, d_previous.fuelRightQty * d_previous.fuelDensity, dataToSend);
+        {
+            gaugeData = d_previous.fuelRightQty * d_previous.fuelDensity;
+            dataToSend.append(
+              { static_cast<char>(DataGroupIdentifier::MFD_DATA), static_cast<char>(MfdIdentifier::FUEL_RIGHT_QTY) });
+            dataToSend.append(reinterpret_cast<const char *>(&gaugeData), sizeof(gaugeData));
+        }
     }
     else
     {
-        util::appendData(MfdIdentifier::FUEL_LEFT_QTY, d_previous.fuelLeftQty, dataToSend);
+        dataToSend.append(
+          { static_cast<char>(DataGroupIdentifier::MFD_DATA), static_cast<char>(MfdIdentifier::FUEL_LEFT_QTY) });
+        dataToSend.append(reinterpret_cast<const char *>(&d_previous.fuelLeftQty), sizeof(d_previous.fuelLeftQty));
 
         if (!d_singleTank)
-            util::appendData(MfdIdentifier::FUEL_RIGHT_QTY, d_previous.fuelRightQty, dataToSend);
+        {
+            dataToSend.append(
+              { static_cast<char>(DataGroupIdentifier::MFD_DATA), static_cast<char>(MfdIdentifier::FUEL_RIGHT_QTY) });
+            dataToSend.append(reinterpret_cast<const char *>(&d_previous.fuelRightQty),
+                              sizeof(d_previous.fuelRightQty));
+        }
     }
 
-    util::appendData(MfdIdentifier::FLAPS_ANGLE, d_flapsAngle, dataToSend);
-    util::appendData(MfdIdentifier::SPOILERS_PCT, d_spoilersPct, dataToSend);
+    dataToSend.append(
+      { static_cast<char>(DataGroupIdentifier::MFD_DATA), static_cast<char>(MfdIdentifier::FLAPS_ANGLE) });
+    dataToSend.append(reinterpret_cast<const char *>(&d_flapsAngle), sizeof(d_flapsAngle));
+    dataToSend.append(
+      { static_cast<char>(DataGroupIdentifier::MFD_DATA), static_cast<char>(MfdIdentifier::SPOILERS_PCT) });
+    dataToSend.append(reinterpret_cast<const char *>(&d_spoilersPct), sizeof(d_spoilersPct));
 
-    util::appendData(MfdIdentifier::ELEV_TRIM_POSITION, d_previous.elevTrimPct, dataToSend);
+    dataToSend.append(
+      { static_cast<char>(DataGroupIdentifier::MFD_DATA), static_cast<char>(MfdIdentifier::ELEV_TRIM_POSITION) });
+    dataToSend.append(reinterpret_cast<const char *>(&d_previous.elevTrimPct), sizeof(d_previous.elevTrimPct));
     dataToSend.append(reinterpret_cast<const char *>(&d_previous.elevTrimAngle), sizeof(d_previous.elevTrimAngle));
 
-    util::appendData(MfdIdentifier::AIL_TRIM_POSITION, d_previous.ailTrimPct, dataToSend);
+    dataToSend.append(
+      { static_cast<char>(DataGroupIdentifier::MFD_DATA), static_cast<char>(MfdIdentifier::AIL_TRIM_POSITION) });
+    dataToSend.append(reinterpret_cast<const char *>(&d_previous.ailTrimPct), sizeof(d_previous.ailTrimPct));
     dataToSend.append(reinterpret_cast<const char *>(&d_previous.ailTrimAngle), sizeof(d_previous.ailTrimAngle));
 
-    util::appendData(MfdIdentifier::RUDD_TRIM_POSITION, d_previous.ruddTrimPct, dataToSend);
+    dataToSend.append(
+      { static_cast<char>(DataGroupIdentifier::MFD_DATA), static_cast<char>(MfdIdentifier::RUDD_TRIM_POSITION) });
+    dataToSend.append(reinterpret_cast<const char *>(&d_previous.ruddTrimPct), sizeof(d_previous.ruddTrimPct));
     dataToSend.append(reinterpret_cast<const char *>(&d_previous.ruddTrimAngle), sizeof(d_previous.ruddTrimAngle));
 
-    util::appendData(MfdIdentifier::APU_N1, d_previous.apuN1, dataToSend);
+    dataToSend.append({ static_cast<char>(DataGroupIdentifier::MFD_DATA), static_cast<char>(MfdIdentifier::APU_N1) });
+    dataToSend.append(reinterpret_cast<const char *>(&d_previous.apuN1), sizeof(d_previous.apuN1));
 
     return dataToSend;
 }
 
-}
+}  // namespace handler::aircraft

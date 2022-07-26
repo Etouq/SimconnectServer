@@ -13,5 +13,5 @@ void FdcSocket::clientDisconnected()
     if (d_socket->isOpen())
             d_socket->close();
 
-        emit socketClosed(d_id);
+    emit socketClosed(d_id);
 }

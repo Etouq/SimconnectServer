@@ -4,8 +4,7 @@
 #include "DataStruct.hpp"
 #include "common/definitions/AircraftConfig.hpp"
 
-#include <QByteArray>
-#include <stdint.h>
+#include <string>
 
 
 typedef void *HANDLE;
@@ -20,9 +19,9 @@ public:
 
     void setupData(HANDLE simConnectHandle, const AircraftConfig &config);
 
-    [[nodiscard]] QByteArray processData(const unsigned long *raw);
+    [[nodiscard]] std::string processData(const unsigned long *raw);
 
-    QByteArray reset()
+    std::string reset()
     {
         d_previous = DataStruct();
 
@@ -45,7 +44,7 @@ public:
         return sendCurrentData();
     }
 
-    [[nodiscard]] QByteArray sendCurrentData();
+    [[nodiscard]] std::string sendCurrentData();
 
 private:
 

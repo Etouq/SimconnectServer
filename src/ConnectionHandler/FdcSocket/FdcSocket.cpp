@@ -43,7 +43,8 @@ FdcSocket::~FdcSocket()
 
     if (d_socket->state() == QTcpSocket::ConnectedState)
     {
-        d_socket->write(util::createMessage(ServerMessageIdentifier::QUIT));
+        d_socket->write(QByteArray::fromStdString({ static_cast<char>(DataGroupIdentifier::SERVER_DATA),
+                                                  static_cast<char>(ServerMessageIdentifier::QUIT) }));
         d_socket->flush();
         d_socket->disconnectFromHost();
     }

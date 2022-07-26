@@ -1,9 +1,8 @@
 #ifndef __APINFOHANDLER_HPP__
 #define __APINFOHANDLER_HPP__
 
-#include "DataStruct.hpp"
 
-#include <QByteArray>
+#include <string>
 
 typedef void *HANDLE;
 
@@ -16,14 +15,12 @@ class ApInfoHandler
     bool d_yawDamper = false;
     bool d_flc = false;
 
-    QByteArray d_verticalActive = "";
-    QByteArray d_modeReference = "";
-    QByteArray d_armed = "";
-    QByteArray d_armedReference = "";
-    QByteArray d_lateralActive = "";
-    QByteArray d_lateralArmed = "";
-
-    DataStruct d_previous;
+    std::string d_verticalActive = "";
+    std::string d_modeReference = "";
+    std::string d_armed = "";
+    std::string d_armedReference = "";
+    std::string d_lateralActive = "";
+    std::string d_lateralArmed = "";
 
 public:
 
@@ -31,12 +28,13 @@ public:
 
     void setupData(HANDLE simConnectHandle);
 
-    [[nodiscard]] QByteArray processData(unsigned long *raw);
+    [[nodiscard]] std::string processData(unsigned long *raw);
 
-    QByteArray reset()
+    std::string reset()
     {
         d_apMaster = false;
         d_yawDamper = false;
+        d_flc = false;
 
         d_verticalActive = "";
         d_modeReference = "";
@@ -48,7 +46,7 @@ public:
         return sendCurrentData();
     }
 
-    [[nodiscard]] QByteArray sendCurrentData();
+    [[nodiscard]] std::string sendCurrentData();
 };
 
 }  // namespace apinfo

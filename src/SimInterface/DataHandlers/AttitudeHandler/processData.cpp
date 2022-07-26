@@ -1,13 +1,12 @@
 #include "AttitudeHandler.hpp"
 #include "common/dataIdentifiers.hpp"
-#include "common/appendData.hpp"
 
 #include <cmath>
 
 namespace attitude
 {
 
-QByteArray AttitudeHandler::processData(unsigned long *raw)
+std::string AttitudeHandler::processData(unsigned long *raw)
 {
     DataStruct newData(reinterpret_cast<RawStruct *>(raw));
 
@@ -15,9 +14,10 @@ QByteArray AttitudeHandler::processData(unsigned long *raw)
     d_previous.pitch = newData.pitch;
     d_previous.slipskid = newData.slipskid;
 
-    QByteArray dataToSend;
+    std::string dataToSend;
 
-    util::appendData(PfdIdentifier::ATTITUDE, newData.bank, dataToSend);
+    dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::ATTITUDE) });
+    dataToSend.append(reinterpret_cast<const char*>(&newData.bank), sizeof(newData.bank));
     dataToSend.append(reinterpret_cast<const char *>(&newData.pitch), sizeof(newData.pitch));
     dataToSend.append(reinterpret_cast<const char *>(&newData.slipskid), sizeof(newData.slipskid));
 
@@ -25,13 +25,15 @@ QByteArray AttitudeHandler::processData(unsigned long *raw)
     if (std::abs(d_previous.angleOfAttack - newData.angleOfAttack) >= 0.25)
     {
         d_previous.angleOfAttack = newData.angleOfAttack;
-        util::appendData(PfdIdentifier::ANGLE_OF_ATTACK, newData.angleOfAttack, dataToSend);
+        dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::ANGLE_OF_ATTACK) });
+        dataToSend.append(reinterpret_cast<const char*>(&newData.angleOfAttack), sizeof(newData.angleOfAttack));
     }
 
     if (d_previous.fdState != newData.fdState)
     {
         d_previous.fdState = newData.fdState;
-        util::appendData(PfdIdentifier::AP_FD_STATUS, newData.fdState, dataToSend);
+        dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::AP_FD_STATUS) });
+        dataToSend.append(reinterpret_cast<const char*>(&newData.fdState), sizeof(newData.fdState));
     }
 
     if (newData.fdState)
@@ -39,7 +41,8 @@ QByteArray AttitudeHandler::processData(unsigned long *raw)
         d_previous.fdBank = newData.fdBank;
         d_previous.fdPitch = newData.fdPitch;
 
-        util::appendData(PfdIdentifier::FD_ATTITUDE, newData.fdBank, dataToSend);
+        dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::FD_ATTITUDE) });
+        dataToSend.append(reinterpret_cast<const char*>(&newData.fdBank), sizeof(newData.fdBank));
         dataToSend.append(reinterpret_cast<const char *>(&newData.fdPitch), sizeof(newData.fdPitch));
     }
 

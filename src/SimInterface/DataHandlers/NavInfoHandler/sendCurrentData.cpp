@@ -1,21 +1,24 @@
 #include "common/dataIdentifiers.hpp"
-#include "common/appendData.hpp"
 #include "NavInfoHandler.hpp"
 
 
 namespace navinfo
 {
 
-QByteArray NavInfoHandler::sendCurrentData()
+std::string NavInfoHandler::sendCurrentData()
 {
-    QByteArray dataToSend;
-    util::appendData(PfdIdentifier::GPS_IS_ACTIVE_FLIGHTPLAN, d_previous.gpsIsActiveFlightplan, dataToSend);
+    std::string dataToSend;
+    dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::GPS_IS_ACTIVE_FLIGHTPLAN) });
+    dataToSend.append(reinterpret_cast<const char*>(&d_previous.gpsIsActiveFlightplan), sizeof(d_previous.gpsIsActiveFlightplan));
 
-    util::appendData(PfdIdentifier::LEG_IS_DIRECT_TO, d_previous.gpsIsDirectTo, dataToSend);
+    dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::LEG_IS_DIRECT_TO) });
+    dataToSend.append(reinterpret_cast<const char*>(&d_previous.gpsIsDirectTo), sizeof(d_previous.gpsIsDirectTo));
 
-    util::appendData(MfdIdentifier::GPS_WP_ETE, d_previous.gpsWpEte, dataToSend);
+    dataToSend.append({ static_cast<char>(DataGroupIdentifier::MFD_DATA), static_cast<char>(MfdIdentifier::GPS_WP_ETE) });
+    dataToSend.append(reinterpret_cast<const char*>(&d_previous.gpsWpEte), sizeof(d_previous.gpsWpEte));
 
-    util::appendData(MfdIdentifier::GPS_DEST_ETE, d_previous.gpsEte, dataToSend);
+    dataToSend.append({ static_cast<char>(DataGroupIdentifier::MFD_DATA), static_cast<char>(MfdIdentifier::GPS_DEST_ETE) });
+    dataToSend.append(reinterpret_cast<const char*>(&d_previous.gpsEte), sizeof(d_previous.gpsEte));
 
 
     return dataToSend;

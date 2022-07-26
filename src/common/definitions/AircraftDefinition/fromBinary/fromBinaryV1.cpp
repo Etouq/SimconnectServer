@@ -1,5 +1,5 @@
 #include "../AircraftDefinition.hpp"
-#include "common/converters/basicConverters.hpp"
+#include <QIODevice>
 
 namespace definitions
 {
@@ -7,7 +7,7 @@ namespace definitions
 AircraftDefinition AircraftDefinition::fromBinaryV1(QIODevice &data, FileVersion version)
 {
     AircraftDefinition ret;
-    Converters::convert(data, ret.type);
+    data.read(reinterpret_cast<char *>(&ret.type), sizeof(ret.type));
 
     switch (ret.type)
     {
@@ -22,10 +22,15 @@ AircraftDefinition AircraftDefinition::fromBinaryV1(QIODevice &data, FileVersion
             ret.secondGauge = GaugeDefinition::fromBinary(data, version);
             ret.thirdGauge = GaugeDefinition::fromBinary(data, version);
 
-            Converters::convert(data, ret.hasApu);
-            ret.engineTempType = Converters::convert<bool>(data) ? TemperatureGaugeType::EGT : TemperatureGaugeType::ITT;
+            data.read(reinterpret_cast<char *>(&ret.hasApu), sizeof(ret.hasApu));
+
+            bool egtInsteadOfItt = false;
+            data.read(reinterpret_cast<char *>(&egtInsteadOfItt), sizeof(egtInsteadOfItt));
+
+            ret.engineTempType = egtInsteadOfItt ? TemperatureGaugeType::EGT : TemperatureGaugeType::ITT;
 
             ret.hasSecondaryTempGauge = false;
+
             break;
         }
         case AircraftType::PROP:
@@ -38,23 +43,21 @@ AircraftDefinition AircraftDefinition::fromBinaryV1(QIODevice &data, FileVersion
 
             ret.secondaryTempGauge = GaugeDefinition::fromBinary(data, version);
             ret.secondaryTempType = TemperatureGaugeType::EGT;
-            Converters::convert(data, ret.hasSecondaryTempGauge);
 
-            ret.gauge1Type = Converters::convert<bool>(data) ? SwitchingGaugeType::PROP_RPM : SwitchingGaugeType::RPM;
-            bool secondIsLoad = Converters::convert<bool>(data);
+            data.read(reinterpret_cast<char *>(&ret.hasSecondaryTempGauge), sizeof(ret.hasSecondaryTempGauge));
 
-            if (secondIsLoad)
-            {
-                ret.gauge2Type = SwitchingGaugeType::POWER_PCT;
-                Converters::convert(data, ret.maxPower);
-            }
-            else
-            {
-                ret.gauge2Type = SwitchingGaugeType::MANIFOLD_PRESSURE;
-                ret.maxPower = 1;
-            }
+            bool boolData = false;
+            data.read(reinterpret_cast<char *>(&boolData), sizeof(boolData));
+
+            ret.gauge1Type = boolData ? SwitchingGaugeType::PROP_RPM : SwitchingGaugeType::RPM;
+
+            data.read(reinterpret_cast<char *>(&boolData), sizeof(boolData));
+
+            ret.gauge2Type = boolData ? SwitchingGaugeType::POWER_PCT : SwitchingGaugeType::MANIFOLD_PRESSURE;
+            data.read(reinterpret_cast<char *>(&ret.maxPower), sizeof(ret.maxPower));
 
             ret.hasApu = false;
+
             break;
         }
         case AircraftType::TURBOPROP:
@@ -71,51 +74,62 @@ AircraftDefinition AircraftDefinition::fromBinaryV1(QIODevice &data, FileVersion
 
             ret.secondaryTempGauge = GaugeDefinition::fromBinary(data, version);
             ret.secondaryTempType = TemperatureGaugeType::EGT;
-            Converters::convert(data, ret.hasSecondaryTempGauge);
+            data.read(reinterpret_cast<char *>(&ret.hasSecondaryTempGauge), sizeof(ret.hasSecondaryTempGauge));
 
-            ret.gauge4Type = Converters::convert<bool>(data) ? SwitchingGaugeType::PROP_RPM : SwitchingGaugeType::RPM;
-            ret.gauge2Type = Converters::convert<bool>(data) ? SwitchingGaugeType::TORQUE_PCT : SwitchingGaugeType::TORQUE;
+            bool boolData = false;
+            data.read(reinterpret_cast<char *>(&boolData), sizeof(boolData));
+            ret.gauge4Type = boolData ? SwitchingGaugeType::PROP_RPM : SwitchingGaugeType::RPM;
+
+            data.read(reinterpret_cast<char *>(&boolData), sizeof(boolData));
+            ret.gauge2Type = boolData ? SwitchingGaugeType::TORQUE_PCT : SwitchingGaugeType::TORQUE;
 
             ret.hasApu = false;
+
             break;
         }
         default:
-            break;
+            return ret;
     }
 
-    Converters::convertString(data, ret.name);
+    uint8_t stringSize = 0;
+    data.read(reinterpret_cast<char *>(&stringSize), sizeof(stringSize));
+
+    ret.name = QString::fromUtf8(data.read(stringSize));
 
     ret.fuelQtyGauge = GaugeDefinition::fromBinary(data, version);
     ret.fuelFlowGauge = GaugeDefinition::fromBinary(data, version);
     ret.oilTempGauge = GaugeDefinition::fromBinary(data, version);
     ret.oilPressGauge = GaugeDefinition::fromBinary(data, version);
 
-    Converters::convert(data, ret.hasFlaps);
-    Converters::convert(data, ret.hasSpoilers);
+    data.read(reinterpret_cast<char *>(&ret.hasFlaps), sizeof(ret.hasFlaps));
+    data.read(reinterpret_cast<char *>(&ret.hasSpoilers), sizeof(ret.hasSpoilers));
 
-    Converters::convert(data, ret.hasElevatorTrim);
-    Converters::convert(data, ret.hasRudderTrim);
-    Converters::convert(data, ret.hasAileronTrim);
+    data.read(reinterpret_cast<char *>(&ret.hasElevatorTrim), sizeof(ret.hasElevatorTrim));
+    data.read(reinterpret_cast<char *>(&ret.hasRudderTrim), sizeof(ret.hasRudderTrim));
+    data.read(reinterpret_cast<char *>(&ret.hasAileronTrim), sizeof(ret.hasAileronTrim));
 
-    ret.fuelQtyByWeight = !Converters::convert<bool>(data);
-    ret.fuelFlowByWeight = !Converters::convert<bool>(data);
+    data.read(reinterpret_cast<char *>(&ret.fuelQtyByWeight), sizeof(ret.fuelQtyByWeight));
+    data.read(reinterpret_cast<char *>(&ret.fuelFlowByWeight), sizeof(ret.fuelFlowByWeight));
+    ret.fuelQtyByWeight = !ret.fuelQtyByWeight;
+    ret.fuelFlowByWeight = !ret.fuelFlowByWeight;
 
-    ret.numEngines = Converters::convert<int8_t>(data);
-    ret.singleTank = Converters::convert<int8_t>(data) == 1;
+    data.read(reinterpret_cast<char *>(&ret.numEngines), sizeof(ret.numEngines));
+    data.read(reinterpret_cast<char *>(&stringSize), sizeof(stringSize));
+    ret.singleTank = stringSize == 1;
 
-    Converters::convert(data, ret.lowLimit);
-    Converters::convert(data, ret.flapsBegin);
-    Converters::convert(data, ret.flapsEnd);
-    Converters::convert(data, ret.greenBegin);
-    Converters::convert(data, ret.greenEnd);
-    Converters::convert(data, ret.yellowBegin);
-    Converters::convert(data, ret.yellowEnd);
-    Converters::convert(data, ret.redBegin);
-    Converters::convert(data, ret.redEnd);
-    Converters::convert(data, ret.highLimit);
+    data.read(reinterpret_cast<char *>(&ret.lowLimit), sizeof(ret.lowLimit));
+    data.read(reinterpret_cast<char *>(&ret.flapsBegin), sizeof(ret.flapsBegin));
+    data.read(reinterpret_cast<char *>(&ret.flapsEnd), sizeof(ret.flapsEnd));
+    data.read(reinterpret_cast<char *>(&ret.greenBegin), sizeof(ret.greenBegin));
+    data.read(reinterpret_cast<char *>(&ret.greenEnd), sizeof(ret.greenEnd));
+    data.read(reinterpret_cast<char *>(&ret.yellowBegin), sizeof(ret.yellowBegin));
+    data.read(reinterpret_cast<char *>(&ret.yellowEnd), sizeof(ret.yellowEnd));
+    data.read(reinterpret_cast<char *>(&ret.redBegin), sizeof(ret.redBegin));
+    data.read(reinterpret_cast<char *>(&ret.redEnd), sizeof(ret.redEnd));
+    data.read(reinterpret_cast<char *>(&ret.highLimit), sizeof(ret.highLimit));
 
-    Converters::convert(data, ret.noColors);
-    Converters::convert(data, ret.dynamicBarberpole);
+    data.read(reinterpret_cast<char *>(&ret.noColors), sizeof(ret.noColors));
+    data.read(reinterpret_cast<char *>(&ret.dynamicBarberpole), sizeof(ret.dynamicBarberpole));
 
     return ret;
 }

@@ -4,7 +4,6 @@
 #include "DataStruct.hpp"
 #include "common/definitions/AircraftConfig.hpp"
 
-#include <QByteArray>
 #include <string>
 
 
@@ -20,19 +19,18 @@ class EngineHandler
 
 public:
 
-    EngineHandler(uint8_t engineIdx)
+    constexpr EngineHandler(uint8_t engineIdx)
       : d_engineIdx(engineIdx)
     {
-        reset();
     }
 
     void setupData(HANDLE simConnectHandle, const AircraftConfig &config);
 
-    [[nodiscard]] QByteArray processData(const unsigned long *raw);
+    [[nodiscard]] std::string processData(const unsigned long *raw);
 
-    [[nodiscard]] QByteArray sendCurrentData();
+    [[nodiscard]] std::string sendCurrentData();
 
-    QByteArray reset()
+    std::string reset()
     {
         d_previous = DataStruct();
 

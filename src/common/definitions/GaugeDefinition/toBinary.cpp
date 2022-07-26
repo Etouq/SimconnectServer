@@ -1,38 +1,68 @@
 #include "GaugeDefinition.hpp"
-#include "common/converters/listConverters.hpp"
 
 #include <QByteArray>
-
 
 namespace definitions
 {
 
-QByteArray GaugeDefinition::toBinary() const
+std::string GaugeDefinition::toBinary() const
 {
-    QByteArray ret = Converters::convert(title);
-    ret += Converters::convert(unitString);
+    std::string ret({ static_cast<char>(title.toStdString().size()) });
+    ret += title.toStdString();
 
-    ret += Converters::convert(minValue);
-    ret += Converters::convert(maxValue);
+    ret.append({ static_cast<char>(unitString.toStdString().size()) });
+    ret += unitString.toStdString();
 
-    ret += Converters::convertList(colorZones);
-    ret += Converters::convertList(grads);
-    ret += Converters::convertList(textGrads);
+    ret.append(reinterpret_cast<const char *>(&minValue), sizeof(minValue));
+    ret.append(reinterpret_cast<const char *>(&maxValue), sizeof(maxValue));
 
-    ret += Converters::convert(textIncrement);
-    ret += Converters::convert(textNumDigits);
+    uint16_t listSize = colorZones.size();
+    ret.append(reinterpret_cast<const char *>(&listSize), sizeof(listSize));
 
-    ret += Converters::convert(forceTextColor);
-    ret += Converters::convert(textForcedColor);
+    for (const ColorZone &colorZone : colorZones)
+    {
+        ret.append(reinterpret_cast<const char *>(&colorZone.start), sizeof(colorZone.start));
+        ret.append(reinterpret_cast<const char *>(&colorZone.end), sizeof(colorZone.end));
+        ret.append({ static_cast<char>(colorZone.color.red()),
+                     static_cast<char>(colorZone.color.green()),
+                     static_cast<char>(colorZone.color.blue()) });
+    }
 
-    ret += Converters::convert(hasMinRedBlink);
-    ret += Converters::convert(minRedBlinkThreshold);
-    ret += Converters::convert(hasMaxRedBlink);
-    ret += Converters::convert(maxRedBlinkThreshold);
+    listSize = grads.size();
+    ret.append(reinterpret_cast<const char *>(&listSize), sizeof(listSize));
+    for (const GradDef &grad : grads)
+    {
+        ret.append(reinterpret_cast<const char *>(&grad.gradPos), sizeof(grad.gradPos));
+        ret.append({ static_cast<char>(grad.isBig),
+                     static_cast<char>(grad.gradColor.red()),
+                     static_cast<char>(grad.gradColor.green()),
+                     static_cast<char>(grad.gradColor.blue()) });
+    }
 
-    ret += Converters::convert(noText);
+    listSize = textGrads.size();
+    ret.append(reinterpret_cast<const char *>(&listSize), sizeof(listSize));
+    for (const TextGradDef &textGrad : textGrads)
+    {
+        ret.append(reinterpret_cast<const char *>(&textGrad.textGradPos), sizeof(textGrad.textGradPos));
+        ret.append({ static_cast<char>(textGrad.gradText.toStdString().size()) });
+        ret += textGrad.gradText.toStdString();
+    }
 
-    ret += Converters::convert(unit);
+
+    ret.append(reinterpret_cast<const char *>(&textIncrement), sizeof(textIncrement));
+    ret.append({ static_cast<char>(textNumDigits) });
+
+    ret.append({ static_cast<char>(forceTextColor) });
+    ret.append({ static_cast<char>(textForcedColor.red()),
+                 static_cast<char>(textForcedColor.green()),
+                 static_cast<char>(textForcedColor.blue()) });
+
+    ret.append({ static_cast<char>(hasMinRedBlink) });
+    ret.append(reinterpret_cast<const char *>(&minRedBlinkThreshold), sizeof(minRedBlinkThreshold));
+    ret.append({ static_cast<char>(hasMaxRedBlink) });
+    ret.append(reinterpret_cast<const char *>(&maxRedBlinkThreshold), sizeof(maxRedBlinkThreshold));
+
+    ret.append({ static_cast<char>(noText), static_cast<char>(unit) });
 
     return ret;
 }

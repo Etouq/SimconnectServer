@@ -17,17 +17,19 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-
 include(src/source_files.txt)
 include(qt_modules.txt)
 
 find_package(Qt5 COMPONENTS ${QT_MODULES} REQUIRED)
+find_package(fmt)
 
 add_executable(${_PROJECT_NAME}
 #    MANUAL_FINALIZATION
-    ${PROJECT_SOURCES}
+    ${CPP_FILES}
+    ${HPP_FILES}
     src/mainwindow/mainwindow.ui
     resources/resources.qrc
+    qml/qml.qrc
 )
 
 target_include_directories(${_PROJECT_NAME} PUBLIC
@@ -36,6 +38,7 @@ target_include_directories(${_PROJECT_NAME} PUBLIC
 
 list(TRANSFORM QT_MODULES PREPEND Qt5::)
 target_link_libraries(${_PROJECT_NAME} PRIVATE
+        fmt::fmt-header-only
         ${QT_MODULES}
         "C:/MSFS SDK/SimConnect SDK/lib/SimConnect.lib"
 )

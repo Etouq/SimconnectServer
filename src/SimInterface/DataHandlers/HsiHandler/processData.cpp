@@ -1,5 +1,4 @@
 #include "common/dataIdentifiers.hpp"
-#include "common/appendData.hpp"
 #include "common/simEnums.hpp"
 #include "HsiHandler.hpp"
 
@@ -8,41 +7,47 @@
 namespace hsi
 {
 
-QByteArray HsiHandler::processData(unsigned long *raw)
+std::string HsiHandler::processData(unsigned long *raw)
 {
     DataStruct newData(reinterpret_cast<RawStruct *>(raw));
 
-    QByteArray dataToSend;
+    std::string dataToSend;
 
 
     if (std::abs(d_previous.rotation - newData.rotation) >= 0.0009)
     {
         d_previous.rotation = newData.rotation;
-        util::appendData(PfdIdentifier::ROTATION, newData.rotation, dataToSend);
+        dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::ROTATION) });
+        dataToSend.append(reinterpret_cast<const char*>(&newData.rotation), sizeof(newData.rotation));
     }
     if (std::abs(d_previous.heading - newData.heading) >= 0.0009)
     {
         d_previous.heading = newData.heading;
-        util::appendData(PfdIdentifier::HEADING, newData.heading, dataToSend);
+        dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::HEADING) });
+        dataToSend.append(reinterpret_cast<const char*>(&newData.heading), sizeof(newData.heading));
     }
     if (std::abs(d_previous.turnRate - newData.turnRate) >= 0.0009)
     {
         d_previous.turnRate = newData.turnRate;
-        util::appendData(PfdIdentifier::TURN_RATE, newData.turnRate, dataToSend);
+        dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::TURN_RATE) });
+        dataToSend.append(reinterpret_cast<const char*>(&newData.turnRate), sizeof(newData.turnRate));
     }
     if (std::abs(d_previous.currentTrack - newData.currentTrack) >= 0.0009)
     {
         d_previous.currentTrack = newData.currentTrack;
-        util::appendData(PfdIdentifier::CURRENT_TRACK, newData.currentTrack, dataToSend);
+        dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::CURRENT_TRACK) });
+        dataToSend.append(reinterpret_cast<const char*>(&newData.currentTrack), sizeof(newData.currentTrack));
     }
 
     if (std::abs(d_previous.gpsWpDesiredTrack - newData.gpsWpDesiredTrack) >= 0.009)
     {
         d_previous.gpsWpDesiredTrack = newData.gpsWpDesiredTrack;
-        util::appendData(MfdIdentifier::GPS_WP_DTK, newData.gpsWpDesiredTrack, dataToSend);
+        dataToSend.append({ static_cast<char>(DataGroupIdentifier::MFD_DATA), static_cast<char>(MfdIdentifier::GPS_WP_DTK) });
+        dataToSend.append(reinterpret_cast<const char*>(&newData.gpsWpDesiredTrack), sizeof(newData.gpsWpDesiredTrack));
     }
 
-    util::appendData(MfdIdentifier::COORDINATES, newData.currLat, dataToSend);
+    dataToSend.append({ static_cast<char>(DataGroupIdentifier::MFD_DATA), static_cast<char>(MfdIdentifier::COORDINATES) });
+    dataToSend.append(reinterpret_cast<const char*>(&newData.currLat), sizeof(newData.currLat));
     dataToSend.append(reinterpret_cast<const char *>(&newData.currLon), sizeof(newData.currLon));
 
     d_previous.currLat = newData.currLat;
@@ -51,7 +56,8 @@ QByteArray HsiHandler::processData(unsigned long *raw)
     if (std::abs(d_previous.trueHeading - newData.trueHeading) >= 0.0009)
     {
         d_previous.trueHeading = newData.trueHeading;
-        util::appendData(MfdIdentifier::TRUE_HEADING, newData.trueHeading, dataToSend);
+        dataToSend.append({ static_cast<char>(DataGroupIdentifier::MFD_DATA), static_cast<char>(MfdIdentifier::TRUE_HEADING) });
+        dataToSend.append(reinterpret_cast<const char*>(&newData.trueHeading), sizeof(newData.trueHeading));
     }
 
 

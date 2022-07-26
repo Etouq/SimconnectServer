@@ -1,5 +1,13 @@
 <RCC>
     <qresource prefix="/">
+        <file>qtquickcontrols2.conf</file>
         <file>SimconnectServerIcon.ico</file>
+        <file alias="Roboto-Mono-Variable.ttf">RobotoMono-VariableFont_wght.ttf</file>
+        <file>miscImages/ICON_MAP_AIRPORT.png</file>
+        <file>miscImages/ICON_MAP_INT.png</file>
+        <file>miscImages/ICON_MAP_NDB.png</file>
+        <file>miscImages/ICON_MAP_USER.png</file>
+        <file>miscImages/ICON_MAP_VOR_2.png</file>
+        <file>miscImages/ICON_MAP_FLIGHT_PLAN_MED_1.png</file>
     </qresource>
 </RCC>
