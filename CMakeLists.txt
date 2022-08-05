@@ -27,7 +27,6 @@ add_executable(${_PROJECT_NAME}
 #    MANUAL_FINALIZATION
     ${CPP_FILES}
     ${HPP_FILES}
-    src/mainwindow/mainwindow.ui
     resources/resources.qrc
     qml/qml.qrc
 )
