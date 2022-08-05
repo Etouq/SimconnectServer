@@ -3,6 +3,7 @@
 #include "HsiHandler.hpp"
 
 #include <cmath>
+#include <QDebug>
 
 namespace hsi
 {
@@ -60,6 +61,7 @@ std::string HsiHandler::processData(unsigned long *raw)
         dataToSend.append(reinterpret_cast<const char*>(&newData.trueHeading), sizeof(newData.trueHeading));
     }
 
+    // qDebug() << "gps drives nav1:" << newData.gpsDrivesNav1 << "approach hold:" << newData.autopilotApproachHold << "approach type:" << newData.gpsApproachApproachType << "selected nav:" << newData.autopilotNavSelected;
 
     // gps
     if (newData.gpsDrivesNav1

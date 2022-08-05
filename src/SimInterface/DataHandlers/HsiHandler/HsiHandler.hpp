@@ -40,6 +40,15 @@ public:
         return ret;
     }
 
+    double latitude() const
+    {
+        return d_previous.currLat;
+    }
+    double longitude() const
+    {
+        return d_previous.currLon;
+    }
+
     bool gpsDrivesNav1() const
     {
         return d_previous.gpsDrivesNav1;
