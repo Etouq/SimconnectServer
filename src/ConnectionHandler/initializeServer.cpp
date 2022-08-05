@@ -33,9 +33,12 @@ void ConnectionHandler::initializeServer()
 
     if (!found)
     {
+        qDebug() << ("Unable to start the server.\n" + errors.join("\n"));
         emit openMessageBox("Simconnect Server", "Unable to start the server.\n" + errors.join("\n"));
         return;
     }
+
+    d_broadcastTimer.start();
 
     emit networkChanged(d_server.serverAddress(), d_server.serverPort());
 }
