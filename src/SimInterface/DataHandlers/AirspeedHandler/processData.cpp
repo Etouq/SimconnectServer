@@ -2,6 +2,7 @@
 #include "common/dataIdentifiers.hpp"
 
 #include <cmath>
+#include <QDebug>
 
 namespace airspeed
 {
@@ -26,15 +27,17 @@ std::string AirspeedHandler::processData(unsigned long *raw)
     {
         d_previous.trueAirspeed = newData.trueAirspeed;
         dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::TRUE_AIRSPEED) });
-        dataToSend.append(reinterpret_cast<const char*>(&newData.maxSpeed), sizeof(newData.maxSpeed));
+        dataToSend.append(reinterpret_cast<const char*>(&newData.trueAirspeed), sizeof(newData.trueAirspeed));
     }
 
     if (d_previous.refSpeed != newData.refSpeed)
     {
         d_previous.refSpeed = newData.refSpeed;
         dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::REF_SPEED) });
-        dataToSend.append(reinterpret_cast<const char*>(&newData.maxSpeed), sizeof(newData.maxSpeed));
+        dataToSend.append(reinterpret_cast<const char*>(&newData.refSpeed), sizeof(newData.refSpeed));
     }
+
+    // qDebug() << "sending data";
 
     return dataToSend;
 }
