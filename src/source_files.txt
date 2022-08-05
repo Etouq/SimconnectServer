@@ -1,73 +1,73 @@
 set(CPP_FILES
         src/main.cpp
+        src/setupQml.cpp
+        src/connectSignals.cpp
+
+        src/AircraftManager/AircraftManager.cpp
+        src/AircraftManager/initSocket.cpp
+        src/AircraftManager/loadDefinitions.cpp
+        src/AircraftManager/updateDefaultSpeedBugs.cpp
 
         src/common/definitions/AircraftDefinition/fromBinary/fromBinaryV1.cpp
         src/common/definitions/AircraftDefinition/fromBinary/fromBinaryV2.cpp
         src/common/definitions/AircraftDefinition/fromBinary/fromBinaryV3.cpp
         src/common/definitions/AircraftDefinition/toBinary.cpp
         src/common/definitions/AircraftDefinition/toConfig.cpp
+
         src/common/definitions/GaugeDefinition/fromBinary/fromBinaryV1.cpp
         src/common/definitions/GaugeDefinition/fromBinary/fromBinaryV3.cpp
         src/common/definitions/GaugeDefinition/getEpsilon.cpp
         src/common/definitions/GaugeDefinition/toBinary.cpp
 
+        src/ConnectionHandler/broadcastToNetwork.cpp
         src/ConnectionHandler/clientDisconnected.cpp
         src/ConnectionHandler/ConnectionHandler.cpp
-        src/ConnectionHandler/broadcastToNetwork.cpp
-        src/ConnectionHandler/initializeServer.cpp
-        src/ConnectionHandler/newIncomingConnection.cpp
-        src/ConnectionHandler/startSim.cpp
+        src/ConnectionHandler/FdcSocket/clientDisconnected.cpp
+        src/ConnectionHandler/FdcSocket/connectSimSignals.cpp
         src/ConnectionHandler/FdcSocket/FdcSocket.cpp
         src/ConnectionHandler/FdcSocket/receivedClientData.cpp
-        src/ConnectionHandler/FdcSocket/clientDisconnected.cpp
+        src/ConnectionHandler/initializeServer.cpp
+        src/ConnectionHandler/newIncomingConnection.cpp
 
-        src/FlightplanManager/readFromFile.cpp
-        src/FlightplanManager/readNextWaypoint.cpp
-        src/FlightplanManager/parsePosition.cpp
         src/FlightplanManager/getFileBasePath.cpp
-
-        src/mainwindow/clearflightplan.cpp
-        src/mainwindow/mainwindow.cpp
-        src/mainwindow/readflightplan.cpp
-        src/mainwindow/readnewflightplan.cpp
+        src/FlightplanManager/parsePosition.cpp
+        src/FlightplanManager/readFromFile.cpp
+        src/FlightplanManager/readFromJson.cpp
+        src/FlightplanManager/readNextWaypoint.cpp
+        src/FlightplanManager/sendInitData.cpp
+        src/FlightplanManager/storeFlightplan.cpp
+        src/FlightplanManager/updateActiveLeg.cpp
+        src/FlightplanManager/WaypointModel/data.cpp
 
         src/SimInterface/DataHandlers/AircraftHandler/processData.cpp
         src/SimInterface/DataHandlers/AircraftHandler/sendCurrentData.cpp
         src/SimInterface/DataHandlers/AircraftHandler/setupData.cpp
-
         src/SimInterface/DataHandlers/AirspeedHandler/processData.cpp
         src/SimInterface/DataHandlers/AirspeedHandler/sendCurrentData.cpp
         src/SimInterface/DataHandlers/AirspeedHandler/setupData.cpp
-
         src/SimInterface/DataHandlers/AltitudeHandler/handleGps.cpp
         src/SimInterface/DataHandlers/AltitudeHandler/handleNav1.cpp
         src/SimInterface/DataHandlers/AltitudeHandler/handleNav2.cpp
         src/SimInterface/DataHandlers/AltitudeHandler/processData.cpp
         src/SimInterface/DataHandlers/AltitudeHandler/sendCurrentData.cpp
         src/SimInterface/DataHandlers/AltitudeHandler/setupData.cpp
-
         src/SimInterface/DataHandlers/ApInfoHandler/processData.cpp
         src/SimInterface/DataHandlers/ApInfoHandler/sendCurrentData.cpp
         src/SimInterface/DataHandlers/ApInfoHandler/setupData.cpp
-
         src/SimInterface/DataHandlers/AttitudeHandler/processData.cpp
         src/SimInterface/DataHandlers/AttitudeHandler/sendCurrentData.cpp
         src/SimInterface/DataHandlers/AttitudeHandler/setupData.cpp
-
         src/SimInterface/DataHandlers/BottombarHandler/processData.cpp
         src/SimInterface/DataHandlers/BottombarHandler/sendCurrentData.cpp
         src/SimInterface/DataHandlers/BottombarHandler/setupData.cpp
-
         src/SimInterface/DataHandlers/EngineHandler/gaugeTypeToString.cpp
         src/SimInterface/DataHandlers/EngineHandler/gaugeTypeToUnit.cpp
         src/SimInterface/DataHandlers/EngineHandler/processData.cpp
         src/SimInterface/DataHandlers/EngineHandler/sendCurrentData.cpp
         src/SimInterface/DataHandlers/EngineHandler/setupData.cpp
-
         src/SimInterface/DataHandlers/HsiBrgHandler/processData.cpp
         src/SimInterface/DataHandlers/HsiBrgHandler/sendCurrentData.cpp
         src/SimInterface/DataHandlers/HsiBrgHandler/setupData.cpp
-
         src/SimInterface/DataHandlers/HsiHandler/handleGps.cpp
         src/SimInterface/DataHandlers/HsiHandler/handleNav1.cpp
         src/SimInterface/DataHandlers/HsiHandler/handleNav1Tacan.cpp
@@ -76,19 +76,15 @@ set(CPP_FILES
         src/SimInterface/DataHandlers/HsiHandler/processData.cpp
         src/SimInterface/DataHandlers/HsiHandler/sendCurrentData.cpp
         src/SimInterface/DataHandlers/HsiHandler/setupData.cpp
-
         src/SimInterface/DataHandlers/MiscHandler/processData.cpp
         src/SimInterface/DataHandlers/MiscHandler/sendCurrentData.cpp
         src/SimInterface/DataHandlers/MiscHandler/setupData.cpp
-
         src/SimInterface/DataHandlers/NavInfoHandler/processData.cpp
         src/SimInterface/DataHandlers/NavInfoHandler/sendCurrentData.cpp
         src/SimInterface/DataHandlers/NavInfoHandler/setupData.cpp
-
         src/SimInterface/DataHandlers/RadioHandler/processData.cpp
         src/SimInterface/DataHandlers/RadioHandler/sendCurrentData.cpp
         src/SimInterface/DataHandlers/RadioHandler/setupData.cpp
-
         src/SimInterface/DataHandlers/WindInfoHandler/processData.cpp
         src/SimInterface/DataHandlers/WindInfoHandler/sendCurrentData.cpp
         src/SimInterface/DataHandlers/WindInfoHandler/setupData.cpp
@@ -102,20 +98,28 @@ set(CPP_FILES
         src/SimInterface/SimInterface.cpp
         src/SimInterface/tryconnecting.cpp
 
-        src/AircraftManager/AircraftManager.cpp
-        src/AircraftManager/loadDefinitions.cpp
+        src/SimThreadManager/initSocket.cpp
+        src/SimThreadManager/simStartupFailed.cpp
+        src/SimThreadManager/SimThreadManager.cpp
+        src/SimThreadManager/startConnectionAttempt.cpp
+        src/SimThreadManager/updateConfig.cpp
 )
 
 
 set(HPP_FILES
-        src/common/dataIdentifiers.hpp
+        src/main.hpp
+
+        src/AircraftManager/AircraftManager.hpp
+
         src/common/definitions/AircraftConfig.hpp
         src/common/definitions/AircraftDefinition/AircraftDefinition.hpp
         src/common/definitions/BaseTypes.hpp
         src/common/definitions/GaugeDefinition/GaugeDefinition.hpp
+
+        src/common/dataIdentifiers.hpp
+        src/common/QmlEnums.hpp
         src/common/simEnums.hpp
         src/common/TypeEnums.hpp
-        src/common/QmlEnums.hpp
         src/common/UnitConverter/UnitConverter.hpp
         src/common/Units.hpp
 
@@ -125,8 +129,7 @@ set(HPP_FILES
         src/FlightplanManager/FlightplanManager.hpp
         src/FlightplanManager/FlightPlanWaypoint.hpp
         src/FlightplanManager/QmlWaypoint.hpp
-
-        src/mainwindow/mainwindow.hpp
+        src/FlightplanManager/WaypointModel/WaypointModel.hpp
 
         src/SimInterface/DataHandlers/AircraftHandler/AircraftHandler.hpp
         src/SimInterface/DataHandlers/AircraftHandler/DataStruct.hpp
@@ -160,6 +163,6 @@ set(HPP_FILES
         src/SimInterface/SharedThreadData.hpp
         src/SimInterface/SimInterface.hpp
 
-        src/AircraftManager/AircraftManager.hpp
+        src/SimThreadManager/SimThreadManager.hpp
 )
 

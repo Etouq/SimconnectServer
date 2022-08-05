@@ -1,60 +1,52 @@
-#include <QApplication>
-#include <QQmlApplicationEngine>
-#include <QFontDatabase>
+#include "main.hpp"
 
-#include "mainwindow/mainwindow.hpp"
-#include "AircraftManager/AircraftManager.hpp"
-#include "FlightplanManager/FlightplanManager.hpp"
-#include "ConnectionHandler/ConnectionHandler.hpp"
-#include "common/QmlEnums.hpp"
-#include <QtQml>
+#include <QApplication>
 #include <QFile>
+#include <QFontDatabase>
+#include <QIcon>
+#include <QQmlApplicationEngine>
+#include <QSurfaceFormat>
 
 int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    qSetMessagePattern("[%{time HH:mm:ss.zzz} %{type}]%{if-category} %{category}: %{endif} - %{message}");
 
     QApplication a(argc, argv);
 
+    // set basic application data for settings object
     a.setOrganizationName("MKootstra");
+    a.setApplicationName("Simconnect Server");
+
+    // set icon
     a.setWindowIcon(QIcon("qrc:/SimconnectServerIcon.ico"));
 
+    // add application font
     QFontDatabase::addApplicationFont(":/Roboto-Mono-Variable.ttf");
     QGuiApplication::setFont(QFont("Roboto Mono", -1, QFont::Bold));
 
-    qRegisterMetaType<QmlWaypointType>("QmlWaypointType");
-    qmlRegisterUncreatableType<QmlWaypointTypeClass>("TypeEnums",
-                                                     1,
-                                                     0,
-                                                     "WaypointType",
-                                                     "Not creatable as it is an enum type");
+    // add slight anti aliasing to reduce jagged edges on flightplan leg arrow
+    QSurfaceFormat format;
+    format.setSamples(2);
+    QSurfaceFormat::setDefaultFormat(format);
 
-    qRegisterMetaType<QmlWpAltitudeType>("QmlWpAltitudeType");
-    qmlRegisterUncreatableType<QmlWpAltitudeTypeClass>("TypeEnums",
-                                                     1,
-                                                     0,
-                                                     "WpAltitudeType",
-                                                     "Not creatable as it is an enum type");
 
-    qRegisterMetaType<io::network::ConnectionState>("ConnectionState");
-    qmlRegisterUncreatableType<io::network::ConnectionStateClass>("TypeEnums",
-                                                     1,
-                                                     0,
-                                                     "ConnectionState",
-                                                     "Not creatable as it is an enum type");
-
-    AircraftManager manager;
-    FlightplanManager flightplanManager;
+    // application state & data managers
+    AircraftManager aircraftManager;
     ConnectionHandler connectionHandler;
+    FlightplanManager flightplanManager;
+    sim::SimThreadManager simManager(aircraftManager.getCurrentDefinition().toConfig());
+
+    setupQml(&aircraftManager, &connectionHandler, &flightplanManager, &simManager);
+    connectSignals(&aircraftManager, &connectionHandler, &flightplanManager, &simManager);
+
+    QObject::connect(&a, &QApplication::aboutToQuit, &flightplanManager, &FlightplanManager::storeFlightplan);
 
     connectionHandler.init();
 
-    flightplanManager.readFromFile("C:/Users/Mikey/AppData/Roaming/Microsoft Flight Simulator/CRJ_TUTORIAL_EDLP_EDDM.PLN");
-
-    qmlRegisterSingletonInstance("Flightplan", 1, 0, "FlightplanManager", &flightplanManager);
-
-    // MainWindow w;
-    // w.show();
+    // init for testing
+    // flightplanManager.readFromFile(
+    //   "C:/Users/Mikey/AppData/Roaming/Microsoft Flight Simulator/CRJ_TUTORIAL_EDLP_EDDM.PLN");
 
     QQmlApplicationEngine engine;
 
