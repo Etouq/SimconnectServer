@@ -2,6 +2,7 @@
 #include "common/dataIdentifiers.hpp"
 
 #include <cmath>
+#include <QDebug>
 
 namespace misc
 {
@@ -77,41 +78,37 @@ std::string MiscHandler::processData(unsigned long *raw, bool *wpIdValid)
     {
         *wpIdValid = newData.gpsNextWpId == "";
         d_previous.gpsNextWpId = newData.gpsNextWpId;
-        static constexpr DataGroupIdentifier groupId = DataGroupIdentifier::PFD_DATA;
-        static constexpr PfdIdentifier id = PfdIdentifier::CURRENT_LEG_TO;
-        dataToSend.append(reinterpret_cast<const char*>(&groupId), sizeof(groupId));
-        dataToSend.append(reinterpret_cast<const char*>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char*>(&newData.gpsNextWpId), sizeof(newData.gpsNextWpId));
+
+        size = d_previous.gpsNextWpId.size();
+        dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::CURRENT_LEG_TO), static_cast<char>(size) });
+        dataToSend.append(newData.gpsNextWpId.constData(), size);
     }
 
     if (d_previous.nav1Ident != newData.nav1Ident)
     {
         d_previous.nav1Ident = newData.nav1Ident;
-        static constexpr DataGroupIdentifier groupId = DataGroupIdentifier::PFD_DATA;
-        static constexpr PfdIdentifier id = PfdIdentifier::NAV1_IDENT;
-        dataToSend.append(reinterpret_cast<const char*>(&groupId), sizeof(groupId));
-        dataToSend.append(reinterpret_cast<const char*>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char*>(&newData.nav1Ident), sizeof(newData.nav1Ident));
+
+        size = d_previous.nav1Ident.size();
+        dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::NAV1_IDENT), static_cast<char>(size) });
+        dataToSend.append(newData.nav1Ident.constData(), size);
     }
 
     if (d_previous.nav2Ident != newData.nav2Ident)
     {
         d_previous.nav2Ident = newData.nav2Ident;
-        static constexpr DataGroupIdentifier groupId = DataGroupIdentifier::PFD_DATA;
-        static constexpr PfdIdentifier id = PfdIdentifier::NAV2_IDENT;
-        dataToSend.append(reinterpret_cast<const char*>(&groupId), sizeof(groupId));
-        dataToSend.append(reinterpret_cast<const char*>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char*>(&newData.nav2Ident), sizeof(newData.nav2Ident));
+
+        size = d_previous.nav2Ident.size();
+        dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::NAV2_IDENT), static_cast<char>(size) });
+        dataToSend.append(newData.nav2Ident.constData(), size);
     }
 
     if (d_previous.gpsPrevWpId != newData.gpsPrevWpId)
     {
         d_previous.gpsPrevWpId = newData.gpsPrevWpId;
-        static constexpr DataGroupIdentifier groupId = DataGroupIdentifier::PFD_DATA;
-        static constexpr PfdIdentifier id = PfdIdentifier::CURRENT_LEG_FROM;
-        dataToSend.append(reinterpret_cast<const char*>(&groupId), sizeof(groupId));
-        dataToSend.append(reinterpret_cast<const char*>(&id), sizeof(id));
-        dataToSend.append(reinterpret_cast<const char*>(&newData.gpsPrevWpId), sizeof(newData.gpsPrevWpId));
+
+        size = d_previous.gpsPrevWpId.size();
+        dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::CURRENT_LEG_FROM), static_cast<char>(size) });
+        dataToSend.append(newData.gpsPrevWpId.constData(), size);
     }
 
     return dataToSend;

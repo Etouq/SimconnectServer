@@ -31,18 +31,18 @@ std::string MiscHandler::sendCurrentData()
     dataToSend.append({ static_cast<char>(DataGroupIdentifier::TSC_DATA), static_cast<char>(TscIdentifier::XPDR_AVAIL) });
     dataToSend.append(reinterpret_cast<const char*>(&d_previous.xpdrAvail), sizeof(d_previous.xpdrAvail));
 
+    uint8_t size = d_previous.gpsNextWpId.size();
+    dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::CURRENT_LEG_TO), static_cast<char>(size) });
+    dataToSend.append(d_previous.gpsNextWpId.constData(), size);
 
-    dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::CURRENT_LEG_TO) });
-    dataToSend.append(reinterpret_cast<const char*>(&d_previous.gpsNextWpId), sizeof(d_previous.gpsNextWpId));
+    dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::NAV1_IDENT), static_cast<char>(size) });
+    dataToSend.append(d_previous.nav1Ident.constData(), size);
 
-    dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::NAV1_IDENT) });
-    dataToSend.append(reinterpret_cast<const char*>(&d_previous.nav1Ident), sizeof(d_previous.nav1Ident));
+    dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::NAV2_IDENT), static_cast<char>(size) });
+    dataToSend.append(d_previous.nav2Ident.constData(), size);
 
-    dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::NAV2_IDENT) });
-    dataToSend.append(reinterpret_cast<const char*>(&d_previous.nav2Ident), sizeof(d_previous.nav2Ident));
-
-    dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::CURRENT_LEG_FROM) });
-    dataToSend.append(reinterpret_cast<const char*>(&d_previous.gpsPrevWpId), sizeof(d_previous.gpsPrevWpId));
+    dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::CURRENT_LEG_FROM), static_cast<char>(size) });
+    dataToSend.append(d_previous.gpsPrevWpId.constData(), size);
 
 
     return dataToSend;
