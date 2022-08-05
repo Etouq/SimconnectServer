@@ -1,15 +1,16 @@
 #include "FdcSocket.hpp"
 #include "common/dataIdentifiers.hpp"
-#include "SimInterface/SharedThreadData.hpp"
-#include <QHostAddress>
+#include "common/definitions/BaseTypes.hpp"
 
+#include <QHostAddress>
 
 void FdcSocket::receivedClientData()
 {
+    ClientToServerIds identifier = ClientToServerIds::HANDSHAKE;
     while (!d_socket->atEnd())
     {
+        QByteArray allData = d_socket->peek(d_socket->bytesAvailable());
         d_socket->startTransaction();
-        ClientToServerIds identifier = ClientToServerIds::QUIT;
         d_socket->read(reinterpret_cast<char *>(&identifier), sizeof(identifier));
 
         switch (identifier)
@@ -17,14 +18,16 @@ void FdcSocket::receivedClientData()
             case ClientToServerIds::HANDSHAKE:
             {
                 uint8_t messageSize = 0;
-                if (d_socket->bytesAvailable() < sizeof(messageSize))
+                if (static_cast<size_t>(d_socket->bytesAvailable()) < sizeof(messageSize))
                 {
                     d_socket->rollbackTransaction();
                     return;
                 }
 
                 d_socket->read(reinterpret_cast<char *>(&messageSize), sizeof(messageSize));
-                if (d_socket->bytesAvailable() < messageSize)
+
+                uint8_t clientVersion = 0;
+                if (static_cast<size_t>(d_socket->bytesAvailable()) < messageSize + sizeof(clientVersion))
                 {
                     d_socket->rollbackTransaction();
                     return;
@@ -32,15 +35,15 @@ void FdcSocket::receivedClientData()
 
                 d_socket->commitTransaction();
 
-                uint8_t clientVersion = 0;
-                d_socket->read(reinterpret_cast<char *>(&clientVersion), sizeof(clientVersion));
-                QByteArray modelName = d_socket->read(messageSize - sizeof(clientVersion));
 
-                if (clientVersion != c_communicationVersion)
+                d_socket->read(reinterpret_cast<char *>(&clientVersion), sizeof(clientVersion));
+                QByteArray modelName = d_socket->read(messageSize);
+
+                if (clientVersion != s_communicationVersion)
                 {
                     qDebug() << "handshake failure";
                     d_socket->disconnectFromHost();
-                    emit handshakeError(clientVersion < c_communicationVersion);
+                    emit handshakeError(clientVersion < s_communicationVersion);
                 }
                 else
                 {
@@ -56,17 +59,49 @@ void FdcSocket::receivedClientData()
 
                 d_socket->commitTransaction();
 
+                emit aircraftLoaded();
+                break;
+            }
+            case ClientToServerIds::UPDATE_DEFAULT_SPEEDBUGS:
+            {
+                uint16_t size = 0;
+                if (static_cast<uint64_t>(d_socket->bytesAvailable()) < sizeof(size))
                 {
-                    std::unique_lock<std::shared_mutex> lock(d_sharedDataMutex);
-                    d_sharedData.aircraftLoaded = true;
+                    d_socket->rollbackTransaction();
+                    return;
+                }
+                d_socket->read(reinterpret_cast<char *>(&size), sizeof(size));
+
+                if (d_socket->bytesAvailable() < size)
+                {
+                    d_socket->rollbackTransaction();
+                    return;
                 }
 
-                d_sharedDataUpdated.store(true, std::memory_order_seq_cst);
+                d_socket->commitTransaction();
+
+                d_socket->read(reinterpret_cast<char *>(&size), sizeof(size));
+
+                QList<definitions::ReferenceSpeed> newBugs;
+
+                uint16_t speed = 0;
+                uint8_t identSize = 0;
+
+                while (size--)
+                {
+                    d_socket->read(reinterpret_cast<char *>(&speed), sizeof(speed));
+                    d_socket->read(reinterpret_cast<char *>(&identSize), sizeof(identSize));
+
+                    newBugs.append({ speed, QString::fromUtf8(d_socket->read(identSize)) });
+                }
+
+                emit updateDefaultSpeedBugs(newBugs);
+
                 break;
             }
             case ClientToServerIds::COMMAND_STRING:
             {
-                uint32_t commandSize = 0;
+                uint64_t commandSize = 0;
                 if (d_socket->bytesAvailable() < sizeof(commandSize))
                 {
                     d_socket->rollbackTransaction();
@@ -81,15 +116,10 @@ void FdcSocket::receivedClientData()
                     return;
                 }
 
-                QByteArray commandString = d_socket->read(commandSize);
                 d_socket->commitTransaction();
 
-                {
-                    std::unique_lock<std::shared_mutex> lock(d_sharedDataMutex);
-                    d_sharedData.commandString += commandString;
-                }
+                emit newCommandString(d_socket->read(commandSize));
 
-                d_sharedDataUpdated.store(true, std::memory_order_seq_cst);
                 break;
             }
             default:
