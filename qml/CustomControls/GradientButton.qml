@@ -38,6 +38,7 @@ Button {
         id: buttonText
 
         horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
 
         font.pixelSize: 18
 

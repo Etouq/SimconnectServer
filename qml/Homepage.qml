@@ -1,9 +1,10 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
+import QtQuick.Window 2.15
 import QtQml 2.15
 
 import SimconnectServer 1.0
-import TypeEnums 1.0
 
 import "CustomControls"
 
@@ -13,50 +14,69 @@ Item {
     signal selectAircraftClicked()
     signal activateFlightplanPage()
 
+    SimStateDisplay {
+        id: simStateDisplay
+
+        y: 20
+
+        anchors.left: parent.left
+        anchors.right: clientContainer.right
+        anchors.leftMargin: 45
+        anchors.rightMargin: 5
+    }
+
     Column {
         id: navigationButtons
 
-        y: 70
+        y: 20
+        width: 150
         anchors.right: parent.right
-        anchors.rightMargin: 80
+        anchors.rightMargin: 40
 
-        spacing: 50
+        spacing: 20
 
         GradientButton {
-            text: "Select Aircraft"
-            width: 200
+            text: "Select\nAircraft"
+            width: 150
+            height: 63
             onClicked: homePage.selectAircraftClicked()
         }
 
         GradientButton {
             text: "Flightplan"
-            width: 200
+            width: 150
+            height: 63
             onClicked: homePage.activateFlightplanPage()
         }
     }
 
     Text {
+        id: clientTitle
+        anchors.top: simStateDisplay.bottom
         anchors.left: clientContainer.left
-        anchors.bottom: clientContainer.top
         anchors.leftMargin: 5
-        anchors.bottomMargin: 5
+        anchors.topMargin: 10
+
+        font.family: "Roboto"
         font.pixelSize: 20
+        font.bold: true
+
         color: "white"
-        text: "Connections"
+        text: "Client Connections"
     }
 
     Rectangle {
         id: clientContainer
 
         anchors.left: parent.left
-        anchors.top: parent.top
+        anchors.top: clientTitle.bottom
         anchors.right: navigationButtons.left
         anchors.bottom: parent.bottom
 
-        anchors.leftMargin: 80
-        anchors.topMargin: 70
-        anchors.rightMargin: 80
-        anchors.bottomMargin: 70
+        anchors.leftMargin: 40
+        anchors.topMargin: 5
+        anchors.rightMargin: 30
+        anchors.bottomMargin: 20
 
         color: "transparent"
         border.color: "white"
@@ -72,18 +92,27 @@ Item {
 
             model: clientModel
 
-            delegate: Item {
+            delegate: RowLayout {
                 required property string name
                 required property string address
 
                 height: childrenRect.height
+                width: clientView.width
 
                 Text {
-                    font.pixelSize: 15
-                    font.family: "Roboto"
-                    width: 100
+                    id: nameText
 
-                    wrapMode: Text.Wrap
+                    Layout.minimumWidth: implicitWidth
+                    Layout.fillWidth: true
+
+                    leftPadding: 5
+                    rightPadding: 5
+
+                    elide: Text.ElideRight
+
+                    font.family: "Roboto"
+                    font.pixelSize: 15
+                    font.bold: true
 
                     color: "white"
 
@@ -91,17 +120,26 @@ Item {
                 }
 
                 Text {
-                    font.pixelSize: 15
-                    font.family: "Roboto"
-                    x: 110
-                    width: 300
+                    id: addressText
 
-                    wrapMode: Text.Wrap
+                    Layout.maximumWidth: 326
+                    Layout.preferredWidth: 326
+                    Layout.fillWidth: true
+
+                    leftPadding: 5
+                    rightPadding: 5
+
+                    font.family: "Roboto"
+                    font.pixelSize: 15
+                    font.bold: true
+
+                    elide: Text.ElideRight
 
                     color: "white"
 
                     text: address
                 }
+
             }
         }
     }

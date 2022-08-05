@@ -6,15 +6,17 @@ import QtQml 2.15
 import SimconnectServer 1.0
 import TypeEnums 1.0
 import Flightplan 1.0
-import "AircraftSelectionPopup"
+import "AircraftSelectionPage"
 import "CustomControls"
 import "FlightplanPage"
 
 ApplicationWindow {
-    //color: "black"
     width: 800
     height: 500
     visible: true
+
+    minimumWidth: 600
+    minimumHeight: 185
 
     StackView {
         id: appStack
@@ -62,7 +64,6 @@ ApplicationWindow {
         id: homePage
 
         Homepage {
-            //anchors.fill: parent
 
             onSelectAircraftClicked: function() {
                 appStack.push(aircraftPage)
@@ -78,7 +79,6 @@ ApplicationWindow {
         id: flightplanPage
 
         FlightplanPage {
-            //anchors.fill: parent
 
             onBackClicked: function() {
                 appStack.pop()
@@ -90,41 +90,12 @@ ApplicationWindow {
         id: aircraftPage
 
         AircraftSelectionPage {
-            //anchors.fill: parent
 
             onBackClicked: function() {
                 appStack.pop()
             }
         }
     }
-
-
-    // GradientButton {
-    //     text: "Select Aircraft"
-    //     onClicked: aircraftSelectionPopup.show()
-    // }
-
-    // GradientButton {
-    //     x: 350
-    //     text: "Flightplan"
-    //     onReleased: fpLoader.active = true
-    // }
-
-    // Loader {
-    //     id: fpLoader
-    //     active: false
-    //     anchors.fill: parent
-
-    //     sourceComponent: FlightplanPage {
-    //         id: fpPage
-
-    //         anchors.fill: parent
-    //     }
-    // }
-
-    // AircraftSelectionPopup {
-    //     id: aircraftSelectionPopup
-    // }
 
 
 
