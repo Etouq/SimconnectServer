@@ -2,9 +2,11 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>Homepage.qml</file>
-        <file>AircraftSelectionPopup/AircraftSelectionPopup.qml</file>
-        <file>AircraftSelectionPopup/AircraftSelectionPage.qml</file>
-        <file>AircraftSelectionPopup/AircraftSelectionItem.qml</file>
+        <file>SimStateDisplay.qml</file>
+        <file>AircraftSelectionPage/AircraftGroupHeader.qml</file>
+        <file>AircraftSelectionPage/AircraftGroupLayout.qml</file>
+        <file>AircraftSelectionPage/AircraftSelectionPage.qml</file>
+        <file>AircraftSelectionPage/AircraftSelectionItem.qml</file>
         <file>CustomControls/GradientButton.qml</file>
         <file>CustomControls/LoadSpinner.qml</file>
         <file>CustomControls/StyledComboBox.qml</file>
