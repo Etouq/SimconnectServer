@@ -4,13 +4,15 @@
 #include <QDir>
 #include <QFile>
 
-
 void AircraftManager::loadDefinitions()
 {
-    QDir dataDir(d_dataRoot + "/Definitions", "*.def", QDir::Unsorted, QDir::Files | QDir::Readable);
+    QDir dataDir(d_dataRoot + "/Definitions", "*.def", QDir::Name, QDir::Files | QDir::Readable);
 
     QFileInfoList files = dataDir.entryInfoList();
 
+
+
+    QString firstWorkingKey;
 
     for (const QFileInfo &fileInfo : files)
     {
@@ -32,6 +34,9 @@ void AircraftManager::loadDefinitions()
 
             fileBuffer.close();
 
+            // select first found and working aircraft
+            if (firstWorkingKey.isEmpty())
+                firstWorkingKey = fileInfo.completeBaseName();
 
             d_definitions[fileInfo.completeBaseName()] = newDefinition;
 
@@ -43,4 +48,8 @@ void AircraftManager::loadDefinitions()
                 d_turbopropKeys.append(fileInfo.completeBaseName());
         }
     }
+
+    // make sure the current definition key exists and is set
+    if (d_currentDefinitionKey.isEmpty() || !d_definitions.contains(d_currentDefinitionKey))
+        d_currentDefinitionKey = firstWorkingKey;
 }

@@ -1,7 +1,6 @@
 #include "AircraftManager.hpp"
 #include <QStandardPaths>
 #include <QDir>
-#include <QQmlEngine>
 
 AircraftManager::AircraftManager()
 {
@@ -13,5 +12,10 @@ AircraftManager::AircraftManager()
 
     loadDefinitions();
 
-    qmlRegisterSingletonInstance("SimconnectServer", 1, 0, "AircraftManager", this);
+    QSettings settings;
+
+    if (settings.contains("lastChosenDefinition"))
+    {
+        d_currentDefinitionKey = settings.value("lastChosenDefinition").toString();
+    }
 }
