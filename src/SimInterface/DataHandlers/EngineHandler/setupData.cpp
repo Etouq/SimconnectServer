@@ -1,7 +1,9 @@
 #include "EngineHandler.hpp"
 #include "windows.h"
 #include "SimInterface/enums.hpp"
+
 #include "C:/MSFS SDK/SimConnect SDK/include/SimConnect.h"
+
 
 namespace handler::engine
 {
@@ -58,6 +60,13 @@ void EngineHandler::setupData(HANDLE simConnectHandle, const AircraftConfig &con
                                        SIMCONNECT_DATATYPE_FLOAT64,
                                        config.thirdGaugeEpsilon);
 
+        SimConnect_AddToDataDefinition(simConnectHandle,
+                                       dataId,
+                                       gaugeTypeToString(config.gauge1Type, config.type, config.engineTempType).c_str(),
+                                       gaugeTypeToUnit(config.gauge1Type).c_str(),
+                                       SIMCONNECT_DATATYPE_FLOAT64,
+                                       config.fourthGaugeEpsilon);
+
         d_numGauges = 2;
     }
     else
@@ -69,7 +78,7 @@ void EngineHandler::setupData(HANDLE simConnectHandle, const AircraftConfig &con
                                        SIMCONNECT_DATATYPE_FLOAT64,
                                        config.thirdGaugeEpsilon);
 
-        if (config.gauge3Type == SwitchingGaugeType::NONE)
+        if (config.gauge4Type == SwitchingGaugeType::NONE)
         {
             SimConnect_AddToDataDefinition(
               simConnectHandle,
@@ -136,7 +145,7 @@ void EngineHandler::setupData(HANDLE simConnectHandle, const AircraftConfig &con
 
     SimConnect_AddToDataDefinition(simConnectHandle,
                                    dataId,
-                                   (datumName + std::to_string(d_engineIdx)).c_str(),
+                                   datumName.c_str(),
                                    "celsius",
                                    SIMCONNECT_DATATYPE_FLOAT64,
                                    config.secondaryTempEpsilon);
