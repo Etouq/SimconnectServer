@@ -11,6 +11,7 @@ Column {
     id: inputColumn
 
     property bool insertModeActive: false
+    property bool editOrMoveModeActive: false
     readonly property bool validInput: identInput.acceptableInput && latInput.acceptableInput && lonInput.acceptableInput && (!alt1Input.enabled || alt1Input.acceptableInput) && (!alt2Input.enabled || alt2Input.acceptableInput) && (speedInput.acceptableInput || speedInput.text.length === 0)
 
     spacing: 8
@@ -294,7 +295,7 @@ Column {
     Button {
         id: appendButton
 
-        enabled: inputColumn.validInput
+        enabled: inputColumn.validInput && !inputColumn.editOrMoveModeActive
 
         topInset: 0
         bottomInset: 0
@@ -318,7 +319,7 @@ Column {
     Button {
         id: insertButton
 
-        enabled: inputColumn.validInput
+        enabled: inputColumn.validInput && !inputColumn.editOrMoveModeActive
 
         topInset: 0
         bottomInset: 0
@@ -346,7 +347,7 @@ Column {
     Button {
         id: directToButton
 
-        enabled: inputColumn.validInput
+        enabled: inputColumn.validInput && !inputColumn.editOrMoveModeActive
 
         topInset: 0
         bottomInset: 0

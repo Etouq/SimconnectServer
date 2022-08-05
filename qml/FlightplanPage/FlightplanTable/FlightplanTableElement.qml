@@ -21,90 +21,30 @@ ListView {
 
     width: contentWidth + 20
     height: 60 + (flightplanTableView.showCount - 1) * 59
-    contentWidth: contentItem.childrenRect.width
+    contentWidth: flightplanTableView.identCellWidth + flightplanTableView.altCellWidth + flightplanTableView.dtkCellWidth + flightplanTableView.distCellWidth + flightplanTableView.speedCellWidth + 6 * flightplanTableView.borderWidth + 10 * flightplanTableView.cellPadding
 
     spacing: -1
     reuseItems: true
 
-    model: flightplanModel
+    model: WaypointModel
 
     boundsBehavior: Flickable.StopAtBounds
 
-    ListModel {
-        id: flightplanModel
+    FontMetrics {
+        id: fontMetrics
+        font.family: "Roboto Mono"
+        font.bold: true
+        font.pixelSize: 20
     }
 
-    Component.onCompleted: {
-        flightplanTableView.fillFlightplan()
-        //console.log(width, contentWidth, childrenRect.width, contentItem.width, contentItem.childrenRect.width)
-        // Qt.callLater(getData);
-    }
-
-    function getData() {
-        console.log(width, contentWidth, childrenRect, contentItem.childrenRect)
-    }
-
-    Connections {
-        target: FlightplanManager
-        function onFlightplanChanged() {
-            const viewIndex = flightplanTableView.indexAt(5, flightplanTableView.contentY);
-            flightplanTableView.fillFlightplan();
-            flightplanTableView.positionViewAtIndex(viewIndex, ListView.Beginning);
-        }
-    }
-
-    function fillFlightplan() {
-        flightplanModel.clear();
-
-        for (let idx = 0; idx < FlightplanManager.waypointCount(); idx++) {
-            const waypoint = FlightplanManager.getWaypoint(idx)
-            flightplanModel.append({
-                "ident": waypoint.ident,
-                "wpTypeUrl": flightplanTableView.getWpTypeUrl(waypoint.waypointType),
-                "altTypeText": flightplanTableView.getAltString(waypoint.altitudeType, waypoint.alt1, waypoint.alt2),
-                "dtk": FlightplanManager.getLegBearing(idx),
-                "dist": FlightplanManager.getLegDistanceTo(idx),
-                "totDist": FlightplanManager.getCumulativeDistance(idx),
-                "speed": waypoint.speed <= 0 ? "" : (waypoint.speed + "KT")
-            });
-        }
-    }
-
-    function getWpTypeUrl(typeId) {
-        switch (typeId) {
-            case WaypointType.AIRPORT:
-                return "qrc:/miscImages/ICON_MAP_AIRPORT.png";
-            case WaypointType.INTERSECTION:
-                return "qrc:/miscImages/ICON_MAP_INT.png";
-            case WaypointType.NDB:
-                return "qrc:/miscImages/ICON_MAP_NDB.png";
-            case WaypointType.USER:
-                return "qrc:/miscImages/ICON_MAP_USER.png";
-            case WaypointType.VOR:
-                return "qrc:/miscImages/ICON_MAP_VOR_2.png";
-            case WaypointType.ATC:
-            case WaypointType.NONE:
-            default:
-                return "qrc:/miscImages/ICON_MAP_USER.png";
-        }
-    }
-
-    function getAltString(altType, alt1, alt2) {
-        switch (altType) {
-            case WpAltitudeType.NONE:
-                return " _____FT";
-            case WpAltitudeType.AT:
-                return " " + alt1.toString() + "FT";
-            case WpAltitudeType.AT_OR_BELOW:
-                return "B" + alt1.toString() + "FT";
-            case WpAltitudeType.AT_OR_ABOVE:
-                return "A" + alt1.toString() + "FT";
-            case WpAltitudeType.BETWEEN:
-                return "A" + alt1.toString() + "FT\nB" + alt2.toString() + "FT";
-            default:
-                return " _____FT";
-        }
-    }
+    readonly property real cellPadding: 4
+    readonly property real borderWidth: 1
+    readonly property real contentHeight: 60 - 2 * (flightplanTableView.cellPadding + flightplanTableView.borderWidth)
+    readonly property real identCellWidth: 20 + flightplanTableView.contentHeight + fontMetrics.boundingRect("A".repeat(9)).width + 6 - flightplanTableView.cellPadding
+    readonly property real altCellWidth: fontMetrics.boundingRect("A00000FT").width + 12
+    readonly property real dtkCellWidth: fontMetrics.boundingRect("000°").width + 12
+    readonly property real distCellWidth: fontMetrics.boundingRect("00.0NM").width + 12
+    readonly property real speedCellWidth: fontMetrics.boundingRect("___KT").width + 12
 
     ScrollBar.vertical: ScrollBar {
         anchors.right: flightplanTableView.right
@@ -120,9 +60,13 @@ ListView {
 
     }
 
-    //snapMode: ListView.SnapToItem
-
     delegate: TableRow {
+
+        identCellWidth: flightplanTableView.identCellWidth
+        altCellWidth: flightplanTableView.altCellWidth
+        dtkCellWidth: flightplanTableView.dtkCellWidth
+        distCellWidth: flightplanTableView.distCellWidth
+        speedCellWidth: flightplanTableView.speedCellWidth
 
         isSelectedItem: flightplanTableView.selectedItemIndex === index
 

@@ -22,20 +22,18 @@ Rectangle {
     required property string altTypeText
     required property string dtk
     required property string dist
-    required property string totDist
     required property string speed
 
     readonly property real cellPadding: 4
     readonly property real borderWidth: 1
 
-    property alias isSelectedItem: selectionIndicator.visible
+    property alias identCellWidth: identCell.width
+    property alias altCellWidth: altCell.width
+    property alias dtkCellWidth: dtkCell.width
+    property alias distCellWidth: distCell.width
+    property alias speedCellWidth: speedCell.width
 
-    FontMetrics {
-        id: fontMetrics
-        font.family: "Roboto Mono"
-        font.bold: true
-        font.pixelSize: 20
-    }
+    property alias isSelectedItem: selectionIndicator.visible
 
     Row {
         id: row
@@ -51,27 +49,12 @@ Rectangle {
         Rectangle {
             id: identCell
 
-            readonly property real contentHeight: 60 - 2 * (rowRoot.cellPadding + rowRoot.borderWidth)
-
-            width: 20 + identCell.contentHeight + fontMetrics.boundingRect("A".repeat(9)).width + 6 - rowRoot.cellPadding// 309
             height: parent.height
 
             gradient: Gradient {
                 GradientStop { position: 0.0; color: "#0093d0" }
                 GradientStop { position: 0.6; color: Qt.rgba(0, 147, 208, 0) }
             }
-
-            // Rectangle {
-            //     anchors.fill: parent
-            //     anchors.topMargin: 0
-            //     anchors.bottomMargin: 0
-            //     anchors.leftMargin: 0
-            //     anchors.rightMargin: 0
-            //     gradient: Gradient {
-            //         GradientStop { position: 0.0; color: "#0093d0" }
-            //         GradientStop { position: 0.6; color: Qt.rgba(0, 147, 208, 0) }
-            //     }
-            // }
 
             Image {
                 id: wpIcon
@@ -101,10 +84,7 @@ Rectangle {
         }
 
         TableCell {
-            //alt
-            width: fontMetrics.boundingRect("A00000FT").width + 12// + rowRoot.cellPadding * 2 // 164
-            cellPadding: rowRoot.cellPadding
-            borderWidth: rowRoot.borderWidth
+            id: altCell
             text: rowRoot.altTypeText
         }
 
@@ -117,11 +97,13 @@ Rectangle {
         }
 
         TableCell {
-            //dtk
-            width: fontMetrics.boundingRect("000°").width + 12// + rowRoot.cellPadding * 2 // 92
-            cellPadding: rowRoot.cellPadding
-            borderWidth: rowRoot.borderWidth
+            id: dtkCell
             text: rowRoot.dtk
+
+            // to deal with stupid chenanigans of spacing around the ° character
+            textObject.anchors.right: undefined
+            textObject.anchors.left: textObject.parent.left
+            textObject.anchors.leftMargin: 6
         }
 
         Rectangle {
@@ -133,11 +115,8 @@ Rectangle {
         }
 
         TableCell {
-            //dist
-            width: fontMetrics.boundingRect("00.0NM").width + 12// + rowRoot.cellPadding * 2 // 128
-            cellPadding: rowRoot.cellPadding
-            borderWidth: rowRoot.borderWidth
-            text: rowRoot.dist + "\n" + rowRoot.totDist
+            id: distCell
+            text: rowRoot.dist
         }
 
         Rectangle {
@@ -149,11 +128,8 @@ Rectangle {
         }
 
         TableCell {
-            //spd
-            width: fontMetrics.boundingRect("___KT").width + 12// + rowRoot.cellPadding * 2 // 110
-            cellPadding: rowRoot.cellPadding
-            borderWidth: rowRoot.borderWidth
-            text: rowRoot.speed//"___KT"
+            id: speedCell
+            text: rowRoot.speed
         }
     }
 
@@ -181,7 +157,7 @@ Rectangle {
             readonly property real arrowTopOffset: 30
 
             readonly property real lineWidth: 5
-            readonly property real lineDistance: 13
+            readonly property real lineDistance: 11
             readonly property real headWidth: 9
 
 

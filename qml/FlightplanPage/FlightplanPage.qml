@@ -16,6 +16,16 @@ Item {
 
     signal backClicked()
 
+    MouseArea {
+        anchors.fill: parent
+
+        onClicked: function() {
+            editModeActive = false
+            moveModeActive = false
+            selectedItemIndex = -1
+        }
+    }
+
     GradientButton {
         text: "Back"
 
@@ -74,6 +84,8 @@ Item {
         anchors.right: parent.right
         anchors.rightMargin: 10
         anchors.top: planTable.top
+
+        editOrMoveModeActive: flightplanPageRoot.editModeActive || flightplanPageRoot.moveModeActive
     }
 
     RowLayout {

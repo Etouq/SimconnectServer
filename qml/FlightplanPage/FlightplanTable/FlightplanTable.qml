@@ -54,7 +54,7 @@ Rectangle {
             font.pixelSize: 20
 
             color: "white"
-            text: FlightplanManager.getTitle()
+            text: WaypointModel.getTitle()
         }
 
         Text {
@@ -139,10 +139,20 @@ Rectangle {
         color: "white"
     }
 
+    Rectangle {
+        anchors.right: flightplanTableView.right
+        anchors.rightMargin: 20
+        anchors.top: flightplanTableView.top
+        anchors.bottom: flightplanTableView.bottom
+        width: 1
+
+        color: "white"
+    }
+
     Connections {
-        target: FlightplanManager
-        function onFlightplanChanged() {
-            fpTitle.text = FlightplanManager.getTitle();
+        target: WaypointModel
+        function onFlightplanTitleChanged() {
+            fpTitle.text = WaypointModel.getTitle();
         }
     }
 
