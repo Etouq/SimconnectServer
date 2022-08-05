@@ -26,10 +26,24 @@ void SimInterface::processSharedData()
 
     if (temp.aircraftLoaded)
     {
+        std::string dataToSend = d_airspeedHandler.sendCurrentData();
+        dataToSend += d_altitudeHandler.sendCurrentData();
+        dataToSend += d_autopilotHandler.sendCurrentData();
+        dataToSend += d_attitudeHandler.sendCurrentData();
+        dataToSend += d_bottombarHandler.sendCurrentData();
+        dataToSend += d_bearingHandler.sendCurrentData();
+        dataToSend += d_hsiHandler.sendCurrentData();
+        dataToSend += d_navInfoHandler.sendCurrentData();
+        dataToSend += d_radioHandler.sendCurrentData();
+        dataToSend += d_windHandler.sendCurrentData();
+        dataToSend += d_miscHandler.sendCurrentData();
+        dataToSend += d_aircraftHandler.sendCurrentData();
+        dataToSend += d_engine1Handler.sendCurrentData();
+        dataToSend += d_engine2Handler.sendCurrentData();
+        dataToSend += d_engine3Handler.sendCurrentData();
+        dataToSend += d_engine4Handler.sendCurrentData();
 
-        emit sendData(QByteArray::fromStdString(
-          d_aircraftHandler.sendCurrentData() + d_engine1Handler.sendCurrentData() + d_engine2Handler.sendCurrentData()
-          + d_engine3Handler.sendCurrentData() + d_engine4Handler.sendCurrentData() + d_miscHandler.sendCurrentData()));
+        emit sendData(QByteArray::fromStdString(dataToSend));
     }
 
     if (temp.aircraftConfigChanged)

@@ -12,7 +12,7 @@ void SimInterface::setupEvents()
 
     SimConnect_MapClientEventToSimEvent(d_simConnectHandle, SIM_COMMAND_IDS::SWAP_COM1, "COM_STBY_RADIO_SWAP");
     SimConnect_MapClientEventToSimEvent(d_simConnectHandle, SIM_COMMAND_IDS::SWAP_COM2, "COM2_RADIO_SWAP");
-    SimConnect_MapClientEventToSimEvent(d_simConnectHandle, SIM_COMMAND_IDS::SWAP_COM2, "COM3_RADIO_SWAP");
+    SimConnect_MapClientEventToSimEvent(d_simConnectHandle, SIM_COMMAND_IDS::SWAP_COM3, "COM3_RADIO_SWAP");
 
     SimConnect_MapClientEventToSimEvent(d_simConnectHandle, SIM_COMMAND_IDS::SWAP_NAV1, "NAV1_RADIO_SWAP");
     SimConnect_MapClientEventToSimEvent(d_simConnectHandle, SIM_COMMAND_IDS::SWAP_NAV2, "NAV2_RADIO_SWAP");

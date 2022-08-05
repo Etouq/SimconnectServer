@@ -23,7 +23,7 @@ bool SimInterface::tryConnecting()
 
     if (!couldConnect)
     {
-        emit receivedError("Could not connect to simconnect. Make sure the sim is running.");
+        //emit receivedError("Could not connect to simconnect. Make sure the sim is running.");
         emit simConnectionFailed();
     }
 
