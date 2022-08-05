@@ -6,11 +6,12 @@
 
 #include <QList>
 #include <QObject>
-#include <QQmlEngine>
 #include <QRegularExpression>
+#include "WaypointModel/WaypointModel.hpp"
 
 class QFile;
 class QXmlStreamReader;
+class FdcSocket;
 
 class FlightplanManager : public QObject
 {
@@ -18,14 +19,18 @@ class FlightplanManager : public QObject
 
     Q_PROPERTY(int activeLegIdx READ activeLegIdx NOTIFY activeLegIdxChanged)
 
-
 public:
 
+    // checks if we have an existing flightplan. If we do, read and store it
     FlightplanManager(QObject *parent = nullptr)
       : QObject(parent)
     {
-        qRegisterMetaType<QmlWaypoint *>("QmlWaypoint*");
-        qmlRegisterUncreatableType<QmlWaypoint>("Flightplan", 1, 0, "Waypoint", "Bad Boy");
+        readFromJson();
+    }
+
+    flightplan::WaypointModel *getModel()
+    {
+        return &d_wpModel;
     }
 
     Q_INVOKABLE void readFromFile(const QString &url);
@@ -37,45 +42,6 @@ public:
 
     Q_INVOKABLE QString getFileBasePath() const;
 
-    Q_INVOKABLE QString getLegDistanceTo(int idx) const
-    {
-        if (idx == 0)
-            return "";
-
-        double distance = d_waypoints[idx - 1].position.distanceTo(d_waypoints[idx].position) / 1852.0;
-        return QString::number(distance, 'f', distance < 100 ? 1 : 0) + "NM";
-    }
-
-    Q_INVOKABLE QString getCumulativeDistance(int idx) const
-    {
-        if (idx == 0)
-            return "";
-        double totalDist = 0.0;
-        for (int i = 1; i <= idx; i++)
-            totalDist += d_waypoints[i - 1].position.distanceTo(d_waypoints[i].position);
-
-        totalDist /= 1852.0;
-        return QString::number(totalDist, 'f', totalDist < 100 ? 1 : 0) + "NM";
-    }
-
-    Q_INVOKABLE QString getLegBearing(int idx) const
-    {
-        if (idx == 0)
-            return "";
-        return QString::number(std::lround(d_waypoints[idx - 1].position.azimuthTo(d_waypoints[idx].position))) + "°";
-    }
-
-    Q_INVOKABLE QString getTitle()
-    {
-        if (d_waypoints.size() == 0)
-            return "____/____";
-
-        if (d_waypoints.size() == 1)
-            return d_waypoints.constFirst().ident + "/____";
-
-        return d_waypoints.constFirst().ident + "/" + d_waypoints.constLast().ident;
-    }
-
     Q_INVOKABLE QmlWaypoint *waypoint()
     {
         return new QmlWaypoint();
@@ -83,17 +49,12 @@ public:
 
     Q_INVOKABLE QmlWaypoint *getWaypoint(int index)
     {
-        return new QmlWaypoint(d_waypoints.at(index));
-    }
-
-    Q_INVOKABLE int waypointCount() const
-    {
-        return d_waypoints.size();
+        return new QmlWaypoint(d_wpModel.at(index));
     }
 
     Q_INVOKABLE void insertWaypoint(int index, QmlWaypoint *waypoint)
     {
-        d_waypoints.insert(index,
+        d_wpModel.insert(index,
                            { .position = waypoint->d_position,
                              .alt1 = waypoint->d_alt1,
                              .alt2 = waypoint->d_alt2,
@@ -101,69 +62,90 @@ public:
                              .wpType = waypoint->d_wpType,
                              .altType = waypoint->d_altType });
 
-        emit flightplanChanged();
+        emit flightplanChanged(d_wpModel.data());
     }
 
     Q_INVOKABLE void updateWaypoint(int index, QmlWaypoint *waypoint)
     {
-        d_waypoints[index] = { .position = waypoint->d_position,
+        d_wpModel.set(index,
+                           { .position = waypoint->d_position,
                                .alt1 = waypoint->d_alt1,
                                .alt2 = waypoint->d_alt2,
                                .ident = waypoint->d_ident,
                                .wpType = waypoint->d_wpType,
-                               .altType = waypoint->d_altType };
+                               .altType = waypoint->d_altType });
 
-        emit flightplanChanged();
+        emit flightplanChanged(d_wpModel.data());
     }
 
     Q_INVOKABLE void moveWaypoint(int fromIndex, int toIndex)
     {
-        d_waypoints.move(fromIndex, toIndex);
+        d_wpModel.move(fromIndex, toIndex);
 
-        emit flightplanChanged();
+        emit flightplanChanged(d_wpModel.data());
     }
 
     Q_INVOKABLE void appendWaypoint(QmlWaypoint *waypoint)
     {
-        insertWaypoint(d_waypoints.size(), waypoint);
+        d_wpModel.append({ .position = waypoint->d_position,
+                             .alt1 = waypoint->d_alt1,
+                             .alt2 = waypoint->d_alt2,
+                             .ident = waypoint->d_ident,
+                             .wpType = waypoint->d_wpType,
+                             .altType = waypoint->d_altType });
+
+        emit flightplanChanged(d_wpModel.data());
     }
 
     Q_INVOKABLE void removeWaypoint(int index)
     {
-        d_waypoints.removeAt(index);
+        d_wpModel.erase(index);
 
-        emit flightplanChanged();
+        emit flightplanChanged(d_wpModel.data());
     }
 
     Q_INVOKABLE void clearFlightplan()
     {
-        d_waypoints.clear();
+        d_wpModel.clear();
 
-        emit flightplanChanged();
+        emit flightplanChanged(d_wpModel.data());
     }
 
-    const QList<FlightPlanWaypoint> &getFlightplan() const
+    const std::vector<FlightPlanWaypoint> &getFlightplan() const
     {
-        return d_waypoints;
+        return d_wpModel.data();
     }
 
 signals:
 
-    void flightplanChanged();
+    void flightplanChanged(const std::vector<FlightPlanWaypoint> &newPlan);
 
-    void activeLegIdxChanged();
+    void activeLegIdxChanged(int32_t newIdx);
+
+public slots:
+
+    void updateActiveLeg(double latitude, double longitude);
+
+    void sendInitData(FdcSocket *newSocket);
+
+    // called when application is about to close, stores current flightplan in json file for readout on next startup
+    void storeFlightplan();
 
 private:
 
-    void readNextWaypoint(QXmlStreamReader &xml);
+    void readFromJson();
+
+    FlightPlanWaypoint readNextWaypoint(QXmlStreamReader &xml);
 
     std::pair<QGeoCoordinate, double> parsePosition(const QString &position);
 
-    QList<FlightPlanWaypoint> d_waypoints;
+    flightplan::WaypointModel d_wpModel;
 
-    int d_activeLegIdx = 3;
+    int32_t d_activeLegIdx = -1;
 
     static const QRegularExpression positionExpr;
+
+    QGeoCoordinate d_userPosition;
 };
 
 #endif  // __FLIGHTPLAN_MANAGER_HPP__

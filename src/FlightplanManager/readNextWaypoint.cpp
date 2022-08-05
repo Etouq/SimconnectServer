@@ -2,7 +2,7 @@
 #include <QXmlStreamReader>
 
 
-void FlightplanManager::readNextWaypoint(QXmlStreamReader &xml)
+FlightPlanWaypoint FlightplanManager::readNextWaypoint(QXmlStreamReader &xml)
 {
     FlightPlanWaypoint newWp;
 
@@ -82,8 +82,8 @@ void FlightplanManager::readNextWaypoint(QXmlStreamReader &xml)
             xml.skipCurrentElement();
     }
 
-    if (newWp.wpType == WaypointType::ATC)
+    if (newWp.wpType == WaypointType::ATC && !newWp.ident.endsWith(" (ATC)"))
         newWp.ident += " (ATC)";
 
-    d_waypoints.append(newWp);
+    return newWp;
 }

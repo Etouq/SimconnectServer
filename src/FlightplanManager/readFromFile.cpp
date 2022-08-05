@@ -32,7 +32,7 @@ void FlightplanManager::readFromFile(const QString &url)
         return; // TODO: raise some kind of error/signal
     }
 
-    d_waypoints.clear();
+    std::vector<FlightPlanWaypoint> waypoints;
 
     while (!xml.atEnd())
     {
@@ -40,7 +40,7 @@ void FlightplanManager::readFromFile(const QString &url)
         {
             if (xml.name() == QLatin1String("ATCWaypoint"))
             {
-                readNextWaypoint(xml);
+                waypoints.push_back(readNextWaypoint(xml));
             }
             else
                 xml.skipCurrentElement();
@@ -49,6 +49,9 @@ void FlightplanManager::readFromFile(const QString &url)
 
     file.close();
 
+    d_wpModel.overwrite(waypoints);
 
-    emit flightplanChanged();
+    emit flightplanChanged(d_wpModel.data());
+
+    updateActiveLeg(d_userPosition.latitude(), d_userPosition.longitude());
 }
