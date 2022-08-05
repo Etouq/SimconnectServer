@@ -10,13 +10,18 @@ QString FlightplanManager::getFileBasePath() const
 
     QSettings settings;
 
+    QDir dir;
+
     if (settings.contains("lastUsedPlnDir")) {
-        return settings.value("lastUsedPlnDir").toString();
+        dir.setPath(settings.value("lastUsedPlnDir").toString());
+
+        if (dir.exists())
+            return settings.value("lastUsedPlnDir").toString();
     }
 
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
 
-    QDir dir(env.value("APPDATA") % sep % "Microsoft Flight Simulator");
+    dir.setPath(env.value("APPDATA") % sep % "Microsoft Flight Simulator");
 
     if (dir.exists())
         return dir.canonicalPath();
