@@ -1,19 +1,10 @@
 #include "FdcSocket.hpp"
-#include "SimInterface/SimInterface.hpp"
 
 FdcSocket::FdcSocket(QTcpSocket *socket,
                      uint64_t id,
-                     std::atomic_bool &sharedDataUpdated,
-                     std::shared_mutex &sharedDataMutex,
-                     SharedThreadData &sharedData,
-                     SimInterface &sim,
                      QObject *parent)
   : QObject(parent),
-    d_id(id),
-    d_sharedDataUpdated(sharedDataUpdated),
-    d_sharedDataMutex(sharedDataMutex),
-    d_sharedData(sharedData),
-    d_sim(sim)
+    d_id(id)
 {
     //d_socket->setSocketOption(QAbstractSocket::KeepAliveOption, 1);
     //d_socket->setSocketOption(QAbstractSocket::LowDelayOption, 1);
@@ -23,28 +14,23 @@ FdcSocket::FdcSocket(QTcpSocket *socket,
 
     qDebug() << "started socket with id:" << QString::number(d_id);
 
-    connect(&sim,
-            &SimInterface::sendData,
-            d_socket,
-            qOverload<const QByteArray &>(&QIODevice::write),
-            Qt::QueuedConnection);
-    connect(&sim, &SimInterface::receivedError, this, &FdcSocket::receivedSimError, Qt::QueuedConnection);
 
     connect(d_socket, &QTcpSocket::disconnected, this, &FdcSocket::clientDisconnected, Qt::UniqueConnection);
     connect(d_socket, &QTcpSocket::readyRead, this, &FdcSocket::receivedClientData, Qt::UniqueConnection);
 
 
-    d_socket->write(reinterpret_cast<const char *>(&c_communicationVersion), sizeof(c_communicationVersion));
+    d_socket->write(reinterpret_cast<const char *>(&s_communicationVersion), sizeof(s_communicationVersion));
 }
 
 FdcSocket::~FdcSocket()
 {
-    disconnect(&d_sim, &SimInterface::sendData, d_socket, qOverload<const QByteArray &>(&QIODevice::write));
+    qDebug() << "destroyed socket with id:" << QString::number(d_id);
+    disconnect(d_sendDataConnection);
 
     if (d_socket->state() == QTcpSocket::ConnectedState)
     {
         d_socket->write(QByteArray::fromStdString({ static_cast<char>(DataGroupIdentifier::SERVER_DATA),
-                                                  static_cast<char>(ServerMessageIdentifier::QUIT) }));
+                                                  static_cast<char>(ServerMessageIdentifier::SERVER_CLOSING) }));
         d_socket->flush();
         d_socket->disconnectFromHost();
     }

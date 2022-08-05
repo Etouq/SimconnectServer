@@ -4,17 +4,21 @@
 
 #include "common/dataIdentifiers.hpp"
 
-#include <atomic>
 #include <cstdint>
-#include <mutex>
-#include <shared_mutex>
-
 #include <QObject>
 #include <QTcpSocket>
+
+#include <QDebug>
+
 
 class SimInterface;
 
 struct SharedThreadData;
+
+namespace definitions
+{
+struct ReferenceSpeed;
+}
 
 // encapsulates a QTcpSocket and handles its data and state
 class FdcSocket : public QObject
@@ -25,10 +29,6 @@ public:
 
     FdcSocket(QTcpSocket *socket,
               uint64_t id,
-              std::atomic_bool &sharedDataUpdated,
-              std::shared_mutex &sharedDataMutex,
-              SharedThreadData &sharedData,
-              SimInterface &sim,
               QObject *parent);
 
     ~FdcSocket();
@@ -48,11 +48,22 @@ public:
         d_socket->write(data);
     }
 
+    void writeToSocket(const std::string &data)
+    {
+        d_socket->write(data.data(), data.size());
+    }
+
+    void connectSimSignals(const SimInterface *sim);
+
 signals:
 
     void socketClosed(uint64_t id);
     void handshakeError(bool clientTooOld);
     void handshakeSuccess();
+    void updateDefaultSpeedBugs(const QList<definitions::ReferenceSpeed> &newBugs);
+
+    void newCommandString(const QByteArray &commandString);
+    void aircraftLoaded();
 
 private slots:
 
@@ -61,13 +72,21 @@ private slots:
 
     void receivedSimError(const QString &msg)
     {
-        d_socket->write(QByteArray::fromStdString({ static_cast<char>(DataGroupIdentifier::SERVER_DATA),
-                                                  static_cast<char>(ServerMessageIdentifier::ERROR_MSG) }) + msg.toUtf8());
+        qCritical() << msg;
+        QByteArray message = msg.toUtf8();
+
+        const uint64_t size = message.size();
+
+        message.prepend(reinterpret_cast<const char *>(&size), sizeof(size));
+        message.prepend(QByteArray::fromStdString({ static_cast<char>(DataGroupIdentifier::SERVER_DATA),
+                                                    static_cast<char>(ServerMessageIdentifier::ERROR_MSG) }));
+
+        d_socket->write(message);
     }
 
 private:
 
-    static constexpr uint8_t c_communicationVersion = 3;
+    static constexpr uint8_t s_communicationVersion = 3;
 
     const uint64_t d_id;
 
@@ -75,11 +94,7 @@ private:
 
     QString d_endpointName = "";
 
-    std::atomic_bool &d_sharedDataUpdated;
-    std::shared_mutex &d_sharedDataMutex;
-    SharedThreadData &d_sharedData;
-
-    SimInterface &d_sim;
+    QMetaObject::Connection d_sendDataConnection;
 };
 
 #endif  // __FDC_SOCKET_HPP__
