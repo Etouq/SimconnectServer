@@ -52,7 +52,8 @@ struct DataStruct
     DataStruct() = default;
 
     DataStruct(RawStruct *data)
-      : totalFuelQty(data->eng1FuelFlow + data->eng2FuelFlow + data->eng3FuelFlow + data->eng4FuelFlow),
+      : totalFuelQty(data->totalFuelQty),
+        totalFuelFlow(data->eng1FuelFlow + data->eng2FuelFlow + data->eng3FuelFlow + data->eng4FuelFlow),
 
         groundSpeed(data->groundSpeed),
         hasAp(data->hasAp != 0),
@@ -61,7 +62,8 @@ struct DataStruct
         com3Avail(data->com3Avail != 0),
         nav1Avail(data->nav1Avail != 0),
         nav2Avail(data->nav2Avail != 0),
-        xpdrAvail(data->xpdrAvail != 0),
+        // xpdrAvail(data->xpdrAvail != 0),
+        xpdrAvail(true),
 
         gpsNextWpId(data->gpsNextWpId, 64),
         nav1Ident(data->nav1Ident, 64),
