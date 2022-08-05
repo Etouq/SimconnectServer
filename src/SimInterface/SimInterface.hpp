@@ -82,7 +82,7 @@ public:
             while (!quit)
             {
                 processDispatches();
-                QThread::msleep(15);
+                QThread::msleep(15); // sleep to reduce cpu usage (we don't need much time anyway)
             }
 
             SimConnect_Close(d_simConnectHandle);
@@ -92,9 +92,12 @@ public:
 signals:
     void sendData(const QByteArray &data) const;
     void receivedError(const QString &errorMsg);
+
     void simConnectQuit();
     void connected();
     void simConnectionFailed();
+
+    void updatePosition(double latitude, double longitude);
 
 private:
 

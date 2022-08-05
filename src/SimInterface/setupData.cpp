@@ -29,6 +29,7 @@ void SimInterface::setupData()
                                    SIMCONNECT_DATATYPE_INT32);
 
     SimConnect_SubscribeToSystemEvent(d_simConnectHandle, EVENT_6HZ_ID, "6Hz");
+    SimConnect_SubscribeToSystemEvent(d_simConnectHandle, EVENT_1SEC_ID, "1sec");
     SimConnect_SubscribeToSystemEvent(d_simConnectHandle, SIM_START_EVENT_ID, "SimStart");
     SimConnect_SubscribeToSystemEvent(d_simConnectHandle, SIM_STOP_EVENT_ID, "SimStop");
 

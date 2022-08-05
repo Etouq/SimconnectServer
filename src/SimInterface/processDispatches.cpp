@@ -25,9 +25,9 @@ void SimInterface::processDispatches()
                 {
                     if (updateAircraft)
                     {
-                        emit sendData(QByteArray::fromStdString(d_engine1Handler.reset() + d_engine2Handler.reset()
-                                                                + d_engine3Handler.reset() + d_engine4Handler.reset()
-                                                                + d_aircraftHandler.reset()));
+                        // emit sendData(QByteArray::fromStdString(d_engine1Handler.reset() + d_engine2Handler.reset()
+                        //                                         + d_engine3Handler.reset() + d_engine4Handler.reset()
+                        //                                         + d_aircraftHandler.reset()));
 
                         SimConnect_ClearDataDefinition(d_simConnectHandle, ENGINE1_DEFINITION);
                         SimConnect_ClearDataDefinition(d_simConnectHandle, ENGINE2_DEFINITION);
@@ -101,6 +101,10 @@ void SimInterface::processDispatches()
                     emit sendData(
                       QByteArray::fromStdString({ static_cast<char>(DataGroupIdentifier::SERVER_DATA),
                                                   static_cast<char>(ServerMessageIdentifier::SIM_STOP_EVENT) }));
+                }
+                else if (evt->uEventID == EVENT_1SEC_ID)
+                {
+                    emit updatePosition(d_hsiHandler.latitude(), d_hsiHandler.longitude());
                 }
                 else
                 {

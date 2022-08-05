@@ -45,13 +45,14 @@ enum DATA_REQUEST_IDS
 enum EVENT_IDS
 {
     EVENT_6HZ_ID,
+    EVENT_1SEC_ID,
     SIM_START_EVENT_ID,
     SIM_STOP_EVENT_ID
 };
 
 enum SIM_COMMAND_IDS
 {
-    SET_COM1_STBY = 3, // to prevent conflict with EVENT_IDS
+    SET_COM1_STBY = 4, // to prevent conflict with EVENT_IDS
     SET_COM2_STBY,
     SET_COM3_STBY,
     SET_NAV1_STBY,
