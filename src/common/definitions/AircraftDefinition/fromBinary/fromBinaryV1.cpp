@@ -108,10 +108,7 @@ AircraftDefinition AircraftDefinition::fromBinaryV1(QIODevice &data, FileVersion
     data.read(reinterpret_cast<char *>(&ret.hasRudderTrim), sizeof(ret.hasRudderTrim));
     data.read(reinterpret_cast<char *>(&ret.hasAileronTrim), sizeof(ret.hasAileronTrim));
 
-    data.read(reinterpret_cast<char *>(&ret.fuelQtyByWeight), sizeof(ret.fuelQtyByWeight));
-    data.read(reinterpret_cast<char *>(&ret.fuelFlowByWeight), sizeof(ret.fuelFlowByWeight));
-    ret.fuelQtyByWeight = !ret.fuelQtyByWeight;
-    ret.fuelFlowByWeight = !ret.fuelFlowByWeight;
+    data.skip(2 * sizeof(bool));
 
     data.read(reinterpret_cast<char *>(&ret.numEngines), sizeof(ret.numEngines));
     data.read(reinterpret_cast<char *>(&stringSize), sizeof(stringSize));

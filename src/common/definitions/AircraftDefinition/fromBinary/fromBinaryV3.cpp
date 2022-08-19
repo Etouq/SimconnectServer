@@ -35,6 +35,7 @@ AircraftDefinition AircraftDefinition::fromBinaryV3(QIODevice &data, FileVersion
     data.read(reinterpret_cast<char *>(&ret.engineTempType), sizeof(ret.engineTempType));
 
     data.read(reinterpret_cast<char *>(&ret.maxPower), sizeof(ret.maxPower));
+    data.read(reinterpret_cast<char *>(&ret.maxTorque), sizeof(ret.maxTorque));
 
     data.read(reinterpret_cast<char *>(&ret.hasApu), sizeof(ret.hasApu));
 
@@ -44,9 +45,6 @@ AircraftDefinition AircraftDefinition::fromBinaryV3(QIODevice &data, FileVersion
     data.read(reinterpret_cast<char *>(&ret.hasElevatorTrim), sizeof(ret.hasElevatorTrim));
     data.read(reinterpret_cast<char *>(&ret.hasRudderTrim), sizeof(ret.hasRudderTrim));
     data.read(reinterpret_cast<char *>(&ret.hasAileronTrim), sizeof(ret.hasAileronTrim));
-
-    data.read(reinterpret_cast<char *>(&ret.fuelQtyByWeight), sizeof(ret.fuelQtyByWeight));
-    data.read(reinterpret_cast<char *>(&ret.fuelFlowByWeight), sizeof(ret.fuelFlowByWeight));
 
     data.read(reinterpret_cast<char *>(&ret.hasSecondaryTempGauge), sizeof(ret.hasSecondaryTempGauge));
     data.read(reinterpret_cast<char *>(&ret.secondaryTempType), sizeof(ret.secondaryTempType));
@@ -67,7 +65,7 @@ AircraftDefinition AircraftDefinition::fromBinaryV3(QIODevice &data, FileVersion
     data.read(reinterpret_cast<char *>(&ret.noColors), sizeof(ret.noColors));
     data.read(reinterpret_cast<char *>(&ret.dynamicBarberpole), sizeof(ret.dynamicBarberpole));
 
-    uint16_t listSize = 0;
+    uint8_t listSize = 0;
     data.read(reinterpret_cast<char *>(&listSize), sizeof(listSize));
 
     ret.refSpeedDefaults.clear();

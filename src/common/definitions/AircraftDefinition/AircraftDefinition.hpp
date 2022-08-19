@@ -40,6 +40,7 @@ struct AircraftDefinition
     TemperatureGaugeType engineTempType = TemperatureGaugeType::ITT;
 
     double maxPower = 1;
+    double maxTorque = 1;
 
     bool hasApu = false;
 
@@ -49,9 +50,6 @@ struct AircraftDefinition
     bool hasElevatorTrim = false;
     bool hasRudderTrim = false;
     bool hasAileronTrim = false;
-
-    bool fuelQtyByWeight = false;
-    bool fuelFlowByWeight = false;
 
     bool hasSecondaryTempGauge = false;
     TemperatureGaugeType secondaryTempType = TemperatureGaugeType::EGT;
@@ -78,6 +76,9 @@ struct AircraftDefinition
     QByteArray toBinary() const;
 
     AircraftConfig toConfig() const;
+
+    bool fuelQtyByWeight() const;
+    bool fuelFlowByWeight() const;
 
     static AircraftDefinition fromBinary(QIODevice &data, FileVersion version)
     {

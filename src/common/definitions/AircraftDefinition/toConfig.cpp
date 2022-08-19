@@ -31,7 +31,7 @@ AircraftConfig AircraftDefinition::toConfig() const
 
     ret.engineTempType = engineTempType;
 
-    ret.maxPower = gauge1Type == SwitchingGaugeType::POWER_PCT || gauge2Type == SwitchingGaugeType::POWER_PCT || gauge3Type == SwitchingGaugeType::POWER_PCT || gauge4Type == SwitchingGaugeType::POWER_PCT ? maxPower : 1.0;
+    ret.maxPower = (gauge1Type == SwitchingGaugeType::POWER && firstGauge.unit == Units::PERCENT) || (gauge2Type == SwitchingGaugeType::POWER && secondGauge.unit == Units::PERCENT) || (gauge3Type == SwitchingGaugeType::POWER && thirdGauge.unit == Units::PERCENT) || (gauge4Type == SwitchingGaugeType::POWER && fourthGauge.unit == Units::PERCENT) ? maxPower : 1.0;
 
     ret.hasApu = hasApu;
 
@@ -42,19 +42,19 @@ AircraftConfig AircraftDefinition::toConfig() const
     ret.hasRudderTrim = hasRudderTrim;
     ret.hasAileronTrim = hasAileronTrim;
 
-    ret.fuelQtyByWeight = fuelQtyByWeight;
-    ret.fuelFlowByWeight = fuelFlowByWeight;
+    ret.fuelQtyByWeight = fuelQtyByWeight();
+    ret.fuelFlowByWeight = fuelFlowByWeight();
 
     ret.hasSecondaryTempGauge = hasSecondaryTempGauge;
     ret.secondaryTempType = secondaryTempType;
 
-    if (fuelQtyByWeight)
+    if (ret.fuelQtyByWeight)
         ret.fuelQtyEpsilon /= 4.0;
 
-    if (fuelFlowByWeight)
+    if (ret.fuelFlowByWeight)
         ret.fuelFlowEpsilon /= 3600.0;
     else
-        ret.fuelFlowEpsilon *= 0.2641720523; // placeholder until liters per hour is fixed
+        ret.fuelFlowEpsilon *= 0.2641720523; // placeholder until liters per hour is fixed (currently gives liters p/s)
 
     return ret;
 }

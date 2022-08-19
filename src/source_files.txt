@@ -11,6 +11,8 @@ set(CPP_FILES
         src/common/definitions/AircraftDefinition/fromBinary/fromBinaryV1.cpp
         src/common/definitions/AircraftDefinition/fromBinary/fromBinaryV2.cpp
         src/common/definitions/AircraftDefinition/fromBinary/fromBinaryV3.cpp
+        src/common/definitions/AircraftDefinition/fuelQtyByWeight.cpp
+        src/common/definitions/AircraftDefinition/fuelFlowByWeight.cpp
         src/common/definitions/AircraftDefinition/toBinary.cpp
         src/common/definitions/AircraftDefinition/toConfig.cpp
 

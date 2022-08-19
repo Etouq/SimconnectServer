@@ -30,6 +30,7 @@ QByteArray AircraftDefinition::toBinary() const
                  static_cast<char>(engineTempType) });
 
     ret.append(reinterpret_cast<const char *>(&maxPower), sizeof(maxPower));
+    ret.append(reinterpret_cast<const char *>(&maxTorque), sizeof(maxTorque));
 
     ret.append({ static_cast<char>(hasApu),
 
@@ -39,9 +40,6 @@ QByteArray AircraftDefinition::toBinary() const
                  static_cast<char>(hasElevatorTrim),
                  static_cast<char>(hasRudderTrim),
                  static_cast<char>(hasAileronTrim),
-
-                 static_cast<char>(fuelQtyByWeight),
-                 static_cast<char>(fuelFlowByWeight),
 
                  static_cast<char>(hasSecondaryTempGauge),
                  static_cast<char>(secondaryTempType),
@@ -63,7 +61,7 @@ QByteArray AircraftDefinition::toBinary() const
     ret.append(reinterpret_cast<const char *>(&noColors), sizeof(noColors));
     ret.append(reinterpret_cast<const char *>(&dynamicBarberpole), sizeof(dynamicBarberpole));
 
-    uint16_t listSize = refSpeedDefaults.size();
+    uint8_t listSize = refSpeedDefaults.size();
     ret.append(reinterpret_cast<const char *>(&listSize), sizeof(listSize));
     for (const ReferenceSpeed &speedBug : refSpeedDefaults)
     {
