@@ -14,6 +14,7 @@ ApplicationWindow {
     width: 800
     height: 500
     visible: true
+    title: Qt.application.displayName
 
     minimumWidth: 600
     minimumHeight: 185
