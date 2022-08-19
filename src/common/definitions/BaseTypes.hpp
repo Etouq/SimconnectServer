@@ -7,6 +7,8 @@
 namespace definitions
 {
 
+static constexpr double DEF_EPS = 1e-5;
+
 // fileversion for aircraft definition files
 enum class FileVersion : uint16_t
 {

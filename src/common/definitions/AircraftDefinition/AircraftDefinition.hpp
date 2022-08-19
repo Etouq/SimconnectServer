@@ -68,10 +68,18 @@ struct AircraftDefinition
     float redBegin = 0;
     float redEnd = 0;
     float highLimit = 0;
+
     bool noColors = false;
+    bool hasLowLimit = true;
+    bool hasFlapsSpeed = true;
+    bool hasGreenSpeed = true;
+    bool hasYellowSpeed = true;
+    bool hasRedSpeed = true;
+    bool hasHighLimit = true;
+
     bool dynamicBarberpole = false;
 
-    QList<ReferenceSpeed> refSpeedDefaults = { { 85, "r" }, { 100, "x" }, { 124, "y" }, { 85, "ap" } };
+    QList<ReferenceSpeed> refSpeedDefaults = { { 85, "R" }, { 100, "X" }, { 124, "Y" }, { 85, "AP" } };
 
     QByteArray toBinary() const;
 

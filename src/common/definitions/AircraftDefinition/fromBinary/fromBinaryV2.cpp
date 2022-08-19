@@ -17,10 +17,10 @@ AircraftDefinition AircraftDefinition::fromBinaryV2(QIODevice &data, FileVersion
     uint16_t vapSetting = 0;
     data.read(reinterpret_cast<char *>(&vapSetting), sizeof(vapSetting));
 
-    ret.refSpeedDefaults = { { vrSetting, "r" },
-                             { vxSetting, "x" },
-                             { vySetting, "y" },
-                             { vapSetting, "ap" } };
+    ret.refSpeedDefaults = { { vrSetting, "R" },
+                             { vxSetting, "X" },
+                             { vySetting, "Y" },
+                             { vapSetting, "AP" } };
 
     return ret;
 }

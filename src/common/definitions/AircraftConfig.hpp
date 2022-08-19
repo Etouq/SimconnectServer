@@ -29,6 +29,7 @@ struct AircraftConfig
     TemperatureGaugeType engineTempType = TemperatureGaugeType::ITT;
 
     double maxPower = 1;
+    double maxTorque = 1;
 
     bool hasApu = false;
 

@@ -58,8 +58,15 @@ QByteArray AircraftDefinition::toBinary() const
     ret.append(reinterpret_cast<const char *>(&redBegin), sizeof(redBegin));
     ret.append(reinterpret_cast<const char *>(&redEnd), sizeof(redEnd));
     ret.append(reinterpret_cast<const char *>(&highLimit), sizeof(highLimit));
-    ret.append(reinterpret_cast<const char *>(&noColors), sizeof(noColors));
-    ret.append(reinterpret_cast<const char *>(&dynamicBarberpole), sizeof(dynamicBarberpole));
+
+    ret.append({ static_cast<char>(noColors),
+                 static_cast<char>(hasLowLimit),
+                 static_cast<char>(hasFlapsSpeed),
+                 static_cast<char>(hasGreenSpeed),
+                 static_cast<char>(hasYellowSpeed),
+                 static_cast<char>(hasRedSpeed),
+                 static_cast<char>(hasHighLimit),
+                 static_cast<char>(dynamicBarberpole) });
 
     uint8_t listSize = refSpeedDefaults.size();
     ret.append(reinterpret_cast<const char *>(&listSize), sizeof(listSize));

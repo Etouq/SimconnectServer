@@ -32,6 +32,7 @@ AircraftConfig AircraftDefinition::toConfig() const
     ret.engineTempType = engineTempType;
 
     ret.maxPower = (gauge1Type == SwitchingGaugeType::POWER && firstGauge.unit == Units::PERCENT) || (gauge2Type == SwitchingGaugeType::POWER && secondGauge.unit == Units::PERCENT) || (gauge3Type == SwitchingGaugeType::POWER && thirdGauge.unit == Units::PERCENT) || (gauge4Type == SwitchingGaugeType::POWER && fourthGauge.unit == Units::PERCENT) ? maxPower : 1.0;
+    ret.maxTorque = type == AircraftType::PROP && (gauge1Type == SwitchingGaugeType::TORQUE && firstGauge.unit == Units::PERCENT) || (gauge2Type == SwitchingGaugeType::TORQUE && secondGauge.unit == Units::PERCENT) || (gauge3Type == SwitchingGaugeType::TORQUE && thirdGauge.unit == Units::PERCENT) || (gauge4Type == SwitchingGaugeType::TORQUE && fourthGauge.unit == Units::PERCENT) ? maxTorque : 1.0;
 
     ret.hasApu = hasApu;
 
