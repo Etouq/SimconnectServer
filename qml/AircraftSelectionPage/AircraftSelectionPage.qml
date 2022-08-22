@@ -24,7 +24,7 @@ Item {
         onClicked: aircraftPageRoot.backClicked()
     }
 
-    ScrollView {
+    Loader {
 
         anchors {
             top: backButton.bottom
@@ -34,167 +34,173 @@ Item {
 
             margins: 20
         }
+        asynchronous: true
 
-        contentWidth: availableWidth
-        contentHeight: thumbColumn.height
+        ScrollView {
 
-        clip: true
+            anchors.fill: parent
 
-        ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+            contentWidth: availableWidth
+            contentHeight: thumbColumn.height
 
-        Column {
-            id: thumbColumn
-            anchors.left: parent.left
-            anchors.right: parent.right
+            clip: true
 
-            spacing: 8
+            ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
 
-            // n_min = ⌈(width + spacing) / (maxWidth + spacing)⌉
-            // n_max = ⌊(width + spacing) / (minWidth + spacing)⌋
-            readonly property int thumbnailColumnCount: Math.max(1, Math.floor((thumbColumn.width + 10) / (300 + 10)))
-
-            AircraftGroupHeader {
-                id: jetHeader
-
+            Column {
+                id: thumbColumn
                 anchors.left: parent.left
                 anchors.right: parent.right
 
-                text: "Jet"
+                spacing: 8
 
-                MouseArea {
-                    anchors.fill: parent
+                // n_min = ⌈(width + spacing) / (maxWidth + spacing)⌉
+                // n_max = ⌊(width + spacing) / (minWidth + spacing)⌋
+                readonly property int thumbnailColumnCount: Math.max(1, Math.floor((thumbColumn.width + 10) / (300 + 10)))
 
-                    onClicked: function() {
-                        jetLayout.expanded = !jetLayout.expanded
-                    }
-                }
-            }
+                AircraftGroupHeader {
+                    id: jetHeader
 
-            AircraftGroupLayout {
-                id: jetLayout
+                    anchors.left: parent.left
+                    anchors.right: parent.right
 
-                anchors.left: parent.left
-                anchors.right: parent.right
+                    text: "Jet"
 
-                columns: thumbColumn.thumbnailColumnCount
-                collapseToggle: jetHeader.collapseToggle
+                    MouseArea {
+                        anchors.fill: parent
 
-                Repeater {
-                    model: AircraftManager.getNumJets()
-
-                    AircraftSelectionItem {
-                        required property int index
-
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
-
-                        Layout.minimumHeight: minHeight
-                        Layout.minimumWidth: 300
-
-                        key: AircraftManager.getJetKey(index)
-
-                        onThumbnailClicked: function() {
-                            aircraftPageRoot.backClicked();
+                        onClicked: function() {
+                            jetLayout.expanded = !jetLayout.expanded
                         }
                     }
                 }
-            }
 
-            AircraftGroupHeader {
-                id: turbopropHeader
+                AircraftGroupLayout {
+                    id: jetLayout
 
-                anchors.left: parent.left
-                anchors.right: parent.right
+                    anchors.left: parent.left
+                    anchors.right: parent.right
 
-                text: "Turboprop"
+                    columns: thumbColumn.thumbnailColumnCount
+                    collapseToggle: jetHeader.collapseToggle
 
-                MouseArea {
-                    anchors.fill: parent
+                    Repeater {
+                        model: AircraftManager.getNumJets()
 
-                    onClicked: function() {
-                        turbopropLayout.expanded = !turbopropLayout.expanded
-                    }
-                }
-            }
+                        AircraftSelectionItem {
+                            required property int index
 
-            AircraftGroupLayout {
-                id: turbopropLayout
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
 
-                anchors.left: parent.left
-                anchors.right: parent.right
+                            Layout.minimumHeight: minHeight
+                            Layout.minimumWidth: 300
 
-                columns: thumbColumn.thumbnailColumnCount
-                collapseToggle: turbopropHeader.collapseToggle
+                            key: AircraftManager.getJetKey(index)
 
-                Repeater {
-                    model: AircraftManager.getNumTurboprop()
-
-                    AircraftSelectionItem {
-                        required property int index
-
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
-
-                        Layout.minimumHeight: minHeight
-                        Layout.minimumWidth: 300
-
-                        key: AircraftManager.getTurbopropKey(index)
-
-                        onThumbnailClicked: function() {
-                            aircraftPageRoot.backClicked();
+                            onThumbnailClicked: function() {
+                                aircraftPageRoot.backClicked();
+                            }
                         }
                     }
                 }
-            }
 
-            AircraftGroupHeader {
-                id: propHeader
+                AircraftGroupHeader {
+                    id: turbopropHeader
 
-                anchors.left: parent.left
-                anchors.right: parent.right
+                    anchors.left: parent.left
+                    anchors.right: parent.right
 
-                text: "Propeller"
+                    text: "Turboprop"
 
-                MouseArea {
-                    anchors.fill: parent
+                    MouseArea {
+                        anchors.fill: parent
 
-                    onClicked: function() {
-                        propLayout.expanded = !propLayout.expanded
-                    }
-                }
-            }
-
-            AircraftGroupLayout {
-                id: propLayout
-
-                anchors.left: parent.left
-                anchors.right: parent.right
-
-                columns: thumbColumn.thumbnailColumnCount
-                collapseToggle: propHeader.collapseToggle
-
-                Repeater {
-                    model: AircraftManager.getNumProp()
-
-                    AircraftSelectionItem {
-                        required property int index
-
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
-
-                        Layout.minimumHeight: minHeight
-                        Layout.minimumWidth: 300
-
-                        key: AircraftManager.getPropKey(index)
-
-                        onThumbnailClicked: function() {
-                            aircraftPageRoot.backClicked();
+                        onClicked: function() {
+                            turbopropLayout.expanded = !turbopropLayout.expanded
                         }
                     }
                 }
+
+                AircraftGroupLayout {
+                    id: turbopropLayout
+
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+
+                    columns: thumbColumn.thumbnailColumnCount
+                    collapseToggle: turbopropHeader.collapseToggle
+
+                    Repeater {
+                        model: AircraftManager.getNumTurboprop()
+
+                        AircraftSelectionItem {
+                            required property int index
+
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+
+                            Layout.minimumHeight: minHeight
+                            Layout.minimumWidth: 300
+
+                            key: AircraftManager.getTurbopropKey(index)
+
+                            onThumbnailClicked: function() {
+                                aircraftPageRoot.backClicked();
+                            }
+                        }
+                    }
+                }
+
+                AircraftGroupHeader {
+                    id: propHeader
+
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+
+                    text: "Propeller"
+
+                    MouseArea {
+                        anchors.fill: parent
+
+                        onClicked: function() {
+                            propLayout.expanded = !propLayout.expanded
+                        }
+                    }
+                }
+
+                AircraftGroupLayout {
+                    id: propLayout
+
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+
+                    columns: thumbColumn.thumbnailColumnCount
+                    collapseToggle: propHeader.collapseToggle
+
+                    Repeater {
+                        model: AircraftManager.getNumProp()
+
+                        AircraftSelectionItem {
+                            required property int index
+
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+
+                            Layout.minimumHeight: minHeight
+                            Layout.minimumWidth: 300
+
+                            key: AircraftManager.getPropKey(index)
+
+                            onThumbnailClicked: function() {
+                                aircraftPageRoot.backClicked();
+                            }
+                        }
+                    }
+                }
+
             }
 
         }
-
     }
 }
