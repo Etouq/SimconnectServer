@@ -1,11 +1,12 @@
 #ifndef __AIRCRAFT_DEFINITION_HPP__
 #define __AIRCRAFT_DEFINITION_HPP__
 
-#include "../GaugeDefinition/GaugeDefinition.hpp"
 #include "common/TypeEnums.hpp"
+#include "../GaugeDefinition/GaugeDefinition.hpp"
 
-#include <QList>
 #include <QDebug>
+#include <QList>
+
 
 
 struct AircraftConfig;
@@ -18,7 +19,7 @@ struct AircraftDefinition
 {
     AircraftType type = AircraftType::INVALID;
 
-    QString name = "";  // used as identifier so needs to be unique
+    QString name = "";
 
     GaugeDefinition firstGauge;
     GaugeDefinition secondGauge;
@@ -98,47 +99,19 @@ struct AircraftDefinition
                 return fromBinaryV2(data, version);
             case FileVersion::V3:
                 return fromBinaryV3(data, version);
+            default:
+                return AircraftDefinition();
         }
     }
 
     uint8_t numGauges() const
     {
         if (gauge3Type == SwitchingGaugeType::NONE)
-            return 2; // always at least 2, and no NONE gauges in between defined gauges
+            return 2;  // always at least 2, and no NONE gauges in between defined gauges
         if (gauge4Type == SwitchingGaugeType::NONE)
             return 3;
 
         return 4;
-    }
-
-    bool operator==(const AircraftDefinition &rhs) const
-    {
-        return name == rhs.name;
-    }
-
-    bool operator!=(const AircraftDefinition &rhs) const
-    {
-        return name != rhs.name;
-    }
-
-    bool operator<(const AircraftDefinition &rhs) const
-    {
-        return name < rhs.name;
-    }
-
-    bool operator<=(const AircraftDefinition &rhs) const
-    {
-        return name <= rhs.name;
-    }
-
-    bool operator>(const AircraftDefinition &rhs) const
-    {
-        return name > rhs.name;
-    }
-
-    bool operator>=(const AircraftDefinition &rhs) const
-    {
-        return name >= rhs.name;
     }
 
 private:
