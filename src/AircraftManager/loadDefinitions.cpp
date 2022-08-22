@@ -1,12 +1,13 @@
 #include "AircraftManager.hpp"
 
+#include <algorithm>
 #include <QBuffer>
 #include <QDir>
 #include <QFile>
 
 void AircraftManager::loadDefinitions()
 {
-    QDir dataDir(d_dataRoot + "/Definitions", "*.def", QDir::Name, QDir::Files | QDir::Readable);
+    QDir dataDir(d_dataRoot + "/Definitions", "*.fdc", QDir::Name, QDir::Files | QDir::Readable);
 
     QFileInfoList files = dataDir.entryInfoList();
 
@@ -48,6 +49,22 @@ void AircraftManager::loadDefinitions()
                 d_turbopropKeys.append(fileInfo.completeBaseName());
         }
     }
+
+    std::sort(
+      d_jetKeys.begin(),
+      d_jetKeys.end(),
+      [this](const QString &lhs, const QString &rhs)
+      { return d_definitions.at(lhs).name.toUpper().localeAwareCompare(d_definitions.at(rhs).name.toUpper()) < 0; });
+    std::sort(
+      d_propKeys.begin(),
+      d_propKeys.end(),
+      [this](const QString &lhs, const QString &rhs)
+      { return d_definitions.at(lhs).name.toUpper().localeAwareCompare(d_definitions.at(rhs).name.toUpper()) < 0; });
+    std::sort(
+      d_turbopropKeys.begin(),
+      d_turbopropKeys.end(),
+      [this](const QString &lhs, const QString &rhs)
+      { return d_definitions.at(lhs).name.toUpper().localeAwareCompare(d_definitions.at(rhs).name.toUpper()) < 0; });
 
     // make sure the current definition key exists and is set
     if (d_currentDefinitionKey.isEmpty() || !d_definitions.contains(d_currentDefinitionKey))

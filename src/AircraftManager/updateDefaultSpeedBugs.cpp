@@ -1,13 +1,14 @@
 #include "AircraftManager.hpp"
 
-#include <QDir>
 #include <QFile>
 
 
 void AircraftManager::updateDefaultSpeedBugs(const QList<definitions::ReferenceSpeed> &newBugs)
 {
-    QDir dataDir(d_dataRoot + "/Definitions");
-    QFile file(dataDir.canonicalPath() + d_currentDefinitionKey + ".def");
+    if (d_currentDefinitionKey.isEmpty() || !d_definitions.contains(d_currentDefinitionKey))
+        return;
+
+    QFile file(d_dataRoot + "/Definitions/" + d_currentDefinitionKey + ".fdc");
 
     d_definitions[d_currentDefinitionKey].refSpeedDefaults = newBugs;
 

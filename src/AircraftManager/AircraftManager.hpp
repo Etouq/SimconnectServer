@@ -1,6 +1,7 @@
 #ifndef __AIRCRAFT_MANAGER_HPP__
 #define __AIRCRAFT_MANAGER_HPP__
 
+#include <QDir>
 #include <QObject>
 #include <QSettings>
 
@@ -55,7 +56,10 @@ public:
 
     Q_INVOKABLE QString getImagePath(const QString &key) const
     {
-        return "file:///" + d_dataRoot + "/Thumbnails/" + key + ".png";
+        if (QDir().exists(d_dataRoot + "/Thumbnails/" + key + ".png"))
+            return "file:///" + d_dataRoot + "/Thumbnails/" + key + ".png";
+
+        return "qrc:/DefaultImage.png";
     }
     Q_INVOKABLE void selectAircraft(const QString &key)
     {

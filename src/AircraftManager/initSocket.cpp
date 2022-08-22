@@ -6,6 +6,9 @@ void AircraftManager::initSocket(FdcSocket *newSocket)
 {
     connect(newSocket, &FdcSocket::updateDefaultSpeedBugs, this, &AircraftManager::updateDefaultSpeedBugs);
 
+    if (d_currentDefinitionKey.isEmpty() || !d_definitions.contains(d_currentDefinitionKey))
+        return;
+
     QByteArray definitionBinary = d_definitions.at(d_currentDefinitionKey).toBinary();
     uint64_t binarySize = definitionBinary.size();
 
