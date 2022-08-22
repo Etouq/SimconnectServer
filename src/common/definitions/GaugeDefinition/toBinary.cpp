@@ -16,7 +16,7 @@ std::string GaugeDefinition::toBinary() const
     ret.append(reinterpret_cast<const char *>(&minValue), sizeof(minValue));
     ret.append(reinterpret_cast<const char *>(&maxValue), sizeof(maxValue));
 
-    uint16_t listSize = colorZones.size();
+    uint8_t listSize = colorZones.size();
     ret.append(reinterpret_cast<const char *>(&listSize), sizeof(listSize));
 
     for (const ColorZone &colorZone : colorZones)
