@@ -2,13 +2,15 @@
 #define GAUGEDEFINITION_H
 
 #include "../BaseTypes.hpp"
+#include "common/TypeEnums.hpp"
 #include "common/Units.hpp"
 
 #include <cstdint>
 #include <QColor>
+#include <QList>
 #include <QString>
 #include <string>
-#include <QList>
+
 
 class QIODevice;
 class QByteArray;
@@ -61,7 +63,11 @@ struct GaugeDefinition
         }
     }
 
-    double getEpsilon(bool isCircular) const;
+    double getEpsilon(bool isCircular,
+                      SwitchingGaugeType gaugeType = SwitchingGaugeType::NONE,
+                      AircraftType aircraftType = AircraftType::INVALID,
+                      double maxPower = 1.0,
+                      double maxTorque = 1.0) const;
 
 private:
 
