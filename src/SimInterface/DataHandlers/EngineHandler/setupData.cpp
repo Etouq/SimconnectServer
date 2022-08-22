@@ -1,19 +1,26 @@
 #include "EngineHandler.hpp"
 #include "windows.h"
 #include "SimInterface/enums.hpp"
-
 #include "C:/MSFS SDK/SimConnect SDK/include/SimConnect.h"
-
 
 namespace handler::engine
 {
 
 void EngineHandler::setupData(HANDLE simConnectHandle, const AircraftConfig &config)
 {
-    d_gauge1IsPowerPct = config.gauge1Type == SwitchingGaugeType::POWER_PCT;
-    d_gauge2IsPowerPct = config.gauge2Type == SwitchingGaugeType::POWER_PCT;
-    d_gauge3IsPowerPct = config.gauge3Type == SwitchingGaugeType::POWER_PCT;
-    d_gauge4IsPowerPct = config.gauge4Type == SwitchingGaugeType::POWER_PCT;
+
+    d_gauge1IsPct = (config.gauge1Type == SwitchingGaugeType::POWER
+                     || (config.type == AircraftType::PROP && config.gauge1Type == SwitchingGaugeType::TORQUE))
+      && config.gauge1Unit == Units::PERCENT;
+    d_gauge2IsPct = (config.gauge2Type == SwitchingGaugeType::POWER
+                     || (config.type == AircraftType::PROP && config.gauge2Type == SwitchingGaugeType::TORQUE))
+      && config.gauge2Unit == Units::PERCENT;
+    d_gauge3IsPct = (config.gauge3Type == SwitchingGaugeType::POWER
+                     || (config.type == AircraftType::PROP && config.gauge3Type == SwitchingGaugeType::TORQUE))
+      && config.gauge3Unit == Units::PERCENT;
+    d_gauge4IsPct = (config.gauge4Type == SwitchingGaugeType::POWER
+                     || (config.type == AircraftType::PROP && config.gauge4Type == SwitchingGaugeType::TORQUE))
+      && config.gauge4Unit == Units::PERCENT;
 
     d_firstGaugeEpsilon = config.firstGaugeEpsilon;
     d_secondGaugeEpsilon = config.secondGaugeEpsilon;
@@ -25,7 +32,19 @@ void EngineHandler::setupData(HANDLE simConnectHandle, const AircraftConfig &con
     d_secondaryTempEpsilon = config.secondaryTempEpsilon;
     d_oilPressEpsilon = config.oilPressEpsilon;
 
-    d_maxPower = config.maxPower;
+
+    d_gauge1Factor = !d_gauge1IsPct                    ? 1.0
+      : config.gauge1Type == SwitchingGaugeType::POWER ? 1.0 / config.maxPower
+                                                       : 1.0 / config.maxTorque;
+    d_gauge2Factor = !d_gauge2IsPct                    ? 1.0
+      : config.gauge2Type == SwitchingGaugeType::POWER ? 1.0 / config.maxPower
+                                                       : 1.0 / config.maxTorque;
+    d_gauge3Factor = !d_gauge3IsPct                    ? 1.0
+      : config.gauge3Type == SwitchingGaugeType::POWER ? 1.0 / config.maxPower
+                                                       : 1.0 / config.maxTorque;
+    d_gauge4Factor = !d_gauge4IsPct                    ? 1.0
+      : config.gauge4Type == SwitchingGaugeType::POWER ? 1.0 / config.maxPower
+                                                       : 1.0 / config.maxTorque;
 
     d_fuelFlowByWeight = config.fuelFlowByWeight;
 
@@ -36,55 +55,60 @@ void EngineHandler::setupData(HANDLE simConnectHandle, const AircraftConfig &con
       : d_engineIdx == 3                          ? DATA_DEFINITION_IDS::ENGINE3_DEFINITION
                                                   : DATA_DEFINITION_IDS::ENGINE4_DEFINITION;
 
-    SimConnect_AddToDataDefinition(simConnectHandle,
-                                   dataId,
-                                   gaugeTypeToString(config.gauge1Type, config.type, config.engineTempType).c_str(),
-                                   gaugeTypeToUnit(config.gauge1Type).c_str(),
-                                   SIMCONNECT_DATATYPE_FLOAT64,
-                                   config.firstGaugeEpsilon);
+    SimConnect_AddToDataDefinition(
+      simConnectHandle,
+      dataId,
+      gaugeTypeToString(config.gauge1Type, config.type, config.engineTempType, config.gauge1Unit).c_str(),
+      gaugeTypeToUnit(config.gauge1Type, config.type, config.gauge1Unit).c_str(),
+      SIMCONNECT_DATATYPE_FLOAT64,
+      config.firstGaugeEpsilon);
 
-    SimConnect_AddToDataDefinition(simConnectHandle,
-                                   dataId,
-                                   gaugeTypeToString(config.gauge2Type, config.type, config.engineTempType).c_str(),
-                                   gaugeTypeToUnit(config.gauge2Type).c_str(),
-                                   SIMCONNECT_DATATYPE_FLOAT64,
-                                   config.secondGaugeEpsilon);
+    SimConnect_AddToDataDefinition(
+      simConnectHandle,
+      dataId,
+      gaugeTypeToString(config.gauge2Type, config.type, config.engineTempType, config.gauge2Unit).c_str(),
+      gaugeTypeToUnit(config.gauge2Type, config.type, config.gauge2Unit).c_str(),
+      SIMCONNECT_DATATYPE_FLOAT64,
+      config.secondGaugeEpsilon);
 
     if (config.gauge3Type == SwitchingGaugeType::NONE)
     {
 
-        SimConnect_AddToDataDefinition(simConnectHandle,
-                                       dataId,
-                                       gaugeTypeToString(config.gauge1Type, config.type, config.engineTempType).c_str(),
-                                       gaugeTypeToUnit(config.gauge1Type).c_str(),
-                                       SIMCONNECT_DATATYPE_FLOAT64,
-                                       config.thirdGaugeEpsilon);
+        SimConnect_AddToDataDefinition(
+          simConnectHandle,
+          dataId,
+          gaugeTypeToString(config.gauge1Type, config.type, config.engineTempType, config.gauge1Unit).c_str(),
+          gaugeTypeToUnit(config.gauge1Type, config.type, config.gauge1Unit).c_str(),
+          SIMCONNECT_DATATYPE_FLOAT64,
+          config.thirdGaugeEpsilon);
 
-        SimConnect_AddToDataDefinition(simConnectHandle,
-                                       dataId,
-                                       gaugeTypeToString(config.gauge1Type, config.type, config.engineTempType).c_str(),
-                                       gaugeTypeToUnit(config.gauge1Type).c_str(),
-                                       SIMCONNECT_DATATYPE_FLOAT64,
-                                       config.fourthGaugeEpsilon);
+        SimConnect_AddToDataDefinition(
+          simConnectHandle,
+          dataId,
+          gaugeTypeToString(config.gauge1Type, config.type, config.engineTempType, config.gauge1Unit).c_str(),
+          gaugeTypeToUnit(config.gauge1Type, config.type, config.gauge1Unit).c_str(),
+          SIMCONNECT_DATATYPE_FLOAT64,
+          config.fourthGaugeEpsilon);
 
         d_numGauges = 2;
     }
     else
     {
-        SimConnect_AddToDataDefinition(simConnectHandle,
-                                       dataId,
-                                       gaugeTypeToString(config.gauge3Type, config.type, config.engineTempType).c_str(),
-                                       gaugeTypeToUnit(config.gauge3Type).c_str(),
-                                       SIMCONNECT_DATATYPE_FLOAT64,
-                                       config.thirdGaugeEpsilon);
+        SimConnect_AddToDataDefinition(
+          simConnectHandle,
+          dataId,
+          gaugeTypeToString(config.gauge3Type, config.type, config.engineTempType, config.gauge3Unit).c_str(),
+          gaugeTypeToUnit(config.gauge3Type, config.type, config.gauge3Unit).c_str(),
+          SIMCONNECT_DATATYPE_FLOAT64,
+          config.thirdGaugeEpsilon);
 
         if (config.gauge4Type == SwitchingGaugeType::NONE)
         {
             SimConnect_AddToDataDefinition(
               simConnectHandle,
               dataId,
-              gaugeTypeToString(config.gauge1Type, config.type, config.engineTempType).c_str(),
-              gaugeTypeToUnit(config.gauge1Type).c_str(),
+              gaugeTypeToString(config.gauge1Type, config.type, config.engineTempType, config.gauge1Unit).c_str(),
+              gaugeTypeToUnit(config.gauge1Type, config.type, config.gauge1Unit).c_str(),
               SIMCONNECT_DATATYPE_FLOAT64,
               config.fourthGaugeEpsilon);
 
@@ -95,8 +119,8 @@ void EngineHandler::setupData(HANDLE simConnectHandle, const AircraftConfig &con
             SimConnect_AddToDataDefinition(
               simConnectHandle,
               dataId,
-              gaugeTypeToString(config.gauge4Type, config.type, config.engineTempType).c_str(),
-              gaugeTypeToUnit(config.gauge4Type).c_str(),
+              gaugeTypeToString(config.gauge4Type, config.type, config.engineTempType, config.gauge4Unit).c_str(),
+              gaugeTypeToUnit(config.gauge4Type, config.type, config.gauge4Unit).c_str(),
               SIMCONNECT_DATATYPE_FLOAT64,
               config.fourthGaugeEpsilon);
 

@@ -46,24 +46,27 @@ public:
         d_secondaryTempEpsilon = 10000;
         d_oilPressEpsilon = 10000;
 
-        d_maxPower = 1;
+        d_gauge1Factor = 1;
+        d_gauge2Factor = 1;
+        d_gauge3Factor = 1;
+        d_gauge4Factor = 1;
 
         d_fuelFlowByWeight = false;
 
         d_hasSecondaryTempGauge = false;
 
-        d_gauge1IsPowerPct = false;
-        d_gauge2IsPowerPct = false;
-        d_gauge3IsPowerPct = false;
-        d_gauge4IsPowerPct = false;
+        d_gauge1IsPct = false;
+        d_gauge2IsPct = false;
+        d_gauge3IsPct = false;
+        d_gauge4IsPct = false;
 
         return sendCurrentData();
     }
 
 private:
 
-    std::string gaugeTypeToString(SwitchingGaugeType gaugeType, AircraftType aircraftType, TemperatureGaugeType tempGaugeType);
-    std::string gaugeTypeToUnit(SwitchingGaugeType gaugeType);
+    std::string gaugeTypeToString(SwitchingGaugeType gaugeType, AircraftType aircraftType, TemperatureGaugeType tempGaugeType, Units unit);
+    std::string gaugeTypeToUnit(SwitchingGaugeType gaugeType, AircraftType aircraftType, Units unit = Units::NONE);
 
     DataStruct d_previous;
 
@@ -81,16 +84,19 @@ private:
     double d_secondaryTempEpsilon = 10000;
     double d_oilPressEpsilon = 10000;
 
-    double d_maxPower = 1;
+    double d_gauge1Factor = 1;
+    double d_gauge2Factor = 1;
+    double d_gauge3Factor = 1;
+    double d_gauge4Factor = 1;
 
     bool d_fuelFlowByWeight = false;
 
     bool d_hasSecondaryTempGauge = false;
 
-    bool d_gauge1IsPowerPct = false;
-    bool d_gauge2IsPowerPct = false;
-    bool d_gauge3IsPowerPct = false;
-    bool d_gauge4IsPowerPct = false;
+    bool d_gauge1IsPct = false;
+    bool d_gauge2IsPct = false;
+    bool d_gauge3IsPct = false;
+    bool d_gauge4IsPct = false;
 };
 
 }  // namespace handler::engine

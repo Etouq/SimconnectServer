@@ -1,10 +1,12 @@
 #include "EngineHandler.hpp"
 
-
 namespace handler::engine
 {
 
-std::string EngineHandler::gaugeTypeToString(SwitchingGaugeType gaugeType, AircraftType aircraftType, TemperatureGaugeType tempGaugeType)
+std::string EngineHandler::gaugeTypeToString(SwitchingGaugeType gaugeType,
+                                             AircraftType aircraftType,
+                                             TemperatureGaugeType tempGaugeType,
+                                             Units unit)
 {
     switch (gaugeType)
     {
@@ -31,15 +33,18 @@ std::string EngineHandler::gaugeTypeToString(SwitchingGaugeType gaugeType, Aircr
             }
         }
         case SwitchingGaugeType::RPM:
+        {
+            if (unit == Units::PERCENT)
+                return "GENERAL ENG PCT MAX RPM:" + std::to_string(d_engineIdx);
             return "GENERAL ENG RPM:" + std::to_string(d_engineIdx);
-        case SwitchingGaugeType::RPM_PCT:
-            return "GENERAL ENG PCT MAX RPM:" + std::to_string(d_engineIdx);
+        }
         case SwitchingGaugeType::PROP_RPM:
+        {
+            if (unit == Units::PERCENT)
+                return "PROP MAX RPM PERCENT:" + std::to_string(d_engineIdx);
             return "PROP RPM:" + std::to_string(d_engineIdx);
-        case SwitchingGaugeType::PROP_RPM_PCT:
-            return "PROP MAX RPM PERCENT:" + std::to_string(d_engineIdx);
+        }
         case SwitchingGaugeType::POWER:
-        case SwitchingGaugeType::POWER_PCT:
             return "RECIP ENG BRAKE POWER:" + std::to_string(d_engineIdx);
         case SwitchingGaugeType::MANIFOLD_PRESSURE:
             return "RECIP ENG MANIFOLD PRESSURE:" + std::to_string(d_engineIdx);
@@ -47,10 +52,11 @@ std::string EngineHandler::gaugeTypeToString(SwitchingGaugeType gaugeType, Aircr
         {
             if (aircraftType == AircraftType::PROP)
                 return "ENG TORQUE:" + std::to_string(d_engineIdx);
+
+            if (unit == Units::PERCENT)
+                return "TURB ENG MAX TORQUE PERCENT:" + std::to_string(d_engineIdx);
             return "TURB ENG FREE TURBINE TORQUE:" + std::to_string(d_engineIdx);
         }
-        case SwitchingGaugeType::TORQUE_PCT:
-            return "TURB ENG MAX TORQUE PERCENT:" + std::to_string(d_engineIdx);
         case SwitchingGaugeType::NONE:
             return "";
     }
