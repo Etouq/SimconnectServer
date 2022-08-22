@@ -2,6 +2,7 @@
 #define __AIRCRAFT_CONFIG_HPP__
 
 #include "../TypeEnums.hpp"
+#include "common/Units.hpp"
 
 struct AircraftConfig
 {
@@ -25,6 +26,11 @@ struct AircraftConfig
     SwitchingGaugeType gauge2Type = SwitchingGaugeType::NONE;
     SwitchingGaugeType gauge3Type = SwitchingGaugeType::NONE;
     SwitchingGaugeType gauge4Type = SwitchingGaugeType::NONE;
+
+    Units gauge1Unit = Units::NONE;
+    Units gauge2Unit = Units::NONE;
+    Units gauge3Unit = Units::NONE;
+    Units gauge4Unit = Units::NONE;
 
     TemperatureGaugeType engineTempType = TemperatureGaugeType::ITT;
 
