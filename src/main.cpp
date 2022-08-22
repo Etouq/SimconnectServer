@@ -16,10 +16,11 @@ int main(int argc, char *argv[])
 
     // set basic application data for settings object
     a.setOrganizationName("MKootstra");
-    a.setApplicationName("Simconnect Server");
+    a.setApplicationName("simconnectServer");
+    a.setApplicationDisplayName("Simconnect Server");
 
     // set icon
-    a.setWindowIcon(QIcon("qrc:/SimconnectServerIcon.ico"));
+    a.setWindowIcon(QIcon(":/SimconnectServerIcon.ico"));
 
     // add application font
     QFontDatabase::addApplicationFont(":/Roboto-Mono-Variable.ttf");
