@@ -64,8 +64,8 @@ std::string HsiHandler::processData(unsigned long *raw)
     // qDebug() << "gps drives nav1:" << newData.gpsDrivesNav1 << "approach hold:" << newData.autopilotApproachHold << "approach type:" << newData.gpsApproachApproachType << "selected nav:" << newData.autopilotNavSelected;
 
     // gps
-    if (newData.gpsDrivesNav1
-          && (!newData.autopilotApproachHold || newData.gpsApproachApproachType == simenums::ApproachType::RNAV)
+    if ((newData.gpsDrivesNav1
+          && (!newData.autopilotApproachHold || newData.gpsApproachApproachType == simenums::ApproachType::RNAV))
         || newData.autopilotNavSelected == 0) [[likely]]
     {
         handleGps(dataToSend, newData);
@@ -92,6 +92,9 @@ std::string HsiHandler::processData(unsigned long *raw)
             handleNav2(dataToSend, newData);
         }
     }
+
+    d_previous.autopilotNavSelected = newData.autopilotNavSelected;
+    d_previous.gpsDrivesNav1 = newData.gpsDrivesNav1;
 
 
     return dataToSend;
