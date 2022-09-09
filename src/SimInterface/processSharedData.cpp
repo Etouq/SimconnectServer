@@ -3,9 +3,11 @@
 #include "SimInterface/SharedThreadData.hpp"
 
 #include <mutex>
+#include <QDebug>
 
 void SimInterface::processSharedData()
 {
+    qDebug() << "processing shared data";
     SharedThreadData temp;
     {
         std::shared_lock<std::shared_mutex> lock(d_sharedDataMutex);
@@ -48,26 +50,34 @@ void SimInterface::processSharedData()
 
     if (temp.aircraftConfigChanged)
     {
-        SimConnect_RequestDataOnSimObject(d_simConnectHandle,
-                                          ENGINE1_REQUEST,
-                                          ENGINE1_DEFINITION,
-                                          SIMCONNECT_OBJECT_ID_USER,
-                                          SIMCONNECT_PERIOD_NEVER);
-        SimConnect_RequestDataOnSimObject(d_simConnectHandle,
-                                          ENGINE2_REQUEST,
-                                          ENGINE2_DEFINITION,
-                                          SIMCONNECT_OBJECT_ID_USER,
-                                          SIMCONNECT_PERIOD_NEVER);
-        SimConnect_RequestDataOnSimObject(d_simConnectHandle,
-                                          ENGINE3_REQUEST,
-                                          ENGINE3_DEFINITION,
-                                          SIMCONNECT_OBJECT_ID_USER,
-                                          SIMCONNECT_PERIOD_NEVER);
-        SimConnect_RequestDataOnSimObject(d_simConnectHandle,
-                                          ENGINE4_REQUEST,
-                                          ENGINE4_DEFINITION,
-                                          SIMCONNECT_OBJECT_ID_USER,
-                                          SIMCONNECT_PERIOD_NEVER);
+        switch (d_aircraftConfig.numEngines)
+        {
+            case 4:
+                SimConnect_RequestDataOnSimObject(d_simConnectHandle,
+                                                  ENGINE4_REQUEST,
+                                                  ENGINE4_DEFINITION,
+                                                  SIMCONNECT_OBJECT_ID_USER,
+                                                  SIMCONNECT_PERIOD_NEVER);
+                SimConnect_RequestDataOnSimObject(d_simConnectHandle,
+                                                  ENGINE3_REQUEST,
+                                                  ENGINE3_DEFINITION,
+                                                  SIMCONNECT_OBJECT_ID_USER,
+                                                  SIMCONNECT_PERIOD_NEVER);
+            case 2:
+                SimConnect_RequestDataOnSimObject(d_simConnectHandle,
+                                                  ENGINE2_REQUEST,
+                                                  ENGINE2_DEFINITION,
+                                                  SIMCONNECT_OBJECT_ID_USER,
+                                                  SIMCONNECT_PERIOD_NEVER);
+            case 1:
+            default:
+                SimConnect_RequestDataOnSimObject(d_simConnectHandle,
+                                                  ENGINE1_REQUEST,
+                                                  ENGINE1_DEFINITION,
+                                                  SIMCONNECT_OBJECT_ID_USER,
+                                                  SIMCONNECT_PERIOD_NEVER);
+        }
+
         SimConnect_RequestDataOnSimObject(d_simConnectHandle,
                                           AIRCRAFT_GENERAL_REQUEST,
                                           AIRCRAFT_GENERAL_DEFINITION,
@@ -77,4 +87,5 @@ void SimInterface::processSharedData()
         d_aircraftConfig = temp.aircraftConfig;
         updateAircraft = true;
     }
+    qDebug() << "shared data processing complete";
 }

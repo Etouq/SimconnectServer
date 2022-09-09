@@ -1,6 +1,7 @@
 #include "enums.hpp"
 #include "SimInterface.hpp"
 #include "common/dataIdentifiers.hpp"
+#include <QDebug>
 
 void SimInterface::processDispatches()
 {
@@ -25,6 +26,7 @@ void SimInterface::processDispatches()
                 {
                     if (updateAircraft)
                     {
+                        qDebug() << "updating aircraft";
                         // emit sendData(QByteArray::fromStdString(d_engine1Handler.reset() + d_engine2Handler.reset()
                         //                                         + d_engine3Handler.reset() + d_engine4Handler.reset()
                         //                                         + d_aircraftHandler.reset()));
@@ -34,8 +36,15 @@ void SimInterface::processDispatches()
                         SimConnect_ClearDataDefinition(d_simConnectHandle, ENGINE3_DEFINITION);
                         SimConnect_ClearDataDefinition(d_simConnectHandle, ENGINE4_DEFINITION);
                         SimConnect_ClearDataDefinition(d_simConnectHandle, AIRCRAFT_GENERAL_DEFINITION);
+                        qDebug() << "cleared definitions";
+
+                        d_engine1Handler.setupData(d_simConnectHandle, d_aircraftConfig);
+                        d_engine2Handler.setupData(d_simConnectHandle, d_aircraftConfig);
+                        d_engine3Handler.setupData(d_simConnectHandle, d_aircraftConfig);
+                        d_engine4Handler.setupData(d_simConnectHandle, d_aircraftConfig);
 
                         d_aircraftHandler.setupData(d_simConnectHandle, d_aircraftConfig);
+                        qDebug() << "setup data handlers again";
 
                         updateAircraft = false;
 
@@ -77,6 +86,7 @@ void SimInterface::processDispatches()
                                                           SIMCONNECT_OBJECT_ID_USER,
                                                           SIMCONNECT_PERIOD_SIM_FRAME,
                                                           SIMCONNECT_DATA_REQUEST_FLAG_CHANGED);
+                        qDebug() << "restarted requests";
                     }
 
 

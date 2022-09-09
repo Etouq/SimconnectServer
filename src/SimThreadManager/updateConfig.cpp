@@ -11,6 +11,7 @@ void SimThreadManager::updateConfig(const definitions::AircraftDefinition &defin
     {
         std::unique_lock<std::shared_mutex> lock(d_sharedDataMutex);
         d_sharedData.aircraftConfig = definition.toConfig();
+        d_sharedData.aircraftConfigChanged = true;
     }
 
     d_sharedDataUpdated.store(true, std::memory_order_seq_cst);
