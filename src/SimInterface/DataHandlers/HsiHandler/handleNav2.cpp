@@ -18,9 +18,9 @@ void HsiHandler::handleNav2(std::string &dataToSend, const DataStruct &newData)
 
     if (newData.nav2HasLoc)
     {
-        if (d_navSource != HsiNavSource::LOC1)
+        if (d_navSource != HsiNavSource::LOC2)
         {
-            d_navSource = HsiNavSource::LOC1;
+            d_navSource = HsiNavSource::LOC2;
             dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::NAV_SOURCE) });
             dataToSend.append(reinterpret_cast<const char*>(&d_navSource), sizeof(d_navSource));
 
@@ -51,9 +51,9 @@ void HsiHandler::handleNav2(std::string &dataToSend, const DataStruct &newData)
     }
     else
     {
-        if (d_navSource != HsiNavSource::VOR1)
+        if (d_navSource != HsiNavSource::VOR2)
         {
-            d_navSource = HsiNavSource::VOR1;
+            d_navSource = HsiNavSource::VOR2;
             dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::NAV_SOURCE) });
             dataToSend.append(reinterpret_cast<const char*>(&d_navSource), sizeof(d_navSource));
 
