@@ -17,6 +17,8 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(APP_ICON_RESOURCE_WINDOWS "${CMAKE_CURRENT_SOURCE_DIR}/resources/icon.rc")
+
 include(src/source_files.txt)
 include(qt_modules.txt)
 
@@ -29,7 +31,10 @@ add_executable(${_PROJECT_NAME}
     ${HPP_FILES}
     resources/resources.qrc
     qml/qml.qrc
+    ${APP_ICON_RESOURCE_WINDOWS}
 )
+
+set_target_properties(${_PROJECT_NAME} PROPERTIES OUTPUT_NAME "Simconnect Server")
 
 target_include_directories(${_PROJECT_NAME} PUBLIC
     src
