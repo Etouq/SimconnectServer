@@ -6,6 +6,7 @@
 #include <QIcon>
 #include <QQmlApplicationEngine>
 #include <QSurfaceFormat>
+#include <QStandardPaths>
 
 int main(int argc, char *argv[])
 {
@@ -30,6 +31,41 @@ int main(int argc, char *argv[])
     QSurfaceFormat format;
     format.setSamples(2);
     QSurfaceFormat::setDefaultFormat(format);
+
+    // make sure necessary directories exist
+    QDir dataDirs(QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
+    dataDirs.mkpath("AppData/Roaming/Flight Display Companion/Definitions");
+    dataDirs.mkpath("AppData/Roaming/Flight Display Companion/Thumbnails");
+
+    // copy definitions for first time setup
+    QDir dir(QDir::currentPath() + "/Definitions Temp");
+    if (dir.exists())
+    {
+        QString dataRoot = QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/AppData/Roaming/Flight Display Companion";
+        dir.cd("Definitions");
+
+        QFileInfoList files = dir.entryInfoList({"*.fdc"}, QDir::Files | QDir::Readable);
+
+        for (const QFileInfo &fileInfo : files)
+        {
+            QFile::copy(fileInfo.canonicalFilePath(), dataRoot + "/Definitions/" + fileInfo.fileName());
+        }
+
+        dir.cdUp();
+        dir.cd("Thumbnails");
+
+        files = dir.entryInfoList({"*.png"}, QDir::Files | QDir::Readable);
+
+        for (const QFileInfo &fileInfo : files)
+        {
+            QFile::copy(fileInfo.canonicalFilePath(), dataRoot + "/Thumbnails/" + fileInfo.fileName());
+        }
+
+        dir.cdUp();
+
+        dir.removeRecursively();
+
+    }
 
 
     // application state & data managers
