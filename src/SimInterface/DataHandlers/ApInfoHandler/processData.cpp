@@ -10,7 +10,8 @@ namespace apinfo
 
 std::string ApInfoHandler::processData(unsigned long *raw)
 {
-    DataStruct newData(*reinterpret_cast<DataStruct *>(raw));
+
+    DataStruct newData(reinterpret_cast<RawStruct *>(raw));
 
     std::string dataToSend;
 
