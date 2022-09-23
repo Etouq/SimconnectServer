@@ -47,7 +47,7 @@ void FdcSocket::receivedClientData()
                 }
                 else
                 {
-                    qDebug() << "handshake success";
+                    qDebug() << "handshake success, client name:" << modelName << "client address:" << d_socket->peerAddress();
                     d_endpointName = modelName + " @ " + d_socket->peerAddress().toString();
                     emit handshakeSuccess();
                 }

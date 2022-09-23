@@ -1,9 +1,11 @@
 #include "ConnectionHandler.hpp"
 
 #include <random>
+#include <QDebug>
 
 void ConnectionHandler::newIncomingConnection()
 {
+    qDebug() << "new incoming connection";
     std::random_device rd;
     std::mt19937_64 gen(rd());
 

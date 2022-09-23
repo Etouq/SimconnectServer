@@ -7,6 +7,7 @@
 #include "common/definitions/AircraftDefinition/AircraftDefinition.hpp"
 
 #include <cstdint>
+#include <QDebug>
 #include <QObject>
 #include <QTcpServer>
 #include <QTcpSocket>
@@ -14,6 +15,7 @@
 #include <QUdpSocket>
 
 #include <unordered_map>
+
 
 
 class FlightplanManager;
@@ -56,9 +58,18 @@ public:
         return d_clientNames.at(idx);
     }
 
+    Q_INVOKABLE QString getServerAddress()
+    {
+        return d_server.serverAddress().toString();
+    }
+
+    Q_INVOKABLE int getServerPort()
+    {
+        return d_server.serverPort();
+    }
+
 signals:
-    void networkChanged(const QHostAddress &address, quint16 port);
-    void openMessageBox(const QString &title, const QString &text);
+    void networkChanged(const QString &address, int port);
 
     void clientsChanged(int numClients);
 
@@ -140,13 +151,10 @@ private slots:
 
     void handshakeError(bool clientTooOld)
     {
-        emit openMessageBox(
-          "Error",
-          clientTooOld
-            ? "The network data transfer version of the Flight Display Companion is older than the one used by "
-              "this application. Please update the Flight Display Companion."
-            : "The network data transfer version of the Flight Display Companion is newer "
-              "than the one used by this application. Please update this application.");
+        qDebug() << "The network protocol version of the Flight Display Companion"
+                 << (clientTooOld ? "is older" : "is newer")
+                 << "than the one used by this application. Please update"
+                 << (clientTooOld ? "the Flight Display Companion." : "this application.");
     }
 
     void clientHandshakeSuccess()

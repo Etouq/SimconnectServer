@@ -1,4 +1,5 @@
 #include "main.hpp"
+#include "Logger/Logger.hpp"
 
 #include <QApplication>
 #include <QFile>
@@ -7,11 +8,14 @@
 #include <QQmlApplicationEngine>
 #include <QSurfaceFormat>
 #include <QStandardPaths>
+#include <QNetworkProxy>
 
 int main(int argc, char *argv[])
 {
+    Logger::init();
+    qInstallMessageHandler(Logger::logOutput);
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    qSetMessagePattern("[%{time HH:mm:ss.zzz} %{type}]%{if-category} %{category}: %{endif} - %{message}");
+    // qSetMessagePattern("[%{time HH:mm:ss.zzz} %{type}]%{if-category} %{category}: %{endif} - %{message}");
 
     QApplication a(argc, argv);
 
@@ -22,6 +26,8 @@ int main(int argc, char *argv[])
 
     // set icon
     a.setWindowIcon(QIcon(":/SimconnectServerIcon.ico"));
+
+    QNetworkProxy::setApplicationProxy(QNetworkProxy::NoProxy);
 
     // add application font
     QFontDatabase::addApplicationFont(":/Roboto-Mono-Variable.ttf");

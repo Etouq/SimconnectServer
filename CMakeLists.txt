@@ -22,6 +22,8 @@ set(APP_ICON_RESOURCE_WINDOWS "${CMAKE_CURRENT_SOURCE_DIR}/resources/icon.rc")
 include(src/source_files.txt)
 include(qt_modules.txt)
 
+add_compile_definitions(LOG_TO_FILE)
+
 find_package(Qt5 COMPONENTS ${QT_MODULES} REQUIRED)
 find_package(fmt)
 

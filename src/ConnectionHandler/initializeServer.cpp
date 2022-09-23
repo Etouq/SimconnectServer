@@ -2,6 +2,8 @@
 
 #include <QMessageBox>
 #include <QNetworkInterface>
+#include <QNetworkProxy>
+#include <QSettings>
 
 void ConnectionHandler::initializeServer()
 {
@@ -10,23 +12,67 @@ void ConnectionHandler::initializeServer()
     bool found = false;
     QStringList errors;
 
+    QSettings settings;
 
-    for (const QHostAddress &address : addresses)
+    if (settings.contains("lastUsedAddress") && settings.contains("lastUsedPort"))
     {
+        QHostAddress lastAddress = QHostAddress(settings.value("lastUsedAddress").toString());
+        int lastPort = settings.value("lastUsedPort").toInt();
 
-        if (!address.isLoopback() && (address.protocol() == QAbstractSocket::IPv4Protocol || address.protocol() == QAbstractSocket::IPv6Protocol))
+        if (addresses.contains(lastAddress))
         {
-            quint16 tcpPort = 12000;
-            while (!d_server.listen(address, tcpPort) && tcpPort <= 12100)
+            found = d_server.listen(lastAddress, lastPort);
+
+            if (!found)
+                found = d_server.listen(lastAddress);
+        }
+    }
+
+    if (!found)
+    {
+        // used if we can't find a working ipv4 address (prefer ipv4 since it is easier to type)
+        QList<QHostAddress> ipv6Addresses;
+
+        for (const QHostAddress &address : addresses)
+        {
+            if (!address.isLoopback())
             {
-                errors.append(address.toString() + " - " + QString::number(tcpPort) + ": " + d_server.errorString());
-                ++tcpPort;
+                if (address.protocol() == QAbstractSocket::IPv4Protocol)
+                    found = d_server.listen(address);
+                else if (address.protocol() == QAbstractSocket::IPv6Protocol)
+                    ipv6Addresses.append(address);
             }
 
-            if (tcpPort <= 12100)
-            {
-                found = true;
+            if (found)
                 break;
+
+            // if (!address.isLoopback() && (address.protocol() == QAbstractSocket::IPv4Protocol || address.protocol()
+            // == QAbstractSocket::IPv6Protocol))
+            // {
+            //     quint16 tcpPort = 12001;
+            //     while (!d_server.listen(address, tcpPort) && tcpPort <= 12100)
+            //     {
+            //         errors.append(address.toString() + " - " + QString::number(tcpPort) + ": " +
+            //         d_server.errorString());
+            //         ++tcpPort;
+            //     }
+
+            //     if (tcpPort <= 12100)
+            //     {
+            //         found = true;
+            //         break;
+            //     }
+            // }
+        }
+
+        if (!found)
+        {
+            for (const QHostAddress &address : ipv6Addresses)
+            {
+                found = d_server.listen(address);
+
+                if (found)
+                    break;
             }
         }
     }
@@ -34,11 +80,16 @@ void ConnectionHandler::initializeServer()
     if (!found)
     {
         qDebug() << ("Unable to start the server.\n" + errors.join("\n"));
-        emit openMessageBox("Simconnect Server", "Unable to start the server.\n" + errors.join("\n"));
         return;
     }
 
     d_broadcastTimer.start();
 
-    emit networkChanged(d_server.serverAddress(), d_server.serverPort());
+    qDebug() << d_server.proxy();
+    qDebug() << d_server.serverAddress() << "\t" << d_server.serverPort();
+
+    settings.setValue("lastUsedAddress", d_server.serverAddress().toString());
+    settings.setValue("lastUsedPort", d_server.serverPort());
+
+    emit networkChanged(d_server.serverAddress().toString(), d_server.serverPort());
 }

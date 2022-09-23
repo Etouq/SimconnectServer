@@ -41,6 +41,9 @@ set(CPP_FILES
         src/FlightplanManager/updateActiveLeg.cpp
         src/FlightplanManager/WaypointModel/data.cpp
 
+        src/Logger/logOutput.cpp
+        src/Logger/init.cpp
+
         src/SimInterface/DataHandlers/AircraftHandler/processData.cpp
         src/SimInterface/DataHandlers/AircraftHandler/sendCurrentData.cpp
         src/SimInterface/DataHandlers/AircraftHandler/setupData.cpp
@@ -132,6 +135,8 @@ set(HPP_FILES
         src/FlightplanManager/FlightPlanWaypoint.hpp
         src/FlightplanManager/QmlWaypoint.hpp
         src/FlightplanManager/WaypointModel/WaypointModel.hpp
+
+        src/Logger/Logger.hpp
 
         src/SimInterface/DataHandlers/AircraftHandler/AircraftHandler.hpp
         src/SimInterface/DataHandlers/AircraftHandler/DataStruct.hpp
