@@ -47,7 +47,7 @@ enum class TemperatureGaugeType : uint8_t
     EGT = 0,
     ITT,
     CHT,
-    TIT
+    TIT  // hehe tit
 };
 
 enum class SwitchingGaugeType : uint8_t
