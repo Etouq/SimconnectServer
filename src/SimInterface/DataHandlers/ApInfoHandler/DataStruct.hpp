@@ -32,9 +32,9 @@ struct RawStruct
     uint32_t apBackcourseHold = 0;
     uint32_t autopilotApproachHold = 0;
 
-    uint32_t refSpeed = 0;
-    uint32_t refAltitude = 0;
-    uint32_t refVspeed = 0;
+    int32_t refSpeed = 0;
+    int32_t refAltitude = 0;
+    int32_t refVspeed = 0;
 
     uint32_t gpsDrivesNav1 = 0;
     uint32_t autopilotNavSelected = 0;
@@ -65,10 +65,10 @@ struct DataStruct
     bool apBackcourseHold = false;
     bool autopilotApproachHold = false;
 
-    uint32_t refSpeed = 0;
+    int32_t refSpeed = 0;
     float refMach = 0.0;
-    uint32_t refAltitude = 0;
-    uint32_t refVspeed = 0;
+    int32_t refAltitude = 0;
+    int32_t refVspeed = 0;
 
     bool gpsDrivesNav1 = false;
     uint32_t autopilotNavSelected = 0;

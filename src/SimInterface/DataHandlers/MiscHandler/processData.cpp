@@ -76,7 +76,7 @@ std::string MiscHandler::processData(unsigned long *raw, bool *wpIdValid)
     uint8_t size = 0;
     if (d_previous.gpsNextWpId != newData.gpsNextWpId)
     {
-        *wpIdValid = newData.gpsNextWpId == "";
+        *wpIdValid = newData.gpsNextWpId != "";
         d_previous.gpsNextWpId = newData.gpsNextWpId;
 
         size = d_previous.gpsNextWpId.size();

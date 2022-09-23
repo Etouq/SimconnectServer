@@ -52,16 +52,16 @@ std::string ApInfoHandler::processData(unsigned long *raw)
         {
             if (newData.refMach < 1.0) [[unlikely]]
             {
-                AP_ModeReference = fmt::format(".{0:03d}", std::lround(newData.refMach * 1000));
+                AP_ModeReference = fmt::format(FMT_STRING(".{0:03d}"), std::lround(newData.refMach * 1000));
             }
             else [[likely]]
             {
-                AP_ModeReference = fmt::format("{0:.3f}", newData.refMach);
+                AP_ModeReference = fmt::format(FMT_STRING("{0:.3f}"), newData.refMach);
             }
         }
         else [[likely]]
         {
-            AP_ModeReference = fmt::format("{0:d}KT", newData.refSpeed);
+            AP_ModeReference = fmt::format(FMT_STRING("{0:d}KT"), newData.refSpeed);
         }
     }
     else if (newData.apMachHold) [[unlikely]]
@@ -69,22 +69,22 @@ std::string ApInfoHandler::processData(unsigned long *raw)
         AP_VerticalActive = "FLC";
         if (newData.refMach < 1.0) [[unlikely]]
         {
-            AP_ModeReference = fmt::format(".{0:03d}", std::lround(newData.refMach * 1000));
+            AP_ModeReference = fmt::format(FMT_STRING(".{0:03d}"), std::lround(newData.refMach * 1000));
         }
         else [[likely]]
         {
-            AP_ModeReference = fmt::format("{0:.3f}", newData.refMach);
+            AP_ModeReference = fmt::format(FMT_STRING("{0:.3f}"), newData.refMach);
         }
     }
     else if (newData.apAltitudeLock) [[likely]]
     {
         AP_VerticalActive = newData.apAltitudeArm ? "ALTS" : "ALT";
-        AP_ModeReference = fmt::format("{0:d}FT", newData.refAltitude);
+        AP_ModeReference = fmt::format(FMT_STRING("{0:d}FT"), newData.refAltitude);
     }
     else if (newData.apVerticalHold) [[likely]]
     {
         AP_VerticalActive = "VS";
-        AP_ModeReference = fmt::format("{0:d}FPM", newData.refVspeed);
+        AP_ModeReference = fmt::format(FMT_STRING("{0:d}FPM"), newData.refVspeed);
     }
     else if (newData.apGlideslopeActive)
         AP_VerticalActive = newData.gpsDrivesNav1 ? "GP" : "GS";

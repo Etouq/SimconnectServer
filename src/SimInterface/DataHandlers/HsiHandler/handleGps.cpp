@@ -27,14 +27,15 @@ void HsiHandler::handleGps(std::string &dataToSend, const DataStruct &newData)
         dataToSend.append(reinterpret_cast<const char*>(&toFromValue), sizeof(toFromValue));
     }
 
+    if (std::abs(d_course - newData.gpsWpDesiredTrack) >= 0.0009)
+    {
+        d_course = newData.gpsWpDesiredTrack;
+        dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::COURSE) });
+        dataToSend.append(reinterpret_cast<const char*>(&d_course), sizeof(d_course));
+    }
+
     if (d_displayDeviation) [[likely]]
     {
-        if (std::abs(d_course - newData.gpsWpDesiredTrack) >= 0.0009)
-        {
-            d_course = newData.gpsWpDesiredTrack;
-            dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::COURSE) });
-            dataToSend.append(reinterpret_cast<const char*>(&d_course), sizeof(d_course));
-        }
 
         if (std::abs(d_courseDeviation - newData.gpsWpCrossTrack) >= 0.002)
         {
@@ -44,13 +45,6 @@ void HsiHandler::handleGps(std::string &dataToSend, const DataStruct &newData)
         }
 
         return;
-    }
-
-    if (std::abs(d_course) >= 0.0009)
-    {
-        d_course = 0.0;
-        dataToSend.append({ static_cast<char>(DataGroupIdentifier::PFD_DATA), static_cast<char>(PfdIdentifier::COURSE) });
-        dataToSend.append(reinterpret_cast<const char*>(&d_course), sizeof(d_course));
     }
 
     if (std::abs(d_courseDeviation) >= 0.0009)
