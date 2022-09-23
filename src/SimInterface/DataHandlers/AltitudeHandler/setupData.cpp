@@ -113,6 +113,42 @@ void AltitudeHandler::setupData(HANDLE simConnectHandle)
                                    "Bool",
                                    SIMCONNECT_DATATYPE_INT32,
                                    0.0);
+    SimConnect_AddToDataDefinition(simConnectHandle,
+                                   DATA_DEFINITION_IDS::ALTIMETER_DEFINITION,
+                                   "AUTOPILOT APPROACH ARM",
+                                   "Bool",
+                                   SIMCONNECT_DATATYPE_INT32,
+                                   0.0);
+    SimConnect_AddToDataDefinition(simConnectHandle,
+                                   DATA_DEFINITION_IDS::ALTIMETER_DEFINITION,
+                                   "AUTOPILOT APPROACH CAPTURED",
+                                   "Bool",
+                                   SIMCONNECT_DATATYPE_INT32,
+                                   0.0);
+    SimConnect_AddToDataDefinition(simConnectHandle,
+                                   DATA_DEFINITION_IDS::ALTIMETER_DEFINITION,
+                                   "AUTOPILOT GLIDESLOPE ACTIVE",
+                                   "Bool",
+                                   SIMCONNECT_DATATYPE_INT32,
+                                   0.0);
+    SimConnect_AddToDataDefinition(simConnectHandle,
+                                   DATA_DEFINITION_IDS::ALTIMETER_DEFINITION,
+                                   "AUTOPILOT GLIDESLOPE ARM",
+                                   "Bool",
+                                   SIMCONNECT_DATATYPE_INT32,
+                                   0.0);
+    SimConnect_AddToDataDefinition(simConnectHandle,
+                                   DATA_DEFINITION_IDS::ALTIMETER_DEFINITION,
+                                   "HSI GSI NEEDLE VALID",
+                                   "Bool",
+                                   SIMCONNECT_DATATYPE_INT32,
+                                   0.0);
+    SimConnect_AddToDataDefinition(simConnectHandle,
+                                   DATA_DEFINITION_IDS::ALTIMETER_DEFINITION,
+                                   "GPS HAS GLIDEPATH",
+                                   "Bool",
+                                   SIMCONNECT_DATATYPE_INT32,
+                                   0.0);
 }
 
 }  // namespace altitude

@@ -32,6 +32,12 @@ struct RawStruct
     uint32_t nav2HasGlideslope = 0;
     uint32_t gpsApproachActive = 0;
     uint32_t apApproachActive = 0;
+    uint32_t apApproachArm = 0;
+    uint32_t apApproachCaptured = 0;
+    uint32_t apGlideslopeActive = 0;
+    uint32_t apGlideslopeArm = 0;
+    uint32_t hsiNeedleValid = 0;
+    uint32_t gpsHasGlidepath = 0;
 };
 
 struct DataStruct
@@ -53,6 +59,12 @@ struct DataStruct
     bool nav2HasGlideslope = false;
     bool gpsApproachActive = false;
     bool apApproachActive = false;
+    bool apApproachArm = false;
+    bool apApproachCaptured = false;
+    bool apGlideslopeActive = false;
+    bool apGlideslopeArm = false;
+    bool hsiNeedleValid = false;
+    bool gpsHasGlidepath = false;
 
     double nav1Gsi = 0;
     double nav2Gsi = 0;
@@ -78,6 +90,12 @@ struct DataStruct
         nav2HasGlideslope(data->nav2HasGlideslope != 0),
         gpsApproachActive(data->gpsApproachActive != 0),
         apApproachActive(data->apApproachActive != 0),
+        apApproachArm(data->apApproachArm != 0),
+        apApproachCaptured(data->apApproachCaptured != 0),
+        apGlideslopeActive(data->apGlideslopeActive != 0),
+        apGlideslopeArm(data->apGlideslopeArm != 0),
+        hsiNeedleValid(data->hsiNeedleValid != 0),
+        gpsHasGlidepath(data->gpsHasGlidepath != 0),
 
         nav1Gsi(data->nav1Gsi),
         nav2Gsi(data->nav2Gsi),
