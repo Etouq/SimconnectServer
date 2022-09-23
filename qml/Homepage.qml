@@ -50,9 +50,61 @@ Item {
         }
     }
 
+    GridLayout {
+        id: serverDataGrid
+        columns: 2
+
+        anchors.top: simStateDisplay.bottom
+        anchors.left: clientContainer.left
+        anchors.topMargin: 10
+        anchors.leftMargin: 5
+
+        columnSpacing: 10
+        rowSpacing: 5
+
+        Text {
+            font.family: "Roboto"
+            font.pixelSize: 15
+            font.bold: true
+
+            text: "Server Address:"
+            color: "white"
+        }
+
+        Text {
+            id: addressDisplay
+            font.family: "Roboto"
+            font.pixelSize: 15
+            font.bold: true
+
+            text: ConnectionHandler.getServerAddress()
+            color: "white"
+        }
+
+        Text {
+            font.family: "Roboto"
+            font.pixelSize: 15
+            font.bold: true
+
+
+            text: "Server Port:"
+            color: "white"
+        }
+
+        Text {
+            id: portDisplay
+            font.family: "Roboto"
+            font.pixelSize: 15
+            font.bold: true
+
+            text: ConnectionHandler.getServerPort()
+            color: "white"
+        }
+    }
+
     Text {
         id: clientTitle
-        anchors.top: simStateDisplay.bottom
+        anchors.top: serverDataGrid.bottom
         anchors.left: clientContainer.left
         anchors.leftMargin: 5
         anchors.topMargin: 10
@@ -164,6 +216,12 @@ Item {
                 let address = clientName.slice(splitIndex + 2);
                 clientModel.append({ "name": name, "address": address });
             }
+        }
+
+        function networkChanged(address, port)
+        {
+            addressDisplay.text = address;
+            portDisplay.text = port;
         }
     }
 }
