@@ -12,6 +12,8 @@ void ConnectionHandler::initializeServer()
     bool found = false;
     QStringList errors;
 
+    qDebug() << "found address list:" << addresses;
+
     QSettings settings;
 
     if (settings.contains("lastUsedAddress") && settings.contains("lastUsedPort"))
